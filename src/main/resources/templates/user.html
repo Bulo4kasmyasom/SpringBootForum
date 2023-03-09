@@ -1,0 +1,60 @@
+<th:block th:insert="~{/fragments/header :: header}"></th:block>
+
+<div>[[#{page.user.enter}]]: [[${user.username}]]</div>
+
+<div th:if="${errors}" class="p-2 text-danger-emphasis bg-danger-subtle border border-danger-subtle rounded-3">
+    <ul>
+        <li th:each="error: ${errors}" th:text="${error.defaultMessage}">errors</li>
+    </ul>
+</div>
+
+<div>
+    <form th:action="@{/users/{userId}/update(userId=${user.id})}" method="post" th:object="${user}">
+
+        <!--    <img th:src="@{image}" alt="Profile image" id="profile-image"><br>-->
+        <div>
+            <div class="mb-2">
+                <label for="username" class="form-label">Логин</label>
+                <input type="text" name="username" class="form-control" id="username" th:value="*{username}">
+            </div>
+            <div class="mb-2">
+                <label for="password" class="form-label">Пароль</label>
+                <input type="password" name="password" class="form-control" id="password">
+            </div>
+            <div class="mb-2">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" id="email" th:value="*{email}">
+            </div>
+            <div class="mb-2">
+                <label for="image" class="form-label">Аватар</label>
+                <input type="text" name="image" class="form-control" id="image" value="x.png" th:value="*{image}">
+            </div>
+            <div class="mb-2">
+                <label for="roles">Роль:
+                    <select class="form-select" id="roles" name="role">
+                        <option th:each="role : ${roles}"
+                                th:text="${role.name}"
+                                th:value="${role.name}"
+                                th:selected="${role.name == user.role}">
+                    </select>
+                </label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <input type="submit" class="btn btn-primary btn-sm btn-light"
+                   sec:authorize="hasAuthority('ADMIN')"
+                   th:value="#{page.user.form.submit}">
+        </div>
+    </form>
+
+
+    <form th:action="@{/users/{userId}/delete(userId=${user.id})}" sec:authorize="hasAuthority('ADMIN')" method="post">
+        <input type="submit" class="btn btn-primary btn-sm btn-light" th:value="Удалить">
+    </form>
+    <form th:action="@{/users/{userId}/ban(userId=${user.id})}" sec:authorize="hasAuthority('ADMIN')" method="post">
+        <input type="submit" class="btn btn-primary btn-sm btn-light" th:value="Заблокировать">
+    </form>
+
+</div>
+
+<th:block th:insert="~{/fragments/footer ::footer}"></th:block>

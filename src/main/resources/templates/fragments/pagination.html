@@ -1,0 +1,19 @@
+<nav aria-label="Page navigation" th:fragment="pagination(data, pageUrl)">
+    <ul class="pagination justify-content-center mt-3" th:object="${data}">
+        <li th:class="*{(page+1) > 1}?'page-item':'page-iten disabled'">
+            <a th:href="@{${pageUrl}+'?page=1'}" class="page-link" th:text="Первая"></a>
+        </li>
+        <li th:class="*{(page+1) > 1}?'page-item':'page-iten disabled'">
+            <a th:href="@{${pageUrl}+'?page=' + *{page}}" class="page-link" th:text="Предыдущая"></a>
+        </li>
+        <li class="page-item" th:each="i: ${#numbers.sequence(1, data.totalPages)}">
+            <a th:href="@{${pageUrl}+'?page=' + ${i}}" th:class="*{page+1}==${i}?'page-link active':'page-link'">[[${i}]]</a>
+        </li>
+        <li th:class="*{(page+1) < totalPages}?'page-item':'page-iten disabled'">
+            <a th:href="@{${pageUrl}+'?page=' + *{page+2}}" class="page-link" th:text="Следующая"></a>
+        </li>
+        <li th:class="*{(page+1) < totalPages}?'page-item':'page-iten disabled'">
+            <a th:href="@{${pageUrl}+'?page=' + *{totalPages}}" class="page-link" th:text="Последняя"></a>
+        </li>
+    </ul>
+</nav>

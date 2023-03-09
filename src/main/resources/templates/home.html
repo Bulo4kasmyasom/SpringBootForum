@@ -1,0 +1,37 @@
+<th:block th:insert="~{/fragments/header :: header}"></th:block>
+
+<div class="container">
+
+    <div th:if="${errors}" class="p-2 text-danger-emphasis bg-danger-subtle border border-danger-subtle rounded-3">
+        <ul>
+            <li th:each="error: ${errors}" th:text="${error.defaultMessage}">errors</li>
+        </ul>
+    </div>
+
+    <div class="row mt-4">
+
+        <div class="card mb-3" th:each="section: ${sections}">
+            <h5 class="card-header">[[${section.title}]]</h5>
+            <div class="card-body">
+                <div class="card-text">
+                    <ul class="list-group">
+                        <li class="list-group-item" th:each="category:${section.categoryList}">
+                            <a th:href="@{/cat/{id}(id=${category.id})}" th:text="${category.title}">Category</a>
+                            <ul class="list-group">
+                                <li class="list-group-item" th:each="subCategory:${category.subCategory}">
+                                    <a th:href="@{/cat/{catId}/subcat/{subCatId}(catId=${category.id},subCatId=${subCategory.id})}"
+                                       th:text="${subCategory.title}">SubCategory</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="card-text">[[${section.description}]]</div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<th:block th:insert="~{/fragments/footer ::footer}"></th:block>

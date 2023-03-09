@@ -1,0 +1,32 @@
+spring:
+  messages:
+    basename: language, site
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
+        default-page-size: 10
+        max-page-size: 500
+        page-parameter: page
+        size-parameter: size
+      sort:
+        sort-parameter: sort
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/spring_boot_forum
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        highlight_sql: true
+        format_sql: true
+        show_sql: true
+        hbm2ddl:
+          auto: validate
+#        cache: # https://javarush.com/quests/lectures/questhibernate.level14.lecture04
+#          provider_class: net.sf.ehcache.hibernate.SingletEhCacheProvider
+#          use_second_level_cache: true

@@ -1,0 +1,31 @@
+<th:block th:insert="~{/fragments/header :: header}"></th:block>
+
+<h5 class="text-center mt-2">[[#{page.users.enter}]]</h5>
+
+<div>[[#{page.users.total_users}]]: [[${users.metadata.getTotalElements()}]]</div>
+
+<table class="table table-sm table-hover table-bordered border-info text-center mt-1">
+    <thead>
+    <tr>
+        <th scope="col">id</th>
+        <th scope="col">Логин</th>
+        <th scope="col">Аватар</th>
+        <th scope="col">Роль</th>
+        <th scope="col">Был активен</th>
+        <th scope="col" sec:authorize="hasAuthority('ADMIN')">email</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users.content}">
+        <th scope="row" th:text="${user.id}">id</th>
+        <td><a th:href="@{'/users/' + ${user.id}}" th:text="${user.username}">User</a></td>
+        <td><img th:src="|#{user.images.path}/${user.image}|" alt="avatar"></td>
+        <td th:text="${user.role}">@mdo</td>
+        <td th:text="${user.lastActivity}">@mdo</td>
+        <td th:text="${user.email}" sec:authorize="hasAuthority('ADMIN')">@mdo</td>
+    </tr>
+    </tbody>
+</table>
+
+<th:block th:replace="~{/fragments/pagination :: pagination(${users.metadata}, '/users')}"></th:block>
+<th:block th:insert="~{/fragments/footer ::footer}"></th:block>
