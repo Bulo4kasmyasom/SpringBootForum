@@ -6,7 +6,6 @@ import com.javarush.springbootforum.dto.UserReadDto;
 import com.javarush.springbootforum.entity.TopicMessage;
 import com.javarush.springbootforum.mapper.TopicCreateMapper;
 import com.javarush.springbootforum.mapper.TopicReadMapper;
-import com.javarush.springbootforum.repository.TopicMessageRepository;
 import com.javarush.springbootforum.repository.TopicRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,7 +25,7 @@ public class TopicService {
     private final TopicRepository topicRepository;
     private final TopicReadMapper topicReadMapper;
     private final TopicCreateMapper topicCreateMapper;
-    private final TopicMessageRepository topicMessageRepository;
+    private final TopicMessageService topicMessageService;
 
     public List<TopicReadDto> findAll() {
         return topicRepository.findAll()
@@ -56,10 +55,9 @@ public class TopicService {
 
         TopicMessage topicMessage = topicCreateMapper.map(topicCreateDto);
         return Optional.of(topicMessage)
-                .map(topicMessageRepository::save)
+                .map(topicMessageService::save)
                 .map(x -> topicReadMapper.map(topicMessage.getTopic()))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
     }
 
 }

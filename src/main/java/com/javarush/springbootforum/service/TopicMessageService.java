@@ -2,6 +2,7 @@ package com.javarush.springbootforum.service;
 
 import com.javarush.springbootforum.dto.TopicMessageCreateEditDto;
 import com.javarush.springbootforum.dto.TopicMessageReadDto;
+import com.javarush.springbootforum.entity.TopicMessage;
 import com.javarush.springbootforum.mapper.TopicMessageCreateEditMapper;
 import com.javarush.springbootforum.mapper.TopicMessageReadMapper;
 import com.javarush.springbootforum.repository.TopicMessageRepository;
@@ -45,4 +46,9 @@ public class TopicMessageService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
+    public TopicMessage save(TopicMessage topicMessage) {
+        return Optional.of(topicMessage)
+                .map(topicMessageRepository::save)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
 }

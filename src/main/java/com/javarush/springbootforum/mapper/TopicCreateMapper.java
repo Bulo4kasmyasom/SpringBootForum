@@ -10,17 +10,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 public class TopicCreateMapper implements Mapper<TopicCreateDto, TopicMessage> {
-
     private final CategoryRepository categoryRepository;
     private final SubCategoryRepository subCategoryRepository;
     private final UserRepository userRepository;
-
 
     @Override
     public TopicMessage map(TopicCreateDto object) {
@@ -33,12 +30,11 @@ public class TopicCreateMapper implements Mapper<TopicCreateDto, TopicMessage> {
                 .author(author)
                 .build();
 
-        TopicMessage topicMessage = new TopicMessage();
-        topicMessage.setText(object.getMessageText());
-        topicMessage.setAuthor(author);
-        topicMessage.setTopic(topic);
-
-        return topicMessage;
+        return TopicMessage.builder()
+                .text(object.getMessageText())
+                .author(author)
+                .topic(topic)
+                .build();
     }
 
     private User getAuthor(Long authorId) {
