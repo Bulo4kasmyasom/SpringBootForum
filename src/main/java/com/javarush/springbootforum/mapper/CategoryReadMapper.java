@@ -12,20 +12,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryReadMapper implements Mapper<Category, CategoryReadDto> {
 
-    private final SubCategoryMapper subCategoryMapper;
+    private final SubCategoryReadMapper subCategoryReadMapper;
 
     @Override
     public CategoryReadDto map(Category object) {
         List<SubCategoryReadDto> subCategoryList = object.getSubCategoryList()
                 .stream()
-                .map(subCategoryMapper::map)
+                .map(subCategoryReadMapper::map)
                 .toList();
 
         return new CategoryReadDto(
                 object.getId(),
                 object.getTitle(),
                 object.getDescription(),
-                subCategoryList
+                subCategoryList,
+                object.getTopicCount()
         );
     }
 

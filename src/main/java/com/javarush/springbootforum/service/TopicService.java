@@ -3,6 +3,7 @@ package com.javarush.springbootforum.service;
 import com.javarush.springbootforum.dto.TopicCreateDto;
 import com.javarush.springbootforum.dto.TopicReadDto;
 import com.javarush.springbootforum.dto.UserReadDto;
+import com.javarush.springbootforum.entity.Section;
 import com.javarush.springbootforum.entity.TopicMessage;
 import com.javarush.springbootforum.mapper.TopicCreateMapper;
 import com.javarush.springbootforum.mapper.TopicReadMapper;
@@ -10,6 +11,7 @@ import com.javarush.springbootforum.repository.TopicRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +30,9 @@ public class TopicService {
     private final TopicMessageService topicMessageService;
 
     public List<TopicReadDto> findAll() {
-        return topicRepository.findAll()
+        Sort.TypedSort<Section> sort = Sort.sort(Section.class);
+        Sort sortByUpdatedAt = sort.by(Section::getUpdatedAt);
+        return topicRepository.findAll(sortByUpdatedAt)
                 .stream()
                 .map(topicReadMapper::map)
                 .toList();
@@ -55,7 +59,7 @@ public class TopicService {
 
         TopicMessage topicMessage = topicCreateMapper.map(topicCreateDto);
         return Optional.of(topicMessage)
-                .map(topicMessageService::save)
+                .map(topicMessageService::create)
                 .map(x -> topicReadMapper.map(topicMessage.getTopic()))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }

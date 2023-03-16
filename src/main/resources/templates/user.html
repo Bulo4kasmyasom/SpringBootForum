@@ -2,11 +2,7 @@
 
 <div>[[#{page.user.enter}]]: [[${user.username}]]</div>
 
-<div th:if="${errors}" class="p-2 text-danger-emphasis bg-danger-subtle border border-danger-subtle rounded-3">
-    <ul>
-        <li th:each="error: ${errors}" th:text="${error.defaultMessage}">errors</li>
-    </ul>
-</div>
+<th:block th:replace="~{/fragments/fragments :: errors(${errors})}">errors</th:block>
 
 <div>
     <form th:action="@{/users/{userId}/update(userId=${user.id})}" method="post" th:object="${user}">

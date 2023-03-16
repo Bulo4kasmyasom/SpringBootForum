@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 public class TopicReadMapper implements Mapper<Topic, TopicReadDto> {
 
-    private final SubCategoryMapper subCategoryMapper;
+    private final SubCategoryReadMapper subCategoryReadMapper;
     private final CategoryReadMapper categoryReadMapper;
     private final UserReadMapper userReadMapper;
 
@@ -24,7 +24,7 @@ public class TopicReadMapper implements Mapper<Topic, TopicReadDto> {
         UserReadDto userReadDto = userReadMapper.map(object.getAuthor());
         CategoryReadDto categoryReadDto = categoryReadMapper.map(object.getCategory());
 
-        SubCategoryReadDto subCategory = (object.getSubCategory() != null) ? subCategoryMapper.map(object.getSubCategory()) : null;
+        SubCategoryReadDto subCategory = (object.getSubCategory() != null) ? subCategoryReadMapper.map(object.getSubCategory()) : null;
 
         return new TopicReadDto(
                 object.getId(),
@@ -32,7 +32,8 @@ public class TopicReadMapper implements Mapper<Topic, TopicReadDto> {
                 subCategory,
                 object.getTitle(),
                 userReadDto,
-                object.getCreatedAt().format(DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm:ss")) // TODO вынести в утиль, есть где-то ещё такая строка
+                object.getCreatedAt().format(DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm:ss")), // TODO вынести в утиль, есть где-то ещё такая строка
+                object.getMessageCount()
         );
     }
 

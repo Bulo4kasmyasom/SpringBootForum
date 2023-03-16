@@ -1,17 +1,24 @@
 package com.javarush.springbootforum.dto;
 
 import com.javarush.springbootforum.validation.NumberValidator;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Size;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@Value
+@Getter
+@AllArgsConstructor
 public class TopicMessageCreateEditDto {
     @NumberValidator(message = "Неверный формат id у темы") // todo не выводит сообщение
-    Long topicId;
+    private final Long topicId;
 
     @Size(min = 2, max = 4000)
-    String text;
+    private final String text;
 
-    @NumberValidator(message = "Неверный формат id у автора")// todo не выводит сообщение
-    Long authorId;
+    @Nullable
+    private Long authorId; // устанавливается сеттером после получения из UserDetails (чтобы не было подмены)
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
+    }
 }

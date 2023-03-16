@@ -3,6 +3,7 @@ package com.javarush.springbootforum.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,6 +21,7 @@ public class Section extends BaseEntity {
     private String title;
     private String description;
 
+    @Builder.Default
     @OneToMany(mappedBy = "section")
-    List<Category> categoryList;
+    List<Category> categoryList = new ArrayList<>();
 }

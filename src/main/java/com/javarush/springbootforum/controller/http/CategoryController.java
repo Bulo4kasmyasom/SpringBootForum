@@ -1,9 +1,6 @@
 package com.javarush.springbootforum.controller.http;
 
-import com.javarush.springbootforum.dto.CategoryReadDto;
-import com.javarush.springbootforum.dto.PageResponseDto;
-import com.javarush.springbootforum.dto.SubCategoryReadDto;
-import com.javarush.springbootforum.dto.TopicReadDto;
+import com.javarush.springbootforum.dto.*;
 import com.javarush.springbootforum.service.CategoryService;
 import com.javarush.springbootforum.service.SubCategoryService;
 import com.javarush.springbootforum.service.TopicService;
@@ -13,10 +10,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -62,6 +60,20 @@ public class CategoryController {
         model.addAttribute("subCategory", subCategoryDto);
         model.addAttribute("topics", PageResponseDto.of(topicsByCategoryAndSubCategory));
         return "categories";
+    }
+
+
+    @PostMapping("/new")
+    public String create(@ModelAttribute @Validated CategoryCreateEditDto categoryCreateEditDto,
+                         BindingResult bindingResult,
+                         RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+            return "redirect:/home";
+        }
+        categoryService.create(categoryCreateEditDto);
+        return "redirect:/home";
     }
 
 }

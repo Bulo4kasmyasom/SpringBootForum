@@ -27,7 +27,7 @@ public class TopicMessageReadMapper implements Mapper<TopicMessage, TopicMessage
                 object.getText(),
                 userReadDto,
                 object.getCreatedAt().format(DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm:ss")), // TODO вынести в утиль, есть где-то ещё такая строка
-                (object.getUpdatedAt()!=null)?object.getUpdatedAt().format(DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm:ss")) : null // TODO вынести в утиль, есть где-то ещё такая строка
+                (object.getUpdatedAt() != null) ? object.getUpdatedAt().format(DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm:ss")) : null // TODO вынести в утиль, есть где-то ещё такая строка
         );
     }
 

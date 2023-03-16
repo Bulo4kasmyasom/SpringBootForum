@@ -30,7 +30,7 @@ create table public.users
 create table public.sections
 (
     id          bigserial primary key,
-    title        varchar(128) not null,
+    title       varchar(128) not null,
     description varchar(512) not null,
     created_at  timestamp    not null,
     updated_at  timestamp
@@ -41,8 +41,9 @@ create table public.categories
 (
     id          bigserial primary key,
     section_id  bigint references sections (id) on update cascade on delete cascade,
-    title        varchar(128) not null,
+    title       varchar(128) not null,
     description varchar(512) not null,
+    topic_count bigint not null default 0,
     created_at  timestamp    not null,
     updated_at  timestamp
 );
@@ -52,8 +53,9 @@ create table public.sub_categories
 (
     id          bigserial primary key,
     category_id bigint       not null references categories (id) on update cascade on delete cascade,
-    title        varchar(128) not null,
+    title       varchar(128) not null,
     description varchar(512) not null,
+    topic_count bigint not null default 0,
     created_at  timestamp    not null,
     updated_at  timestamp
 );
@@ -64,8 +66,9 @@ create table public.topics
     id              bigserial primary key,
     category_id     bigint       not null references categories (id) on update cascade on delete cascade,
     sub_category_id bigint references sub_categories (id) on update cascade on delete cascade,
-    title            varchar(200) not null,
+    title           varchar(200) not null,
     author_id       bigint       not null references users (id) on update cascade,
+    message_count   bigint       not null default 0,
     created_at      timestamp    not null,
     updated_at      timestamp
 );

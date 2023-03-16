@@ -1,11 +1,15 @@
 package com.javarush.springbootforum.service;
 
+import com.javarush.springbootforum.dto.CategoryCreateEditDto;
 import com.javarush.springbootforum.dto.CategoryReadDto;
+import com.javarush.springbootforum.mapper.CategoryCreateEditMapper;
 import com.javarush.springbootforum.mapper.CategoryReadMapper;
 import com.javarush.springbootforum.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +20,7 @@ import java.util.Optional;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryReadMapper categoryReadMapper;
+    private final CategoryCreateEditMapper categoryCreateEditMapper;
 
     public List<CategoryReadDto> findAll() {
         return categoryRepository.findAll()
@@ -29,5 +34,13 @@ public class CategoryService {
                 .map(categoryReadMapper::map);
     }
 
+    @Transactional
+    public CategoryReadDto create(CategoryCreateEditDto categoryCreateEditDto) {
+        return Optional.of(categoryCreateEditDto)
+                .map(categoryCreateEditMapper::map)
+                .map(categoryRepository::save)
+                .map(categoryReadMapper::map)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
 
 }

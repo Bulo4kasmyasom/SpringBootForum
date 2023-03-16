@@ -8,4 +8,5 @@ public class SubCategoryReadDto {
     String category;
     String title;
     String description;
+    Long topicCount;
 }

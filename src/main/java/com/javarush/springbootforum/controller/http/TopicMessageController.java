@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Objects;
-
 @Controller
 @RequestMapping("/topic-message")
 @RequiredArgsConstructor
@@ -38,18 +36,15 @@ public class TopicMessageController {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("topicMessage", message);
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors()); // todo выводит ошибки при парсинге Long
-            return "redirect:"+referer;
+            return "redirect:" + referer;
         }
 
         // только для проверки присланного id и реального id пользователя
         UserReadDto userReadDto = userService.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        if (!Objects.equals(userReadDto.getId(), message.getAuthorId()))
-            return "redirect:"+referer;
 
-
-        topicMessageService.create(message);
-        return "redirect:"+referer;
+        topicMessageService.create(userReadDto, message);
+        return "redirect:" + referer;
     }
 
 }

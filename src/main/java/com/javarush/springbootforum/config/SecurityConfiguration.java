@@ -11,8 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import java.util.Arrays;
-
 @Configuration
 @EnableMethodSecurity
 @EnableWebSecurity
@@ -20,15 +18,16 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
+        return http.csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers(
                         "",
                         "/",
                         "/home",
                         "/login",
-                        "/users/**"
-//                        "/users/registration"
+                        "/users/**",
+                        "/api/v1/**",
+                        "/js/**"
                 ).permitAll()
                 .requestMatchers("/topic-message/new")
                 .hasAnyAuthority(Role.ADMIN.getAuthority(),

@@ -10,4 +10,5 @@ public class CategoryReadDto {
     String title;
     String description;
     List<SubCategoryReadDto> subCategory;
+    Long topicCount;
 }

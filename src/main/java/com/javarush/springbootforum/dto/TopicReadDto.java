@@ -10,4 +10,5 @@ public class TopicReadDto {
     String title;
     UserReadDto author;
     String createdAt;
+    Long messageCount;
 }

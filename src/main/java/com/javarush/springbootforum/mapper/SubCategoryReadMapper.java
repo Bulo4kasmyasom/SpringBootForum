@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class SubCategoryMapper implements Mapper<SubCategory, SubCategoryReadDto> {
+public class SubCategoryReadMapper implements Mapper<SubCategory, SubCategoryReadDto> {
 
     @Override
     public SubCategoryReadDto map(SubCategory object) {
@@ -16,7 +16,8 @@ public class SubCategoryMapper implements Mapper<SubCategory, SubCategoryReadDto
                 object.getId(),
                 object.getCategory().getTitle(),
                 object.getTitle(),
-                object.getDescription()
+                object.getDescription(),
+                object.getTopicCount()
         );
     }
 

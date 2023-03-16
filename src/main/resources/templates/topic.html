@@ -2,11 +2,7 @@
 
 <th:block th:if="${topicMessages != null && topicMessages.content.size()>0}">
 
-    <div th:if="${errors}" class="p-2 text-danger-emphasis bg-danger-subtle border border-danger-subtle rounded-3">
-        <ul>
-            <li th:each="error: ${errors}" th:text="${error.defaultMessage}">errors</li>
-        </ul>
-    </div>
+    <th:block th:replace="~{/fragments/fragments :: errors(${errors})}">errors</th:block>
 
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -43,19 +39,23 @@
                     [[${message.author.role}]]
                 </div>
             </div>
-            <div class="col-10 border border-secondary" th:text="${message.text}">text</div>
+            <div class="col-10 border border-secondary" th:text="${message.text}"
+                 th:id="|topic-message-text-${message.id}|">text</div>
             <div class="col-12 border border-secondary" th:text="${message.createdAt}">Date</div>
+            <div th:if="${#authentication.name == message.author.username}">
+                <button type="submit" class="btn btn-primary btn-sm btn-light"
+                        th:name="|topic-message-text-${message.id}|">Редактировать</button>
+            </div>
         </div>
-
 
         <th:block sec:authorize="isAuthenticated()"
                   th:replace="~{/fragments/modal :: topic-message-new(${topic.id},
-                  ${topic.author.id},
                   ${topicMessage!=null}?${topicMessage}:null)}">
         </th:block>
 
-
-        <th:block th:replace="~{/fragments/pagination :: pagination(${topicMessages.metadata}, '/topic/'+${topic.id})}"></th:block>
+        <th:block
+                th:replace="~{/fragments/pagination :: pagination(${topicMessages.metadata}, '/topic/'+${topic.id})}">
+        </th:block>
     </div>
 
 </th:block>

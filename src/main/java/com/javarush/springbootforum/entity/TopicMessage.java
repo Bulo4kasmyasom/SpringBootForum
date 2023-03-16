@@ -1,5 +1,6 @@
 package com.javarush.springbootforum.entity;
 
+import com.javarush.springbootforum.listener.TopicMessageListener;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,6 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString(exclude = {"topic", "author"})
 @EqualsAndHashCode(exclude = {"topic", "author"}, callSuper = false)
+@EntityListeners(TopicMessageListener.class)
 public class TopicMessage extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
