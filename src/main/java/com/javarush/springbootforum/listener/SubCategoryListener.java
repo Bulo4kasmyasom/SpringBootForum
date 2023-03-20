@@ -5,13 +5,13 @@ import jakarta.persistence.PrePersist;
 
 public class SubCategoryListener {
 
-    @PrePersist
-    public void setCount(SubCategory subCategory) {
-        Long topicCount = subCategory.getTopicCount();
-
-        if (topicCount == null) topicCount = 0L; // todo преобразовать в long чтобы избавиться от null??
-
-        subCategory.setTopicCount(topicCount);
-    }
+//    @PrePersist
+//    public void setCount(SubCategory subCategory) {
+//        Long topicCount = subCategory.getTopicCount();
+//
+//        if (topicCount == null) topicCount = 0L;
+//
+//        subCategory.setTopicCount(topicCount);
+//    }
 
 }

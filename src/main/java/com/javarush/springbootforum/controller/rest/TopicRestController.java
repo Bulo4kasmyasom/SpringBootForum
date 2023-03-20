@@ -2,6 +2,7 @@ package com.javarush.springbootforum.controller.rest;
 
 import com.javarush.springbootforum.controller.handler.exception.ValidationException;
 import com.javarush.springbootforum.dto.TopicEditDto;
+import com.javarush.springbootforum.dto.TopicFieldReadDto;
 import com.javarush.springbootforum.dto.TopicReadDto;
 import com.javarush.springbootforum.service.TopicService;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,9 @@ public class TopicRestController {
     private final TopicService topicService;
 
     @PutMapping("/{id}")
-    public TopicReadDto update(@PathVariable("id") Long topicId,
-                               @RequestBody @Validated TopicEditDto topicEditDto,
-                               BindingResult bindingResult) {
+    public TopicFieldReadDto update(@PathVariable("id") Long topicId,
+                                    @RequestBody @Validated TopicEditDto topicEditDto,
+                                    BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String errors = bindingResult.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)

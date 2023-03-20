@@ -1,13 +1,11 @@
 package com.javarush.springbootforum.service;
 
-import com.javarush.springbootforum.dto.TopicCreateDto;
-import com.javarush.springbootforum.dto.TopicEditDto;
-import com.javarush.springbootforum.dto.TopicReadDto;
-import com.javarush.springbootforum.dto.UserReadDto;
+import com.javarush.springbootforum.dto.*;
 import com.javarush.springbootforum.entity.Section;
 import com.javarush.springbootforum.entity.TopicMessage;
 import com.javarush.springbootforum.mapper.TopicCreateMapper;
 import com.javarush.springbootforum.mapper.TopicEditMapper;
+import com.javarush.springbootforum.mapper.TopicFieldReadMapper;
 import com.javarush.springbootforum.mapper.TopicReadMapper;
 import com.javarush.springbootforum.repository.TopicRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +26,7 @@ import java.util.Optional;
 public class TopicService {
     private final TopicRepository topicRepository;
     private final TopicReadMapper topicReadMapper;
+    private final TopicFieldReadMapper topicFieldReadMapper;
     private final TopicCreateMapper topicCreateMapper;
     private final TopicMessageService topicMessageService;
     private final TopicEditMapper topicEditMapper;
@@ -68,10 +67,10 @@ public class TopicService {
     }
 
     @Transactional
-    public Optional<TopicReadDto> update(Long topicId, TopicEditDto topicEditDto) {
+    public Optional<TopicFieldReadDto> update(Long topicId, TopicEditDto topicEditDto) {
         return topicRepository.findById(topicId)
                 .map(topic -> topicEditMapper.map(topicEditDto, topic))
                 .map(topicRepository::saveAndFlush)
-                .map(topicReadMapper::map);
+                .map(topicFieldReadMapper::map);
     }
 }

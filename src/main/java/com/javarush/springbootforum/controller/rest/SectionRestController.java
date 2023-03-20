@@ -2,7 +2,7 @@ package com.javarush.springbootforum.controller.rest;
 
 import com.javarush.springbootforum.controller.handler.exception.ValidationException;
 import com.javarush.springbootforum.dto.SectionCreateEditDto;
-import com.javarush.springbootforum.dto.SectionReadDto;
+import com.javarush.springbootforum.dto.SectionWithoutCategoryListReadDto;
 import com.javarush.springbootforum.service.SectionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -22,9 +22,9 @@ public class SectionRestController {
     private final SectionService sectionService;
 
     @PutMapping("/{id}")
-    public SectionReadDto update(@PathVariable("id") Long sectionId,
-                                 @RequestBody @Validated SectionCreateEditDto sectionCreateEditDto,
-                                 BindingResult bindingResult) {
+    public SectionWithoutCategoryListReadDto update(@PathVariable("id") Long sectionId,
+                                                    @RequestBody @Validated SectionCreateEditDto sectionCreateEditDto,
+                                                    BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String errors = bindingResult.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)

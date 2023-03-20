@@ -9,7 +9,6 @@ import jakarta.persistence.PreUpdate;
 public class TopicListener {
 
     @PrePersist
-    @PreUpdate
     public void setTopicCount(Topic topic) {
         Category category = topic.getCategory();
         SubCategory subCategory = topic.getSubCategory();

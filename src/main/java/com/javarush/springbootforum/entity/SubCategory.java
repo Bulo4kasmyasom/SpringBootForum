@@ -25,6 +25,7 @@ public class SubCategory extends BaseEntity {
     private String title;
     private String description;
 
+    @Builder.Default
     @Column(name = "topic_count")
-    private Long topicCount;
+    private Long topicCount = 0L;
 }

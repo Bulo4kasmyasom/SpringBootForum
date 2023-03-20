@@ -2,8 +2,10 @@ package com.javarush.springbootforum.service;
 
 import com.javarush.springbootforum.dto.SectionCreateEditDto;
 import com.javarush.springbootforum.dto.SectionReadDto;
+import com.javarush.springbootforum.dto.SectionWithoutCategoryListReadDto;
 import com.javarush.springbootforum.mapper.SectionCreateEditMapper;
 import com.javarush.springbootforum.mapper.SectionReadMapper;
+import com.javarush.springbootforum.mapper.SectionWithoutCategoryListReadMapper;
 import com.javarush.springbootforum.repository.SectionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,7 @@ public class SectionService {
     private final SectionRepository sectionRepository;
     private final SectionReadMapper sectionReadMapper;
     private final SectionCreateEditMapper sectionCreateEditMapper;
+    private final SectionWithoutCategoryListReadMapper sectionWithoutCategoryListReadMapper;
 
     public List<SectionReadDto> findAll() {
         return sectionRepository.findAll()
@@ -44,10 +47,10 @@ public class SectionService {
     }
 
     @Transactional
-    public Optional<SectionReadDto> update(Long sectionId, SectionCreateEditDto sectionCreateEditDto) {
+    public Optional<SectionWithoutCategoryListReadDto> update(Long sectionId, SectionCreateEditDto sectionCreateEditDto) {
         return sectionRepository.findById(sectionId)
                 .map(section -> sectionCreateEditMapper.map(sectionCreateEditDto, section))
                 .map(sectionRepository::saveAndFlush)
-                .map(sectionReadMapper::map);
+                .map(sectionWithoutCategoryListReadMapper::map);
     }
 }

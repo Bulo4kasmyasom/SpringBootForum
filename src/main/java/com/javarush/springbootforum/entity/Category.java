@@ -23,15 +23,16 @@ public class Category extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "section_id")
     private Section section;
 
     private String title;
     private String description;
 
+    @Builder.Default
     @Column(name = "topic_count")
-    private Long topicCount;
+    private Long topicCount = 0L;
 
     @Builder.Default
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
