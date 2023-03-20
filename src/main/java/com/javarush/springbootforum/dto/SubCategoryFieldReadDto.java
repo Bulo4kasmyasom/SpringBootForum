@@ -3,7 +3,7 @@ package com.javarush.springbootforum.dto;
 import lombok.Value;
 
 @Value
-public class SectionWithoutCategoryListReadDto {
+public class SubCategoryFieldReadDto {
     String title;
     String description;
 }

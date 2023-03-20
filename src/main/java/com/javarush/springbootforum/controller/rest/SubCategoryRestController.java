@@ -1,9 +1,9 @@
 package com.javarush.springbootforum.controller.rest;
 
 import com.javarush.springbootforum.controller.handler.exception.ValidationException;
-import com.javarush.springbootforum.dto.TopicEditDto;
-import com.javarush.springbootforum.dto.TopicFieldReadDto;
-import com.javarush.springbootforum.service.TopicService;
+import com.javarush.springbootforum.dto.SubCategoryEditDto;
+import com.javarush.springbootforum.dto.SubCategoryFieldReadDto;
+import com.javarush.springbootforum.service.SubCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -15,22 +15,23 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/topic")
+@RequestMapping("/api/subcat")
 @RequiredArgsConstructor
-public class TopicRestController {
-    private final TopicService topicService;
+public class SubCategoryRestController {
+
+    private final SubCategoryService subCategoryService;
 
     @PutMapping("/{id}")
-    public TopicFieldReadDto update(@PathVariable("id") Long topicId,
-                                    @RequestBody @Validated TopicEditDto topicEditDto,
-                                    BindingResult bindingResult) {
+    public SubCategoryFieldReadDto update(@PathVariable("id") Long id,
+                                          @RequestBody @Validated SubCategoryEditDto subCategoryEditDto,
+                                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String errors = bindingResult.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .collect(Collectors.joining(", "));
             throw new ValidationException(errors);
         }
-        return topicService.update(topicId, topicEditDto)
+        return subCategoryService.update(id, subCategoryEditDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 

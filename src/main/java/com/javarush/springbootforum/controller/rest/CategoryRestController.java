@@ -1,9 +1,9 @@
 package com.javarush.springbootforum.controller.rest;
 
 import com.javarush.springbootforum.controller.handler.exception.ValidationException;
-import com.javarush.springbootforum.dto.TopicEditDto;
-import com.javarush.springbootforum.dto.TopicFieldReadDto;
-import com.javarush.springbootforum.service.TopicService;
+import com.javarush.springbootforum.dto.CategoryEditDto;
+import com.javarush.springbootforum.dto.CategoryFieldReadDto;
+import com.javarush.springbootforum.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -15,22 +15,23 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/topic")
+@RequestMapping("/api/cat")
 @RequiredArgsConstructor
-public class TopicRestController {
-    private final TopicService topicService;
+public class CategoryRestController {
+
+    private final CategoryService categoryService;
 
     @PutMapping("/{id}")
-    public TopicFieldReadDto update(@PathVariable("id") Long topicId,
-                                    @RequestBody @Validated TopicEditDto topicEditDto,
-                                    BindingResult bindingResult) {
+    public CategoryFieldReadDto update(@PathVariable("id") Long id,
+                                       @RequestBody @Validated CategoryEditDto categoryEditDto,
+                                       BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String errors = bindingResult.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .collect(Collectors.joining(", "));
             throw new ValidationException(errors);
         }
-        return topicService.update(topicId, topicEditDto)
+        return categoryService.update(id, categoryEditDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 

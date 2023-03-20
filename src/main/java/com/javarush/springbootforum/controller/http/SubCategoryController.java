@@ -1,6 +1,6 @@
 package com.javarush.springbootforum.controller.http;
 
-import com.javarush.springbootforum.dto.SubCategoryCreateEditDto;
+import com.javarush.springbootforum.dto.SubCategoryCreateDto;
 import com.javarush.springbootforum.service.SubCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,7 @@ public class SubCategoryController {
     private final SubCategoryService subCategoryService;
 
     @PostMapping("/new")
-    public String create(@ModelAttribute @Validated SubCategoryCreateEditDto subCategoryCreateEditDto,
+    public String create(@ModelAttribute @Validated SubCategoryCreateDto subCategoryCreateDto,
                          BindingResult bindingResult,
                          RedirectAttributes redirectAttributes) {
 
@@ -26,7 +26,7 @@ public class SubCategoryController {
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
             return "redirect:/home";
         }
-        subCategoryService.create(subCategoryCreateEditDto);
+        subCategoryService.create(subCategoryCreateDto);
         return "redirect:/home";
     }
 

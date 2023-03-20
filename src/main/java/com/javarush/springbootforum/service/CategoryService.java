@@ -1,8 +1,12 @@
 package com.javarush.springbootforum.service;
 
-import com.javarush.springbootforum.dto.CategoryCreateEditDto;
+import com.javarush.springbootforum.dto.CategoryCreateDto;
+import com.javarush.springbootforum.dto.CategoryEditDto;
+import com.javarush.springbootforum.dto.CategoryFieldReadDto;
 import com.javarush.springbootforum.dto.CategoryReadDto;
-import com.javarush.springbootforum.mapper.CategoryCreateEditMapper;
+import com.javarush.springbootforum.mapper.CategoryCreateMapper;
+import com.javarush.springbootforum.mapper.CategoryEditMapper;
+import com.javarush.springbootforum.mapper.CategoryFieldReadMapper;
 import com.javarush.springbootforum.mapper.CategoryReadMapper;
 import com.javarush.springbootforum.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +24,9 @@ import java.util.Optional;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryReadMapper categoryReadMapper;
-    private final CategoryCreateEditMapper categoryCreateEditMapper;
+    private final CategoryCreateMapper categoryCreateMapper;
+    private final CategoryEditMapper categoryEditMapper;
+    private final CategoryFieldReadMapper categoryFieldReadMapper;
 
     public List<CategoryReadDto> findAll() {
         return categoryRepository.findAll()
@@ -35,12 +41,19 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryReadDto create(CategoryCreateEditDto categoryCreateEditDto) {
-        return Optional.of(categoryCreateEditDto)
-                .map(categoryCreateEditMapper::map)
+    public CategoryReadDto create(CategoryCreateDto categoryCreateDto) {
+        return Optional.of(categoryCreateDto)
+                .map(categoryCreateMapper::map)
                 .map(categoryRepository::save)
                 .map(categoryReadMapper::map)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
+    @Transactional
+    public Optional<CategoryFieldReadDto> update(Long id, CategoryEditDto categoryEditDto) {
+        return categoryRepository.findById(id)
+                .map(section -> categoryEditMapper.map(categoryEditDto, section))
+                .map(categoryRepository::saveAndFlush)
+                .map(categoryFieldReadMapper::map);
+    }
 }

@@ -1,6 +1,6 @@
 package com.javarush.springbootforum.mapper;
 
-import com.javarush.springbootforum.dto.SubCategoryCreateEditDto;
+import com.javarush.springbootforum.dto.SubCategoryCreateDto;
 import com.javarush.springbootforum.entity.Category;
 import com.javarush.springbootforum.entity.SubCategory;
 import com.javarush.springbootforum.repository.CategoryRepository;
@@ -13,12 +13,12 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class SubCategoryCreateEditMapper implements Mapper<SubCategoryCreateEditDto, SubCategory> {
+public class SubCategoryCreateMapper implements Mapper<SubCategoryCreateDto, SubCategory> {
 
     private final CategoryRepository categoryRepository;
 
     @Override
-    public SubCategory map(SubCategoryCreateEditDto object) {
+    public SubCategory map(SubCategoryCreateDto object) {
         return SubCategory.builder()
                 .title(object.getTitle())
                 .description(object.getDescription())

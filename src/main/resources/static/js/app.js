@@ -15,16 +15,21 @@ const API_URL = '/api';
 })()
 
 window.onload = () => {
-    addListenersForSelectors('button[name^=topic-message-text-]', 'click', editTopicMessage, 'name');
-    addListenersForSelectors('span[class^=section-edit-]', 'click', sectionEdit, 'class');
-    addListenersForSelectors('span[id^=topic-edit-]', 'click', topicEdit, 'id');
+    addListeners('button[name^=topic-message-text-]', 'click', editTopicMessage, 'name');
+    addListeners('span[id^=topic-edit-]', 'click', topicEdit, 'id', 'topic');
+    addListeners('span[class^=section-edit-]', 'click', sectionCatSubCatEdit, 'class', 'sections', 'section');
+    addListeners('span[class^=category-edit-]', 'click', sectionCatSubCatEdit, 'class', 'cat', 'category');
+    addListeners('span[class^=subCategory-edit-]', 'click', sectionCatSubCatEdit, 'class', 'subcat', 'subCategory');
 }
 
-function addListenersForSelectors(selector, type, func, attr) {
+function addListeners(selector, type, func, attr, url = null, editableElement = null) {
     let selectorsAll = document.querySelectorAll(selector)
     selectorsAll.forEach(function (el) {
         el.addEventListener(type, function (e) {
-            func(e.target.getAttribute(attr));
+            if (editableElement != null && url != null)
+                func(e.target.getAttribute(attr), url, editableElement); // sections, cats, subcats
+            else
+                func(e.target.getAttribute(attr));
         })
     })
 }
@@ -153,27 +158,28 @@ function editTopicMessage(el) {
     message.appendChild(textarea)
     button.innerHTML = "Сохранить"
 
-    let newButton = button.cloneNode(true); // for remove event listener
+    let newButton = button.cloneNode(true);
     button.parentNode.replaceChild(newButton, button);
     newButton.addEventListener('click', function (event) {
         editTopicMessageSendRequest(textarea, messageId, message, newButton);
     });
 }
 
-
-function sectionEdit(el) {
-    let sectionId = +/\d+/.exec(el);
-    let title = getQSelector('#section-title-' + sectionId);
-    let description = getQSelector('#section-description-' + sectionId);
+function sectionCatSubCatEdit(el, url, editableElement) {
+    let id = +/\d+/.exec(el);
+    let title = getQSelector('#' + editableElement + '-title-' + id);
+    let description = getQSelector('#' + editableElement + '-description-' + id);
+    let editButton = getQSelector('.' + el)
+    editButton.style.display = 'none'
     let titleClone = title.cloneNode(false);
     let descriptionClone = description.cloneNode(false);
 
     let inputTitle = createInputField("input", "text",
-        "form-control", title.textContent, 2, 128)
+        "form-control", title.textContent.trim(), 2, 128)
     title.parentNode.replaceChild(inputTitle, title)
 
     let textarea = createInputField("textarea", null,
-        "form-control", description.textContent, 0, 512)
+        "form-control", description.textContent.trim(), 0, 512)
     textarea.rows = 5
     description.parentNode.replaceChild(textarea, description)
 
@@ -181,25 +187,26 @@ function sectionEdit(el) {
     button.className = "btn btn-primary btn-sm btn-light"
     button.innerText = "Сохранить"
     button.addEventListener('click', () => {
-        sectionEditSendRequest(inputTitle, textarea, sectionId, descriptionClone, titleClone, button);
+        sectionCatSubCatEditSendRequest(inputTitle, textarea, id, descriptionClone, titleClone, button, editButton, url);
     })
     textarea.parentNode.insertBefore(button, textarea.nextSibling);
 }
 
-function sectionEditSendRequest(inputTitle, textarea, sectionId, descriptionClone, titleClone, button) {
+function sectionCatSubCatEditSendRequest(inputTitle, textarea, id, descriptionClone, titleClone, button, editButton, url) {
     let body = {
         title: inputTitle.value,
         description: textarea.value
     }
-    sendRequest('PUT', API_URL + '/sections/' + sectionId, body)
+    sendRequest('PUT', API_URL + '/' + url + '/' + id, body)
         .then(data => {
-            descriptionClone.innerText = data.description
-            titleClone.innerText = data.title
+            descriptionClone.innerText = data.description.trim()
+            titleClone.innerText = data.title.trim()
             inputTitle.parentNode.replaceChild(titleClone, inputTitle)
             textarea.parentNode.replaceChild(descriptionClone, textarea)
             inputTitle.remove()
             button.remove()
             textarea.remove()
+            editButton.style.display = ''
         })
         .catch(err => {
             showErrResponse(err, inputTitle)

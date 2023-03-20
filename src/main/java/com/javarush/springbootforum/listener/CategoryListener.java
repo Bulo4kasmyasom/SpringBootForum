@@ -1,8 +1,5 @@
 package com.javarush.springbootforum.listener;
 
-import com.javarush.springbootforum.entity.Category;
-import jakarta.persistence.PrePersist;
-
 public class CategoryListener {
 
 //    @PrePersist

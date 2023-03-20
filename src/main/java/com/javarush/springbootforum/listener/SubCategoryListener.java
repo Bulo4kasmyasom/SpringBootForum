@@ -1,8 +1,5 @@
 package com.javarush.springbootforum.listener;
 
-import com.javarush.springbootforum.entity.SubCategory;
-import jakarta.persistence.PrePersist;
-
 public class SubCategoryListener {
 
 //    @PrePersist

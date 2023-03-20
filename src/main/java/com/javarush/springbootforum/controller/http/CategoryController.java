@@ -64,7 +64,7 @@ public class CategoryController {
 
 
     @PostMapping("/new")
-    public String create(@ModelAttribute @Validated CategoryCreateEditDto categoryCreateEditDto,
+    public String create(@ModelAttribute @Validated CategoryCreateDto categoryCreateDto,
                          BindingResult bindingResult,
                          RedirectAttributes redirectAttributes) {
 
@@ -72,7 +72,7 @@ public class CategoryController {
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
             return "redirect:/home";
         }
-        categoryService.create(categoryCreateEditDto);
+        categoryService.create(categoryCreateDto);
         return "redirect:/home";
     }
 

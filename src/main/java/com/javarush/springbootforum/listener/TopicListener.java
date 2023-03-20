@@ -4,7 +4,6 @@ import com.javarush.springbootforum.entity.Category;
 import com.javarush.springbootforum.entity.SubCategory;
 import com.javarush.springbootforum.entity.Topic;
 import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 
 public class TopicListener {
 

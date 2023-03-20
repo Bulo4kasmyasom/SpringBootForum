@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Value;
 
 @Value
-public class SubCategoryCreateEditDto {
+public class SubCategoryCreateDto {
     @NumberValidator
     Long categoryId;
 

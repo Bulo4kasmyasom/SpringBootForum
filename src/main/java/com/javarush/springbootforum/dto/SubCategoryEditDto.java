@@ -1,14 +1,10 @@
 package com.javarush.springbootforum.dto;
 
-import com.javarush.springbootforum.validation.NumberValidator;
 import jakarta.validation.constraints.Size;
 import lombok.Value;
 
 @Value
-public class CategoryCreateEditDto {
-    @NumberValidator
-    Long sectionId;
-
+public class SubCategoryEditDto {
     @Size(min = 2, max = 128)
     String title;
 
