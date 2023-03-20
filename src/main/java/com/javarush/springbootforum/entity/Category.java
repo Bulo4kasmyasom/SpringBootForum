@@ -34,7 +34,7 @@ public class Category extends BaseEntity {
     private Long topicCount;
 
     @Builder.Default
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     @BatchSize(size = 30)// todo bad?
     List<SubCategory> subCategoryList = new ArrayList<>();
 }

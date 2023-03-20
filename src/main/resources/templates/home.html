@@ -2,7 +2,7 @@
 
 <div class="container">
 
-<th:block th:replace="~{/fragments/fragments :: errors(${errors})}">errors</th:block>
+    <th:block th:replace="~{/fragments/fragments :: errors(${errors})}">errors</th:block>
 
     <div class="row mt-4">
 
@@ -15,8 +15,10 @@
         </th:block>
 
         <div class="card mb-3" th:each="section: ${sections}">
-            <h5 class="card-header">[[${section.title}]]</h5>
+            <h5 class="card-header d-inline-block" th:id="|section-title-${section.id}|">[[${section.title}]]</h5>
+            <span sec:authorize="hasAuthority('ADMIN')" th:class="|section-edit-${section.id}|">RRR</span>
             <div class="card-body">
+                <div class="card-text" th:id="|section-description-${section.id}|">[[${section.description}]]</div>
                 <div class="card-text">
                     <ul class="list-group">
                         <li class="list-group-item" th:each="category:${section.categoryList}">
@@ -30,11 +32,10 @@
                             </ul>
                         </li>
                     </ul>
-                    <div class="card-text">[[${section.description}]]</div>
+
                 </div>
             </div>
         </div>
-
 
     </div>
 </div>

@@ -43,4 +43,11 @@ public class SectionService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
+    @Transactional
+    public Optional<SectionReadDto> update(Long sectionId, SectionCreateEditDto sectionCreateEditDto) {
+        return sectionRepository.findById(sectionId)
+                .map(section -> sectionCreateEditMapper.map(sectionCreateEditDto, section))
+                .map(sectionRepository::saveAndFlush)
+                .map(sectionReadMapper::map);
+    }
 }

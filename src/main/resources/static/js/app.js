@@ -14,20 +14,20 @@ const API_URL = '/api';
     })
 })()
 
-function buttonListenerTopicMessage() {
-    let btns = document.querySelectorAll('button[name^=topic-message-text-]')
-    btns.forEach(function (btn) {
-        btn.addEventListener('click', function (e) {
-            divToTextarea(e.target.name);
+window.onload = () => {
+    addListenersForSelectors('button[name^=topic-message-text-]', 'click', editTopicMessage, 'name');
+    addListenersForSelectors('span[class^=section-edit-]', 'click', sectionEdit, 'class');
+    addListenersForSelectors('span[id^=topic-edit-]', 'click', topicEdit, 'id');
+}
+
+function addListenersForSelectors(selector, type, func, attr) {
+    let selectorsAll = document.querySelectorAll(selector)
+    selectorsAll.forEach(function (el) {
+        el.addEventListener(type, function (e) {
+            func(e.target.getAttribute(attr));
         })
     })
 }
-
-window.onload = () => {
-    buttonListenerTopicMessage();
-
-}
-
 
 function sendRequest(method, url, body = null) {
     return fetch(url, {
@@ -45,7 +45,6 @@ function sendRequest(method, url, body = null) {
         })
     })
 }
-
 
 // function removeAllChilds(elem) {
 //     if (elem.childElementCount > 0) {
@@ -67,46 +66,142 @@ function sendRequest(method, url, body = null) {
 //         element.style.display = "none";
 // }
 
+function getQSelector(el) {
+    return document.querySelector(el);
+}
 
-function getQSelector(idName) {
-    return document.querySelector(idName);
+function createInputField(tagName, type, className, value, minLength, maxLength) {
+    let el = document.createElement(tagName);
+    if (type != null)
+        el.type = type;
+    el.className = className;
+    el.value = value
+    el.minLength = minLength
+    el.maxLength = maxLength
+    return el;
+}
+
+function topicEditSendRequest(inputTitle, topicId, titleClone, newButton) {
+    let body = {
+        title: inputTitle.value
+    }
+    sendRequest('PUT', API_URL + '/topic/' + topicId, body)
+        .then(data => {
+            titleClone.innerText = data.title
+            inputTitle.parentNode.replaceChild(titleClone, inputTitle)
+            inputTitle.remove()
+            newButton.remove()
+        })
+        .catch(err => {
+            showErrResponse(err, inputTitle)
+        })
+}
+
+function topicEdit(el) {
+    let topicId = +/\d+/.exec(el);
+    let title = getQSelector('#topic-title-' + topicId);
+    let button = getQSelector('#' + el);
+    let titleClone = title.cloneNode(false);
+    let inputTitle = createInputField("input", "text",
+        "form-control", title.textContent, 2, 128)
+
+    title.parentNode.replaceChild(inputTitle, title)
+
+    let newButton = button.cloneNode(true);
+    newButton.textContent = 'Сохранить'
+
+    button.parentNode.replaceChild(newButton, button);
+    newButton.addEventListener('click', function (event) {
+        topicEditSendRequest(inputTitle, topicId, titleClone, newButton);
+    });
+}
+
+function showErrResponse(err, el) {
+    let error = document.createElement('div');
+    error.setAttribute('class', 'p-2 text-danger-emphasis bg-danger-subtle border border-danger-subtle rounded-3')
+    error.innerText = err.message
+    el.parentNode.insertBefore(error, el.nextSibling)
+    setTimeout(() => {
+        error.remove()
+    }, 1500)
+}
+
+function editTopicMessageSendRequest(textarea, messageId, message, newButton) {
+    let body = {
+        topicId: getQSelector('#topicId').value,
+        text: textarea.value
+    }
+    sendRequest('PUT', API_URL + '/topic-message/' + messageId, body)
+        .then(data => {
+            message.innerText = data.text;
+            newButton.remove()
+            textarea.remove();
+        })
+        .catch(err => {
+            showErrResponse(err, message);
+        })
+}
+
+function editTopicMessage(el) {
+    let message = getQSelector('#' + el);
+    let button = getQSelector('button[name="' + el + '"]')
+    let messageId = +/\d+/.exec(el);
+    let textarea = createInputField("textarea", null,
+        "form-control", message.textContent, 2, 4000)
+    textarea.rows = 7
+    message.innerHTML = ''
+    message.appendChild(textarea)
+    button.innerHTML = "Сохранить"
+
+    let newButton = button.cloneNode(true); // for remove event listener
+    button.parentNode.replaceChild(newButton, button);
+    newButton.addEventListener('click', function (event) {
+        editTopicMessageSendRequest(textarea, messageId, message, newButton);
+    });
 }
 
 
-function divToTextarea(el) {
-    let divMessage = getQSelector('#' + el);
-    let button = document.querySelector('button[name="' + el + '"]')
-    let messageId = +/\d+/.exec(el);
-    let textarea = document.createElement("textarea");
-    textarea.setAttribute('class', 'form-control');
-    textarea.value = divMessage.textContent;
-    textarea.setAttribute('rows', '7');
-    divMessage.innerHTML = ''
-    // divMessage.parentNode.replaceChild(textarea, divMessage);
-    divMessage.appendChild(textarea)
-    button.innerHTML = "Сохранить"
-    let newButton = button.cloneNode(true); // for remove event listener
-    button.parentNode.replaceChild(newButton, button);
+function sectionEdit(el) {
+    let sectionId = +/\d+/.exec(el);
+    let title = getQSelector('#section-title-' + sectionId);
+    let description = getQSelector('#section-description-' + sectionId);
+    let titleClone = title.cloneNode(false);
+    let descriptionClone = description.cloneNode(false);
 
-    newButton.addEventListener('click', function (event) {
-        let body = {
-            topicId: getQSelector('#topicId').value,
-            text: textarea.value
-        }
-        sendRequest('PUT', API_URL + '/topic-message/' + messageId, body)
-            .then(data => {
-                divMessage.innerText = data.text;
-                newButton.remove()
-                textarea.remove();
-            })
-            .catch(err => {
-                let error = document.createElement('div');
-                error.setAttribute('class', 'p-2 text-danger-emphasis bg-danger-subtle border border-danger-subtle rounded-3')
-                error.innerText = err.message
-                divMessage.parentNode.appendChild(error)
-                setTimeout(() => {
-                    error.remove()
-                }, 1500)
-            })
-    });
+    let inputTitle = createInputField("input", "text",
+        "form-control", title.textContent, 2, 128)
+    title.parentNode.replaceChild(inputTitle, title)
+
+    let textarea = createInputField("textarea", null,
+        "form-control", description.textContent, 0, 512)
+    textarea.rows = 5
+    description.parentNode.replaceChild(textarea, description)
+
+    let button = document.createElement('button');
+    button.className = "btn btn-primary btn-sm btn-light"
+    button.innerText = "Сохранить"
+    button.addEventListener('click', () => {
+        sectionEditSendRequest(inputTitle, textarea, sectionId, descriptionClone, titleClone, button);
+    })
+    textarea.parentNode.insertBefore(button, textarea.nextSibling);
+}
+
+function sectionEditSendRequest(inputTitle, textarea, sectionId, descriptionClone, titleClone, button) {
+    let body = {
+        title: inputTitle.value,
+        description: textarea.value
+    }
+    sendRequest('PUT', API_URL + '/sections/' + sectionId, body)
+        .then(data => {
+            descriptionClone.innerText = data.description
+            titleClone.innerText = data.title
+            inputTitle.parentNode.replaceChild(titleClone, inputTitle)
+            textarea.parentNode.replaceChild(descriptionClone, textarea)
+            inputTitle.remove()
+            button.remove()
+            textarea.remove()
+        })
+        .catch(err => {
+            showErrResponse(err, inputTitle)
+        })
 }

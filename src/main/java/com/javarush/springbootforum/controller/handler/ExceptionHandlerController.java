@@ -11,7 +11,7 @@ public class ExceptionHandlerController {
     @ExceptionHandler(Exception.class)
     public String handleException(Exception exception) {
         exception.printStackTrace(); // писать в логи нужно
-        return "home";
+        return "redirect:/home";
     }
 
 }

@@ -57,30 +57,41 @@
                 <div class="col-6  border border-secondary-subtle">
                     Тема
                 </div>
-                <div class="col  border border-secondary-subtle">
+                <div class="col-2  border border-secondary-subtle">
                     Создана
                 </div>
-                <div class="col  border border-secondary-subtle">
+                <div class="col-1  border border-secondary-subtle">
                     Ответов
                 </div>
                 <div class="col  border border-secondary-subtle">
                     Автор
                 </div>
+                <th:block sec:authorize="hasAuthority('ADMIN')">
+                    <div class="col  border border-secondary-subtle">
+                        Редактировать
+                    </div>
+                </th:block>
             </div>
 
             <div class="row align-items-end" th:each="topic: ${topics.content}">
                 <div class="col-6   border border-secondary-subtle">
-                    <a th:href="@{/topic/{id}(id=${topic.id})}" th:text="${topic.title}"></a>
+                    <a th:href="@{/topic/{id}(id=${topic.id})}" th:text="${topic.title}"
+                       th:id="|topic-title-${topic.id}|"></a>
                 </div>
-                <div class="col  border border-secondary-subtle">
+                <div class="col-2  border border-secondary-subtle">
                     [[${topic.createdAt}]]
                 </div>
-                <div class="col  border border-secondary-subtle">
+                <div class="col-1  border border-secondary-subtle">
                     [[${topic.messageCount}]]
                 </div>
                 <div class="col  border border-secondary-subtle">
                     [[${topic.author.username}]]
                 </div>
+                <th:block sec:authorize="hasAuthority('ADMIN')">
+                    <div class="col  border border-secondary-subtle">
+                        <span th:id="|topic-edit-${topic.id}|">Редактировать</span>
+                    </div>
+                </th:block>
             </div>
 
         </div>

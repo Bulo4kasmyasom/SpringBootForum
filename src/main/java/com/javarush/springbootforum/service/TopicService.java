@@ -1,11 +1,13 @@
 package com.javarush.springbootforum.service;
 
 import com.javarush.springbootforum.dto.TopicCreateDto;
+import com.javarush.springbootforum.dto.TopicEditDto;
 import com.javarush.springbootforum.dto.TopicReadDto;
 import com.javarush.springbootforum.dto.UserReadDto;
 import com.javarush.springbootforum.entity.Section;
 import com.javarush.springbootforum.entity.TopicMessage;
 import com.javarush.springbootforum.mapper.TopicCreateMapper;
+import com.javarush.springbootforum.mapper.TopicEditMapper;
 import com.javarush.springbootforum.mapper.TopicReadMapper;
 import com.javarush.springbootforum.repository.TopicRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,7 @@ public class TopicService {
     private final TopicReadMapper topicReadMapper;
     private final TopicCreateMapper topicCreateMapper;
     private final TopicMessageService topicMessageService;
+    private final TopicEditMapper topicEditMapper;
 
     public List<TopicReadDto> findAll() {
         Sort.TypedSort<Section> sort = Sort.sort(Section.class);
@@ -64,4 +67,11 @@ public class TopicService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
+    @Transactional
+    public Optional<TopicReadDto> update(Long topicId, TopicEditDto topicEditDto) {
+        return topicRepository.findById(topicId)
+                .map(topic -> topicEditMapper.map(topicEditDto, topic))
+                .map(topicRepository::saveAndFlush)
+                .map(topicReadMapper::map);
+    }
 }

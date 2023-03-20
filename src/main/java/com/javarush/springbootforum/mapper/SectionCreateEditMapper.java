@@ -13,4 +13,15 @@ public class SectionCreateEditMapper implements Mapper<SectionCreateEditDto, Sec
                 .description(object.getDescription())
                 .build();
     }
+
+    @Override
+    public Section map(SectionCreateEditDto fromObject, Section toObject) {
+        copy(fromObject, toObject);
+        return toObject;
+    }
+
+    private void copy(SectionCreateEditDto object, Section section) {
+        section.setTitle(object.getTitle());
+        section.setDescription(object.getDescription());
+    }
 }
