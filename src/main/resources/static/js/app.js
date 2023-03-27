@@ -15,6 +15,7 @@ const API_URL = '/api';
 })()
 
 window.onload = () => {
+    addListeners('button[name^=topic-message-id-]', 'click', deleteTopicMessage, 'name');
     addListeners('button[name^=topic-message-text-]', 'click', editTopicMessage, 'name');
     addListeners('span[id^=topic-edit-]', 'click', topicEdit, 'id', 'topic');
     addListeners('span[class^=section-edit-]', 'click', sectionCatSubCatEdit, 'class', 'sections', 'section');
@@ -26,10 +27,11 @@ function addListeners(selector, type, func, attr, url = null, editableElement = 
     let selectorsAll = document.querySelectorAll(selector)
     selectorsAll.forEach(function (el) {
         el.addEventListener(type, function (e) {
+            let getAttr = e.target.getAttribute(attr);
             if (editableElement != null && url != null)
-                func(e.target.getAttribute(attr), url, editableElement); // sections, cats, subcats
+                func(getAttr, url, editableElement); // edit: sections, cats, subcats
             else
-                func(e.target.getAttribute(attr));
+                func(getAttr);
         })
     })
 }
@@ -210,5 +212,19 @@ function sectionCatSubCatEditSendRequest(inputTitle, textarea, id, descriptionCl
         })
         .catch(err => {
             showErrResponse(err, inputTitle)
+        })
+}
+
+
+function deleteTopicMessage(el) {
+    let id = +/\d+/.exec(el);
+    let topicMessage = getQSelector('#' + el);
+    sendRequest('DELETE', API_URL + '/topic-message/' + id)
+        .then(() => {
+            topicMessage.parentNode.removeChild(topicMessage);
+            alert("Сообщение удалено")
+        })
+        .catch(err => {
+            showErrResponse(err, topicMessage)
         })
 }

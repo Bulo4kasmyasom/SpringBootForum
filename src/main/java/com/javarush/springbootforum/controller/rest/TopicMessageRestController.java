@@ -1,5 +1,6 @@
 package com.javarush.springbootforum.controller.rest;
 
+import com.javarush.springbootforum.config.SecurityConfiguration;
 import com.javarush.springbootforum.controller.handler.exception.ValidationException;
 import com.javarush.springbootforum.dto.TopicMessageCreateEditDto;
 import com.javarush.springbootforum.dto.TopicMessageReadDto;
@@ -47,10 +48,19 @@ public class TopicMessageRestController {
 
         UserReadDto userReadDto = userService.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        topicMessageCreateEditDto.setAuthorId(userReadDto.getId());
+        topicMessageCreateEditDto.setAuthorId(userReadDto.getId()); // todo сеттер в контроллере - плохо?
 
         return topicMessageService.update(topicMessageId, topicMessageCreateEditDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+
+    // todo возможно нужно изменить возвращаемый тип данных.
+    @DeleteMapping("/{id}")
+    public HttpStatus delete(@PathVariable("id") Long id) {
+        return topicMessageService.delete(id)
+                ? HttpStatus.OK
+                : HttpStatus.NOT_FOUND;
     }
 
 }

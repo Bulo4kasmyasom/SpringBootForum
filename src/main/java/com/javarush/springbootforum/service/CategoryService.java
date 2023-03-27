@@ -21,13 +21,14 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class CategoryService {
+public class CategoryService implements CategoryServiceInterface {
     private final CategoryRepository categoryRepository;
     private final CategoryReadMapper categoryReadMapper;
     private final CategoryCreateMapper categoryCreateMapper;
     private final CategoryEditMapper categoryEditMapper;
     private final CategoryFieldReadMapper categoryFieldReadMapper;
 
+    @Override
     public List<CategoryReadDto> findAll() {
         return categoryRepository.findAll()
                 .stream()
@@ -35,11 +36,13 @@ public class CategoryService {
                 .toList();
     }
 
+    @Override
     public Optional<CategoryReadDto> findById(Long id) {
         return categoryRepository.findById(id)
                 .map(categoryReadMapper::map);
     }
 
+    @Override
     @Transactional
     public CategoryReadDto create(CategoryCreateDto categoryCreateDto) {
         return Optional.of(categoryCreateDto)
@@ -49,6 +52,7 @@ public class CategoryService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
+    @Override
     @Transactional
     public Optional<CategoryFieldReadDto> update(Long id, CategoryEditDto categoryEditDto) {
         return categoryRepository.findById(id)

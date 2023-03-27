@@ -3,7 +3,7 @@ package com.javarush.springbootforum.controller.rest;
 import com.javarush.springbootforum.controller.handler.exception.ValidationException;
 import com.javarush.springbootforum.dto.CategoryEditDto;
 import com.javarush.springbootforum.dto.CategoryFieldReadDto;
-import com.javarush.springbootforum.service.CategoryService;
+import com.javarush.springbootforum.service.CategoryServiceInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CategoryRestController {
 
-    private final CategoryService categoryService;
+    private final CategoryServiceInterface categoryServiceInterface;
 
     @PutMapping("/{id}")
     public CategoryFieldReadDto update(@PathVariable("id") Long id,
@@ -31,7 +31,7 @@ public class CategoryRestController {
                     .collect(Collectors.joining(", "));
             throw new ValidationException(errors);
         }
-        return categoryService.update(id, categoryEditDto)
+        return categoryServiceInterface.update(id, categoryEditDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 

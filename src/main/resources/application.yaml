@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: dev
   messages:
     basename: language, site
   data:
@@ -22,23 +24,8 @@ spring:
     show-sql: true
     properties:
       hibernate:
-#        javax:
-#          persistence:
-#            sharedCache:
-#              mode: ENABLE_SELECTIVE
-#        javax.cache:
-#          provider: org.ehcache.jsr107.EhcacheCachingProvider
         highlight_sql: true
         format_sql: true
         show_sql: true
         hbm2ddl:
           auto: validate
-#        cache:
-#          use_second_level_cache: true
-#          jcache:
-#            config:
-#              classpath=ehcache.xml
-#          use_query_cache: true
-#          region_prefix: dd_hibernate
-#          region:
-#              factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory

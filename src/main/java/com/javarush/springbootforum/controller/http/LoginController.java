@@ -1,14 +1,14 @@
 package com.javarush.springbootforum.controller.http;
 
 
-import com.javarush.springbootforum.service.CategoryService;
+import com.javarush.springbootforum.service.CategoryServiceInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 @Controller
 @RequiredArgsConstructor
 public class LoginController {
-    private final CategoryService categoryService;
+    private final CategoryServiceInterface categoryServiceInterface;
 
 //    @GetMapping("/login")
 //    private String loginPage(Model model) {

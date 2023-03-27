@@ -1,7 +1,7 @@
 package com.javarush.springbootforum.controller.http;
 
 import com.javarush.springbootforum.dto.*;
-import com.javarush.springbootforum.service.CategoryService;
+import com.javarush.springbootforum.service.CategoryServiceInterface;
 import com.javarush.springbootforum.service.SubCategoryService;
 import com.javarush.springbootforum.service.TopicService;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +22,13 @@ import java.util.List;
 @RequestMapping("/cat")
 @RequiredArgsConstructor
 public class CategoryController {
-    private final CategoryService categoryService;
+    private final CategoryServiceInterface categoryServiceInterface;
     private final SubCategoryService subCategoryService;
     private final TopicService topicService;
 
     @GetMapping("/{id}")
     public String categoriesWithTopics(@PathVariable("id") Long id, Model model, Pageable pageable) {
-        CategoryReadDto categoryDto = categoryService.findById(id)
+        CategoryReadDto categoryDto = categoryServiceInterface.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         List<SubCategoryReadDto> subCategoryListDto = categoryDto.getSubCategory();
@@ -48,7 +48,7 @@ public class CategoryController {
             Model model,
             Pageable pageable
     ) {
-        CategoryReadDto categoryDto = categoryService.findById(catId)
+        CategoryReadDto categoryDto = categoryServiceInterface.findById(catId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         SubCategoryReadDto subCategoryDto = subCategoryService.findById(subCatId)
@@ -72,7 +72,7 @@ public class CategoryController {
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
             return "redirect:/home";
         }
-        categoryService.create(categoryCreateDto);
+        categoryServiceInterface.create(categoryCreateDto);
         return "redirect:/home";
     }
 

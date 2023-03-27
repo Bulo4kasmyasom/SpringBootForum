@@ -4,6 +4,7 @@ package com.javarush.springbootforum.config;
 import com.javarush.springbootforum.entity.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+    @Profile("dev")
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
@@ -32,7 +34,6 @@ public class SecurityConfiguration {
                 .requestMatchers("/topic-message/new")
                 .hasAnyAuthority(Role.ADMIN.getAuthority(),
                         Role.MODERATOR.getAuthority(),
-                        Role.GUEST.getAuthority(),
                         Role.USER.getAuthority())
                 .anyRequest().permitAll()
                 .and()
@@ -42,6 +43,7 @@ public class SecurityConfiguration {
                 .and()
                 .build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
