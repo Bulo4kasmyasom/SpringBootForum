@@ -70,10 +70,13 @@
                     <div class="col  border border-secondary-subtle">
                         Редактировать
                     </div>
+                    <div class="col  border border-secondary-subtle">
+                        Удалить
+                    </div>
                 </th:block>
             </div>
 
-            <div class="row align-items-end" th:each="topic: ${topics.content}">
+            <div class="row align-items-end" th:each="topic: ${topics.content}" th:id="|topic-${topic.id}|">
                 <div class="col-6   border border-secondary-subtle">
                     <a th:href="@{/topic/{id}(id=${topic.id})}" th:text="${topic.title}"
                        th:id="|topic-title-${topic.id}|"></a>
@@ -90,6 +93,9 @@
                 <th:block sec:authorize="hasAuthority('ADMIN')">
                     <div class="col  border border-secondary-subtle">
                         <span th:id="|topic-edit-${topic.id}|">Редактировать</span>
+                    </div>
+                    <div class="col  border border-secondary-subtle">
+                        <span th:id="|topic-delete-${topic.id}|">Удалить</span>
                     </div>
                 </th:block>
             </div>

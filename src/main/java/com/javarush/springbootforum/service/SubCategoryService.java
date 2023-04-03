@@ -56,4 +56,14 @@ public class SubCategoryService {
                 .map(subCategoryRepository::saveAndFlush)
                 .map(subCategoryFieldReadMapper::map);
     }
+
+    @Transactional
+    public boolean delete(Long id) {
+        return subCategoryRepository.findById(id)
+                .map(topic -> {
+                    subCategoryRepository.delete(topic);
+                    subCategoryRepository.flush();
+                    return true;
+                }).orElse(false);
+    }
 }

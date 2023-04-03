@@ -53,4 +53,14 @@ public class SectionService {
                 .map(sectionRepository::saveAndFlush)
                 .map(sectionWithoutCategoryListReadMapper::map);
     }
+
+    @Transactional
+    public boolean delete(Long id) {
+        return sectionRepository.findById(id)
+                .map(topic -> {
+                    sectionRepository.delete(topic);
+                    sectionRepository.flush();
+                    return true;
+                }).orElse(false);
+    }
 }

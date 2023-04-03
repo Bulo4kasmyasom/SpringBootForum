@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -75,10 +74,10 @@ public class TopicMessageService {
     }
 
     @Transactional
-    public boolean delete(Long id) {
+    public boolean delete(Long id) { // todo в топике может не остаться сообщений, пофиксить
         return topicMessageRepository.findById(id)
-                .map(user -> {
-                    topicMessageRepository.delete(user);
+                .map(topicMessage -> {
+                    topicMessageRepository.delete(topicMessage);
                     topicMessageRepository.flush();
                     return true;
                 }).orElse(false);

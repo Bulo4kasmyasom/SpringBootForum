@@ -35,4 +35,12 @@ public class CategoryRestController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
+    // todo возможно нужно изменить возвращаемый тип данных.
+    @DeleteMapping("/{id}")
+    public HttpStatus delete(@PathVariable("id") Long id) {
+        return categoryServiceInterface.delete(id)
+                ? HttpStatus.OK
+                : HttpStatus.NOT_FOUND;
+    }
+
 }

@@ -1,6 +1,5 @@
 package com.javarush.springbootforum.controller.rest;
 
-import com.javarush.springbootforum.config.SecurityConfiguration;
 import com.javarush.springbootforum.controller.handler.exception.ValidationException;
 import com.javarush.springbootforum.dto.TopicMessageCreateEditDto;
 import com.javarush.springbootforum.dto.TopicMessageReadDto;

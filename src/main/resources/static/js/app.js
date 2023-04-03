@@ -15,21 +15,25 @@ const API_URL = '/api';
 })()
 
 window.onload = () => {
+    addListeners('span[id^=topic-delete-]', 'click', deleteTopic, 'id');
     addListeners('button[name^=topic-message-id-]', 'click', deleteTopicMessage, 'name');
     addListeners('button[name^=topic-message-text-]', 'click', editTopicMessage, 'name');
     addListeners('span[id^=topic-edit-]', 'click', topicEdit, 'id', 'topic');
     addListeners('span[class^=section-edit-]', 'click', sectionCatSubCatEdit, 'class', 'sections', 'section');
     addListeners('span[class^=category-edit-]', 'click', sectionCatSubCatEdit, 'class', 'cat', 'category');
     addListeners('span[class^=subCategory-edit-]', 'click', sectionCatSubCatEdit, 'class', 'subcat', 'subCategory');
+    addListeners('span[class^=section-delete-]', 'click', sectionCatSubCatDelete, 'class', 'sections', 'section');
+    addListeners('span[class^=category-delete-]', 'click', sectionCatSubCatDelete, 'class', 'cat', 'category');
+    addListeners('span[class^=subCategory-delete-]', 'click', sectionCatSubCatDelete, 'class', 'subcat', 'subCategory');
 }
 
-function addListeners(selector, type, func, attr, url = null, editableElement = null) {
+function addListeners(selector, type, func, attr, url = null, elem = null) {
     let selectorsAll = document.querySelectorAll(selector)
     selectorsAll.forEach(function (el) {
         el.addEventListener(type, function (e) {
             let getAttr = e.target.getAttribute(attr);
-            if (editableElement != null && url != null)
-                func(getAttr, url, editableElement); // edit: sections, cats, subcats
+            if (elem != null && url != null)
+                func(getAttr, url, elem); // edit: sections, cats, subcats
             else
                 func(getAttr);
         })
@@ -215,16 +219,65 @@ function sectionCatSubCatEditSendRequest(inputTitle, textarea, id, descriptionCl
         })
 }
 
-
 function deleteTopicMessage(el) {
     let id = +/\d+/.exec(el);
     let topicMessage = getQSelector('#' + el);
     sendRequest('DELETE', API_URL + '/topic-message/' + id)
         .then(() => {
             topicMessage.parentNode.removeChild(topicMessage);
-            alert("Сообщение удалено")
         })
         .catch(err => {
             showErrResponse(err, topicMessage)
         })
 }
+
+function deleteTopic(el) {
+    let id = +/\d+/.exec(el);
+    let topic = getQSelector('#topic-' + id);
+    sendRequest('DELETE', API_URL + '/topic/' + id)
+        .then(() => {
+            topic.parentNode.removeChild(topic);
+        })
+        .catch(err => {
+            showErrResponse(err, topic)
+        })
+}
+
+function sectionCatSubCatDelete(el, url, elem) {
+    let id = +/\d+/.exec(el);
+    let elemId = getQSelector('#' + elem + '-' + id);
+    if (confirm("Данные будут удалены. Точно удалить?")) {
+        sendRequest('DELETE', API_URL + '/' + url + '/' + id)
+            .then(() => {
+                elemId.parentNode.removeChild(elemId)
+            })
+            .catch(err => {
+                showErrResponse(err, elemId)
+            })
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

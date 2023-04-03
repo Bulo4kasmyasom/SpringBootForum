@@ -9,7 +9,6 @@ import com.javarush.springbootforum.mapper.TopicFieldReadMapper;
 import com.javarush.springbootforum.mapper.TopicReadMapper;
 import com.javarush.springbootforum.repository.TopicRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -73,5 +72,15 @@ public class TopicService {
                 .map(topic -> topicEditMapper.map(topicEditDto, topic))
                 .map(topicRepository::saveAndFlush)
                 .map(topicFieldReadMapper::map);
+    }
+
+    @Transactional
+    public boolean delete(Long id) {
+        return topicRepository.findById(id)
+                .map(topic -> {
+                    topicRepository.delete(topic);
+                    topicRepository.flush();
+                    return true;
+                }).orElse(false);
     }
 }

@@ -19,4 +19,7 @@ public interface CategoryServiceInterface {
 
     @Transactional
     Optional<CategoryFieldReadDto> update(Long id, CategoryEditDto categoryEditDto);
+
+    @Transactional
+    boolean delete(Long id);
 }

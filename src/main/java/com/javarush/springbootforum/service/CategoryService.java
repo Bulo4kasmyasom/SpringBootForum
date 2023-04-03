@@ -60,4 +60,14 @@ public class CategoryService implements CategoryServiceInterface {
                 .map(categoryRepository::saveAndFlush)
                 .map(categoryFieldReadMapper::map);
     }
+
+    @Transactional
+    public boolean delete(Long id) {
+        return categoryRepository.findById(id)
+                .map(topic -> {
+                    categoryRepository.delete(topic);
+                    categoryRepository.flush();
+                    return true;
+                }).orElse(false);
+    }
 }
