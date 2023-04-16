@@ -1,8 +1,7 @@
 package com.javarush.springbootforum.service;
 
 import com.javarush.springbootforum.dto.*;
-import com.javarush.springbootforum.entity.Section;
-import com.javarush.springbootforum.entity.TopicMessage;
+import com.javarush.springbootforum.entity.*;
 import com.javarush.springbootforum.mapper.TopicCreateMapper;
 import com.javarush.springbootforum.mapper.TopicEditMapper;
 import com.javarush.springbootforum.mapper.TopicFieldReadMapper;
@@ -30,6 +29,8 @@ public class TopicService {
     private final TopicCreateMapper topicCreateMapper;
     private final TopicMessageService topicMessageService;
     private final TopicEditMapper topicEditMapper;
+    private final CategoryService categoryService;
+    private final SubCategoryService subCategoryService;
 
     public List<TopicReadDto> findAll() {
         Sort.TypedSort<Section> sort = Sort.sort(Section.class);
@@ -82,5 +83,63 @@ public class TopicService {
                     topicRepository.flush();
                     return true;
                 }).orElse(false);
+    }
+
+    @Transactional
+    public boolean moveTopicsInCategory(Long catId, Long[] topicsIds) {
+        Category newCategory = categoryService.findByIdAndReturnCategory(catId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        List<Topic> topics = getTopicsForMove(topicsIds, newCategory, null); // null т.к. нет подкатегории
+
+        // todo  N + 1 при обновлении, batch не работает из application.yaml
+        return topicRepository.saveAllAndFlush(topics).size() > 0;
+    }
+
+    @Transactional
+    public boolean moveTopicsInSubCategory(Long catId, Long subCatId, Long[] topicsIds) {
+        Category newCategory = categoryService.findByIdAndReturnCategory(catId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        SubCategory newSubCategory = subCategoryService.findByCategoryIdAndId(catId, subCatId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        List<Topic> topics = getTopicsForMove(topicsIds, newCategory, newSubCategory);
+
+        // todo  N + 1 при обновлении, batch не работает из application.yaml
+        return topicRepository.saveAllAndFlush(topics).size() > 0;
+    }
+
+    private List<Topic> getTopicsForMove(Long[] topicsIds, Category newCategory, SubCategory newSubCategory) {
+        return topicRepository.findTopicsByIdIn(List.of(topicsIds))
+                // todo много запросов, нужно уменьшать их кол-во и подумать над адекватностью кода ниже. Если выделить
+                //  в отдельные переменные категории и подкатегории, то некорректно работает код,
+                //  поэтому геттеры и сеттеры
+                .stream()
+                .peek(topic -> {
+                    long numToSetTopicCounter = 1;
+
+                    topic.getCategory().setTopicCount(topic.getCategory().getTopicCount() - numToSetTopicCounter);
+                    if (topic.getSubCategory() != null)
+                        topic.getSubCategory().setTopicCount(topic.getSubCategory().getTopicCount() - numToSetTopicCounter);
+
+                    topic.setCategory(newCategory);
+                    topic.setSubCategory(newSubCategory);
+
+                    topic.getCategory().setTopicCount(newCategory.getTopicCount() + numToSetTopicCounter);
+                    if (topic.getSubCategory() != null && newSubCategory != null)
+                        topic.getSubCategory().setTopicCount(newSubCategory.getTopicCount() + numToSetTopicCounter);
+
+                }).toList();
+    }
+
+    @Transactional
+    public boolean massDelete(Long[] topicsIds) {
+        if (topicsIds.length > 0) {
+            topicRepository.deleteAllByIdInBatch(List.of(topicsIds));
+            topicRepository.flush();
+            return topicRepository.existsById(topicsIds[0]);
+        }
+        return false;
     }
 }

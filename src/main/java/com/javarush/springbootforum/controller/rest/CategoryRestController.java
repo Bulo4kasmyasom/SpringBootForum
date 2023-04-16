@@ -3,6 +3,7 @@ package com.javarush.springbootforum.controller.rest;
 import com.javarush.springbootforum.controller.handler.exception.ValidationException;
 import com.javarush.springbootforum.dto.CategoryEditDto;
 import com.javarush.springbootforum.dto.CategoryFieldReadDto;
+import com.javarush.springbootforum.dto.CategoryReadDto;
 import com.javarush.springbootforum.service.CategoryServiceInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -12,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -20,6 +22,11 @@ import java.util.stream.Collectors;
 public class CategoryRestController {
 
     private final CategoryServiceInterface categoryServiceInterface;
+
+    @GetMapping
+    public List<CategoryReadDto> findAll() {
+        return categoryServiceInterface.findAll();
+    }
 
     @PutMapping("/{id}")
     public CategoryFieldReadDto update(@PathVariable("id") Long id,

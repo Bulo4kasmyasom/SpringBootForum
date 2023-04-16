@@ -52,9 +52,9 @@
     </th:block>
 
     <th:block th:if="${topics.content.size()>0}">
-        <div class="mt-3">
+        <div class="mt-3" id="topics-table">
             <div class="row align-items-end border border-secondary-subtle rounded-3">
-                <div class="col-6  border border-secondary-subtle">
+                <div class="col-5  border border-secondary-subtle">
                     Тема
                 </div>
                 <div class="col-2  border border-secondary-subtle">
@@ -63,21 +63,24 @@
                 <div class="col-1  border border-secondary-subtle">
                     Ответов
                 </div>
-                <div class="col  border border-secondary-subtle">
+                <div class="col-1  border border-secondary-subtle">
                     Автор
                 </div>
                 <th:block sec:authorize="hasAuthority('ADMIN')">
-                    <div class="col  border border-secondary-subtle">
-                        Редактировать
+                    <div class="col-1  border border-secondary-subtle">
+                        Edit
                     </div>
-                    <div class="col  border border-secondary-subtle">
-                        Удалить
+                    <div class="col-1  border border-secondary-subtle">
+                        Delete
+                    </div>
+                    <div class="col-1  border border-secondary-subtle">
+                        Select
                     </div>
                 </th:block>
             </div>
 
             <div class="row align-items-end" th:each="topic: ${topics.content}" th:id="|topic-${topic.id}|">
-                <div class="col-6   border border-secondary-subtle">
+                <div class="col-5   border border-secondary-subtle">
                     <a th:href="@{/topic/{id}(id=${topic.id})}" th:text="${topic.title}"
                        th:id="|topic-title-${topic.id}|"></a>
                 </div>
@@ -87,15 +90,18 @@
                 <div class="col-1  border border-secondary-subtle">
                     [[${topic.messageCount}]]
                 </div>
-                <div class="col  border border-secondary-subtle">
+                <div class="col-1  border border-secondary-subtle">
                     [[${topic.author.username}]]
                 </div>
                 <th:block sec:authorize="hasAuthority('ADMIN')">
-                    <div class="col  border border-secondary-subtle">
-                        <span th:id="|topic-edit-${topic.id}|">Редактировать</span>
+                    <div class="col-1  border border-secondary-subtle">
+                        <span th:id="|topic-edit-${topic.id}|">Edit</span>
                     </div>
-                    <div class="col  border border-secondary-subtle">
-                        <span th:id="|topic-delete-${topic.id}|">Удалить</span>
+                    <div class="col-1  border border-secondary-subtle">
+                        <span th:id="|topic-delete-${topic.id}|">Delete</span>
+                    </div>
+                    <div class="col-1  border border-secondary-subtle">
+                        <input class="checkbox" type="checkbox" name="topic[]" th:value="${topic.id}">
                     </div>
                 </th:block>
             </div>

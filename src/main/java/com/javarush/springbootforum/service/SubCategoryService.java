@@ -4,6 +4,7 @@ import com.javarush.springbootforum.dto.SubCategoryCreateDto;
 import com.javarush.springbootforum.dto.SubCategoryEditDto;
 import com.javarush.springbootforum.dto.SubCategoryFieldReadDto;
 import com.javarush.springbootforum.dto.SubCategoryReadDto;
+import com.javarush.springbootforum.entity.SubCategory;
 import com.javarush.springbootforum.mapper.SubCategoryCreateMapper;
 import com.javarush.springbootforum.mapper.SubCategoryEditMapper;
 import com.javarush.springbootforum.mapper.SubCategoryFieldReadMapper;
@@ -38,6 +39,10 @@ public class SubCategoryService {
     public Optional<SubCategoryReadDto> findById(Long id) {
         return subCategoryRepository.findById(id)
                 .map(subCategoryReadMapper::map);
+    }
+
+    public Optional<SubCategory> findByCategoryIdAndId(Long categoryId, Long subCategoryId) {
+        return subCategoryRepository.findByCategoryIdAndId(categoryId, subCategoryId);
     }
 
     @Transactional

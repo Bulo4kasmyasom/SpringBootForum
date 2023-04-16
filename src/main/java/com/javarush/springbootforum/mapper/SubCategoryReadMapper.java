@@ -14,6 +14,7 @@ public class SubCategoryReadMapper implements Mapper<SubCategory, SubCategoryRea
     public SubCategoryReadDto map(SubCategory object) {
         return new SubCategoryReadDto(
                 object.getId(),
+                object.getCategory().getId(),
                 object.getCategory().getTitle(),
                 object.getTitle(),
                 object.getDescription(),

@@ -4,6 +4,7 @@ import com.javarush.springbootforum.dto.CategoryCreateDto;
 import com.javarush.springbootforum.dto.CategoryEditDto;
 import com.javarush.springbootforum.dto.CategoryFieldReadDto;
 import com.javarush.springbootforum.dto.CategoryReadDto;
+import com.javarush.springbootforum.entity.Category;
 import com.javarush.springbootforum.mapper.CategoryCreateMapper;
 import com.javarush.springbootforum.mapper.CategoryEditMapper;
 import com.javarush.springbootforum.mapper.CategoryFieldReadMapper;
@@ -40,6 +41,10 @@ public class CategoryService implements CategoryServiceInterface {
     public Optional<CategoryReadDto> findById(Long id) {
         return categoryRepository.findById(id)
                 .map(categoryReadMapper::map);
+    }
+
+    public Optional<Category> findByIdAndReturnCategory(Long id) {
+        return categoryRepository.findById(id);
     }
 
     @Override

@@ -1,4 +1,5 @@
 const API_URL = '/api';
+const messageIfDeleteAction = "Данные будут удалены без возможности восстановления. Точно удалить?";
 
 (() => {
     'use strict'
@@ -15,6 +16,7 @@ const API_URL = '/api';
 })()
 
 window.onload = () => {
+    addListeners('input[name^=topic]', 'change', moveDeleteTopics, 'value');
     addListeners('span[id^=topic-delete-]', 'click', deleteTopic, 'id');
     addListeners('button[name^=topic-message-id-]', 'click', deleteTopicMessage, 'name');
     addListeners('button[name^=topic-message-text-]', 'click', editTopicMessage, 'name');
@@ -222,31 +224,35 @@ function sectionCatSubCatEditSendRequest(inputTitle, textarea, id, descriptionCl
 function deleteTopicMessage(el) {
     let id = +/\d+/.exec(el);
     let topicMessage = getQSelector('#' + el);
-    sendRequest('DELETE', API_URL + '/topic-message/' + id)
-        .then(() => {
-            topicMessage.parentNode.removeChild(topicMessage);
-        })
-        .catch(err => {
-            showErrResponse(err, topicMessage)
-        })
+    if (confirm(messageIfDeleteAction)) {
+        sendRequest('DELETE', API_URL + '/topic-message/' + id)
+            .then(() => {
+                topicMessage.parentNode.removeChild(topicMessage);
+            })
+            .catch(err => {
+                showErrResponse(err, topicMessage)
+            })
+    }
 }
 
 function deleteTopic(el) {
     let id = +/\d+/.exec(el);
     let topic = getQSelector('#topic-' + id);
-    sendRequest('DELETE', API_URL + '/topic/' + id)
-        .then(() => {
-            topic.parentNode.removeChild(topic);
-        })
-        .catch(err => {
-            showErrResponse(err, topic)
-        })
+    if (confirm(messageIfDeleteAction)) {
+        sendRequest('DELETE', API_URL + '/topic/' + id)
+            .then(() => {
+                topic.parentNode.removeChild(topic);
+            })
+            .catch(err => {
+                showErrResponse(err, topic)
+            })
+    }
 }
 
 function sectionCatSubCatDelete(el, url, elem) {
     let id = +/\d+/.exec(el);
     let elemId = getQSelector('#' + elem + '-' + id);
-    if (confirm("Данные будут удалены. Точно удалить?")) {
+    if (confirm(messageIfDeleteAction)) {
         sendRequest('DELETE', API_URL + '/' + url + '/' + id)
             .then(() => {
                 elemId.parentNode.removeChild(elemId)
@@ -257,11 +263,162 @@ function sectionCatSubCatDelete(el, url, elem) {
     }
 }
 
+function arrayToObject(arr) {
+    let rv = {};
+    for (let i = 0; i < arr.length; ++i)
+        if (arr[i] !== undefined) rv[i] = arr[i];
+    return rv;
+}
 
+function moveTopicsSendRequest(selectCategory, selectSubCategory) {
+    let checkBoxesChecked = document.querySelectorAll('input[type="checkbox"]:checked');
+    let checkedValues = Array.from(checkBoxesChecked).map(cb => cb.value);
 
+    let cat = Number(selectCategory.value);
+    let subCat = (Number(selectSubCategory.value) === 0) ? '' : '/subCat/' + Number(selectSubCategory.value)
 
+    sendRequest('PATCH', API_URL + '/topic/cat/' + cat + subCat, checkedValues)
+        .then(() => {
+            for (let val of checkBoxesChecked.values()) {
+                let topic = getQSelector('#topic-' + val.value);
+                topic.parentNode.removeChild(topic);
+            }
+            moveDeleteTopicsRemoveElements();
+        })
+}
 
+function createElementSelectListForMoveDeleteTopics(id, name) {
+    let subCategoriesSelect = document.createElement("select");
+    subCategoriesSelect.id = id
+    subCategoriesSelect.name = name
+    subCategoriesSelect.className = "form-select form-select-sm ms-2 d-inline"
+    subCategoriesSelect.style.width = '300px'
+    return subCategoriesSelect;
+}
 
+function fillCatSubCatForMoveTopics() {
+    let category = {'ID': [], 'title': []}
+    let subCategory = {'ID': [], 'categoryId': [], 'title': []}
+    let c = 0;
+    for (let i = 0; i < getCatAndSubCats.length; i++) {
+        category.ID.push(getCatAndSubCats[i].id);
+        category.title.push(getCatAndSubCats[i].title);
+        for (let j = 0; j < getCatAndSubCats[i].subCategory.length; j++) {
+            subCategory.ID.push(getCatAndSubCats[i].subCategory[j].id);
+            subCategory.categoryId.push(getCatAndSubCats[i].subCategory[j].categoryId);
+            subCategory.title.push(getCatAndSubCats[i].subCategory[j].title);
+            c++;
+        }
+    }
+    return {category, subCategory};
+}
+
+function set_select(name, arr_text, arr_val) {
+    let select = document.getElementsByName(name)[0];
+    select.options.length = 0;
+    for (let k = 0; k < arr_val.length; k++) {
+        select.options[k] = new Option(arr_text[k], arr_val[k]);
+    }
+}
+
+let getCatAndSubCatsBoolean = false;
+let getCatAndSubCats;
+
+function moveDeleteTopicsRemoveElements() {
+    getCatAndSubCatsBoolean = false
+    let subCategory = getQSelector('#subCategory');
+    let category = getQSelector('#category');
+    let submitMove = getQSelector('#submitButtonMoveTopics');
+    let submitDelete = getQSelector('#submitButtonDeleteTopics');
+    if (category != null && subCategory != null) {
+        subCategory.parentNode.removeChild(subCategory);
+        category.parentNode.removeChild(category);
+        submitMove.parentNode.removeChild(submitMove);
+        submitDelete.parentNode.removeChild(submitDelete);
+    }
+}
+
+function createElementSubmitMoveDeleteTopics(id, val) {
+    let submit = document.createElement("input");
+    submit.id = id
+    submit.type = 'submit'
+    submit.value = val
+    submit.className = "btn btn-primary btn-sm btn-light"
+    return submit;
+}
+
+function insertBefore(elem, node) {
+    node.parentNode.insertBefore(elem, node)
+}
+
+function deleteTopicsSendRequest() {
+    let checkBoxesChecked = document.querySelectorAll('input[type="checkbox"]:checked');
+    let checkedValues = Array.from(checkBoxesChecked).map(cb => cb.value);
+
+    sendRequest('DELETE', API_URL + '/topic', checkedValues)
+        .then(() => {
+            for (let val of checkBoxesChecked.values()) {
+                let topic = getQSelector('#topic-' + val.value);
+                topic.parentNode.removeChild(topic);
+            }
+            moveDeleteTopicsRemoveElements();
+        })
+}
+
+async function moveDeleteTopics(el) {
+    let selectedCheckBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
+    if (selectedCheckBoxes.length > 0) {
+        if (getCatAndSubCatsBoolean === false) {
+            getCatAndSubCats = await function () {
+                return new Promise((resolve, reject) => {
+                    resolve(sendRequest('GET', API_URL + '/cat'));
+                    getCatAndSubCatsBoolean = true;
+                });
+            }();
+
+            let topicsTable = getQSelector('#topics-table');
+            let subCategoriesSelect = createElementSelectListForMoveDeleteTopics("subCategory", "subCategory");
+            let categoriesSelect = createElementSelectListForMoveDeleteTopics("category", "category");
+            let submitMove = createElementSubmitMoveDeleteTopics('submitButtonMoveTopics', 'Переместить');
+            let submitDelete = createElementSubmitMoveDeleteTopics('submitButtonDeleteTopics', 'Удалить');
+
+            if (getQSelector('#category') == null) {
+                insertBefore(categoriesSelect, topicsTable)
+                insertBefore(subCategoriesSelect, topicsTable)
+                insertBefore(submitMove, topicsTable)
+                insertBefore(submitDelete, topicsTable)
+            }
+            let {category, subCategory} = fillCatSubCatForMoveTopics();
+            let selectCategory = document.getElementsByName('category')[0];
+            let selectSubCategory = document.getElementsByName('subCategory')[0];
+
+            function change_select() {
+                let j = selectCategory.selectedIndex || 0, name = ['Без подкатегории'], id = [0];
+                j = category['ID'][j]
+                for (let i = 0; i < subCategory['categoryId'].length; i++) {
+                    if (subCategory['categoryId'][i] === j) {
+                        name.push(subCategory['title'][i]);
+                        id.push(subCategory['ID'][i]);
+                    }
+                }
+                set_select('subCategory', name, id)
+            }
+
+            set_select('category', category['title'], category['ID'])
+            change_select()
+            selectCategory.addEventListener('change', change_select);
+            submitMove.addEventListener('click', () => {
+                moveTopicsSendRequest(selectCategory, selectSubCategory);
+            })
+            submitDelete.addEventListener('click', () => {
+                deleteTopicsSendRequest();
+            })
+        }
+    } else {
+        moveDeleteTopicsRemoveElements();
+    }
+
+}
 
 
 

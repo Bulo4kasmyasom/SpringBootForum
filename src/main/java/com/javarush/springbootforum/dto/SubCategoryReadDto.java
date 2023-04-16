@@ -5,6 +5,7 @@ import lombok.Value;
 @Value
 public class SubCategoryReadDto {
     Long id;
+    Long categoryId;
     String category;
     String title;
     String description;

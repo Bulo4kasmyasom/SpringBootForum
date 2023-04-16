@@ -34,12 +34,36 @@ public class TopicRestController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
+    @PatchMapping("/cat/{catId}")
+    public HttpStatus moveTopicsInCategory(@PathVariable("catId") Long catId,
+                                           @RequestBody Long[] topicsIds) {
+        return topicService.moveTopicsInCategory(catId, topicsIds)
+                ? HttpStatus.OK
+                : HttpStatus.BAD_REQUEST;
+    }
+
+    @PatchMapping("/cat/{catId}/subCat/{subCatId}")
+    public HttpStatus moveTopicsInSubCategory(@PathVariable("catId") Long catId,
+                                              @PathVariable(value = "subCatId") Long subCatId,
+                                              @RequestBody Long[] topicsIds) {
+        return topicService.moveTopicsInSubCategory(catId, subCatId, topicsIds)
+                ? HttpStatus.OK
+                : HttpStatus.BAD_REQUEST;
+    }
+
     // todo возможно нужно изменить возвращаемый тип данных.
     @DeleteMapping("/{id}")
     public HttpStatus delete(@PathVariable("id") Long id) {
         return topicService.delete(id)
                 ? HttpStatus.OK
                 : HttpStatus.NOT_FOUND;
+    }
+
+    @DeleteMapping
+    public HttpStatus massDelete(@RequestBody Long[] topicsIds) {
+        return topicService.massDelete(topicsIds)
+                ? HttpStatus.OK
+                : HttpStatus.BAD_REQUEST;
     }
 
 }
