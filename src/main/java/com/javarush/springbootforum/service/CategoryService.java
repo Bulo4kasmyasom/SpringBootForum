@@ -7,8 +7,7 @@ import com.javarush.springbootforum.dto.CategoryReadDto;
 import com.javarush.springbootforum.entity.Category;
 import com.javarush.springbootforum.mapper.CategoryCreateMapper;
 import com.javarush.springbootforum.mapper.CategoryEditMapper;
-import com.javarush.springbootforum.mapper.CategoryFieldReadMapper;
-import com.javarush.springbootforum.mapper.CategoryReadMapper;
+import com.javarush.springbootforum.mapper.DtoMapper;
 import com.javarush.springbootforum.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,23 +23,22 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class CategoryService implements CategoryServiceInterface {
     private final CategoryRepository categoryRepository;
-    private final CategoryReadMapper categoryReadMapper;
+    private final DtoMapper dtoMapper = DtoMapper.MAPPER;
     private final CategoryCreateMapper categoryCreateMapper;
     private final CategoryEditMapper categoryEditMapper;
-    private final CategoryFieldReadMapper categoryFieldReadMapper;
 
     @Override
     public List<CategoryReadDto> findAll() {
         return categoryRepository.findAll()
                 .stream()
-                .map(categoryReadMapper::map)
+                .map(dtoMapper::categoryToCategoryReadDto)
                 .toList();
     }
 
     @Override
     public Optional<CategoryReadDto> findById(Long id) {
         return categoryRepository.findById(id)
-                .map(categoryReadMapper::map);
+                .map(dtoMapper::categoryToCategoryReadDto);
     }
 
     public Optional<Category> findByIdAndReturnCategory(Long id) {
@@ -53,7 +51,7 @@ public class CategoryService implements CategoryServiceInterface {
         return Optional.of(categoryCreateDto)
                 .map(categoryCreateMapper::map)
                 .map(categoryRepository::save)
-                .map(categoryReadMapper::map)
+                .map(dtoMapper::categoryToCategoryReadDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
@@ -63,7 +61,7 @@ public class CategoryService implements CategoryServiceInterface {
         return categoryRepository.findById(id)
                 .map(section -> categoryEditMapper.map(categoryEditDto, section))
                 .map(categoryRepository::saveAndFlush)
-                .map(categoryFieldReadMapper::map);
+                .map(dtoMapper::categoryToCategoryFieldReadDto);
     }
 
     @Transactional

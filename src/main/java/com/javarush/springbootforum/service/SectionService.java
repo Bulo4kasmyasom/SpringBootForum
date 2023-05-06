@@ -3,9 +3,8 @@ package com.javarush.springbootforum.service;
 import com.javarush.springbootforum.dto.SectionCreateEditDto;
 import com.javarush.springbootforum.dto.SectionReadDto;
 import com.javarush.springbootforum.dto.SectionWithoutCategoryListReadDto;
+import com.javarush.springbootforum.mapper.DtoMapper;
 import com.javarush.springbootforum.mapper.SectionCreateEditMapper;
-import com.javarush.springbootforum.mapper.SectionReadMapper;
-import com.javarush.springbootforum.mapper.SectionWithoutCategoryListReadMapper;
 import com.javarush.springbootforum.repository.SectionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,20 +20,19 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class SectionService {
     private final SectionRepository sectionRepository;
-    private final SectionReadMapper sectionReadMapper;
+    private final DtoMapper dtoMapper = DtoMapper.MAPPER;
     private final SectionCreateEditMapper sectionCreateEditMapper;
-    private final SectionWithoutCategoryListReadMapper sectionWithoutCategoryListReadMapper;
 
     public List<SectionReadDto> findAll() {
         return sectionRepository.findAll()
                 .stream()
-                .map(sectionReadMapper::map)
+                .map(dtoMapper::sectionToSectionReadDto)
                 .toList();
     }
 
     public Optional<SectionReadDto> findById(Long id) {
         return sectionRepository.findById(id)
-                .map(sectionReadMapper::map);
+                .map(dtoMapper::sectionToSectionReadDto);
     }
 
     @Transactional
@@ -42,7 +40,7 @@ public class SectionService {
         return Optional.of(sectionCreateEditDto)
                 .map(sectionCreateEditMapper::map)
                 .map(sectionRepository::save)
-                .map(sectionReadMapper::map)
+                .map(dtoMapper::sectionToSectionReadDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
@@ -51,7 +49,7 @@ public class SectionService {
         return sectionRepository.findById(sectionId)
                 .map(section -> sectionCreateEditMapper.map(sectionCreateEditDto, section))
                 .map(sectionRepository::saveAndFlush)
-                .map(sectionWithoutCategoryListReadMapper::map);
+                .map(dtoMapper::sectionToSectionWithoutCategoryListReadDto);
     }
 
     @Transactional

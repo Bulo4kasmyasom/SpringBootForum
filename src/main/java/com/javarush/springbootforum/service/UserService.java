@@ -2,8 +2,8 @@ package com.javarush.springbootforum.service;
 
 import com.javarush.springbootforum.dto.UserCreateEditDto;
 import com.javarush.springbootforum.dto.UserReadDto;
+import com.javarush.springbootforum.mapper.DtoMapper;
 import com.javarush.springbootforum.mapper.UserCreateEditMapper;
-import com.javarush.springbootforum.mapper.UserReadMapper;
 import com.javarush.springbootforum.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheConfig;
@@ -30,25 +30,25 @@ import java.util.Optional;
 @CacheConfig(cacheNames = "users")
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
-    private final UserReadMapper userReadMapper;
+    private final DtoMapper dtoMapper = DtoMapper.MAPPER;
     private final UserCreateEditMapper userCreateEditMapper;
 
     @Cacheable(key = "#pageable")
     public Page<UserReadDto> findAll(Pageable pageable) {
         return userRepository.findAll(pageable)
-                .map(userReadMapper::map);
+                .map(dtoMapper::userToUserReadDto);
     }
 
     @Cacheable(key = "#id")
     public Optional<UserReadDto> findById(Long id) {
         return userRepository.findById(id)
-                .map(userReadMapper::map);
+                .map(dtoMapper::userToUserReadDto);
     }
 
     @Cacheable(key = "#username")
     public Optional<UserReadDto> findByUsername(String username) {
         return userRepository.findByUsername(username)
-                .map(userReadMapper::map);
+                .map(dtoMapper::userToUserReadDto);
     }
 
     @Transactional
@@ -56,7 +56,7 @@ public class UserService implements UserDetailsService {
         return Optional.of(user)
                 .map(userCreateEditMapper::map)
                 .map(userRepository::save)
-                .map(userReadMapper::map)
+                .map(dtoMapper::userToUserReadDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
@@ -66,7 +66,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id)
                 .map(user -> userCreateEditMapper.map(userCreateEditDto, user))
                 .map(userRepository::saveAndFlush)
-                .map(userReadMapper::map);
+                .map(dtoMapper::userToUserReadDto);
     }
 
     @Transactional

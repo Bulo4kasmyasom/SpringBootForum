@@ -2,10 +2,9 @@ package com.javarush.springbootforum.service;
 
 import com.javarush.springbootforum.dto.*;
 import com.javarush.springbootforum.entity.*;
+import com.javarush.springbootforum.mapper.DtoMapper;
 import com.javarush.springbootforum.mapper.TopicCreateMapper;
 import com.javarush.springbootforum.mapper.TopicEditMapper;
-import com.javarush.springbootforum.mapper.TopicFieldReadMapper;
-import com.javarush.springbootforum.mapper.TopicReadMapper;
 import com.javarush.springbootforum.repository.TopicRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,8 +23,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class TopicService {
     private final TopicRepository topicRepository;
-    private final TopicReadMapper topicReadMapper;
-    private final TopicFieldReadMapper topicFieldReadMapper;
+    private final DtoMapper dtoMapper = DtoMapper.MAPPER;
     private final TopicCreateMapper topicCreateMapper;
     private final TopicMessageService topicMessageService;
     private final TopicEditMapper topicEditMapper;
@@ -37,23 +35,23 @@ public class TopicService {
         Sort sortByUpdatedAt = sort.by(Section::getUpdatedAt);
         return topicRepository.findAll(sortByUpdatedAt)
                 .stream()
-                .map(topicReadMapper::map)
+                .map(dtoMapper::topicToTopicReadDto)
                 .toList();
     }
 
     public Optional<TopicReadDto> findById(Long id) {
         return topicRepository.findById(id)
-                .map(topicReadMapper::map);
+                .map(dtoMapper::topicToTopicReadDto);
     }
 
     public Page<TopicReadDto> findAllByCategoryIdAndSubCategoryIsNull(Long id, Pageable pageable) {
         return topicRepository.findAllByCategoryIdAndSubCategoryIsNull(id, pageable)
-                .map(topicReadMapper::map);
+                .map(dtoMapper::topicToTopicReadDto);
     }
 
     public Page<TopicReadDto> findAllByCategoryIdAndSubCategoryId(Long catId, Long subCatId, Pageable pageable) {
         return topicRepository.findAllByCategoryIdAndSubCategoryId(catId, subCatId, pageable)
-                .map(topicReadMapper::map);
+                .map(dtoMapper::topicToTopicReadDto);
     }
 
     @Transactional
@@ -63,7 +61,7 @@ public class TopicService {
         TopicMessage topicMessage = topicCreateMapper.map(topicCreateDto);
         return Optional.of(topicMessage)
                 .map(topicMessageService::create)
-                .map(x -> topicReadMapper.map(topicMessage.getTopic()))
+                .map(message -> dtoMapper.topicToTopicReadDto(message.getTopic()))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
@@ -72,7 +70,7 @@ public class TopicService {
         return topicRepository.findById(topicId)
                 .map(topic -> topicEditMapper.map(topicEditDto, topic))
                 .map(topicRepository::saveAndFlush)
-                .map(topicFieldReadMapper::map);
+                .map(dtoMapper::topicToTopicFieldReadDto);
     }
 
     @Transactional
