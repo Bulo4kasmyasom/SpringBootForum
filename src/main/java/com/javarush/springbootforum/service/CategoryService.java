@@ -23,7 +23,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class CategoryService implements CategoryServiceInterface {
     private final CategoryRepository categoryRepository;
-    private final DtoMapper dtoMapper = DtoMapper.MAPPER;
+    private final DtoMapper dtoMapper;
     private final CategoryCreateMapper categoryCreateMapper;
     private final CategoryEditMapper categoryEditMapper;
 

@@ -25,7 +25,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class TopicMessageService {
     private final TopicMessageRepository topicMessageRepository;
-    private final DtoMapper dtoMapper = DtoMapper.MAPPER;
+    private final DtoMapper dtoMapper;
     private final TopicMessageCreateEditMapper topicMessageCreateEditMapper;
 
     public List<TopicMessageReadDto> findAll() {

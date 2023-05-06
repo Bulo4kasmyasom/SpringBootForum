@@ -23,7 +23,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class SubCategoryService {
     private final SubCategoryRepository subCategoryRepository;
-    private final DtoMapper dtoMapper = DtoMapper.MAPPER;
+    private final DtoMapper dtoMapper;
     private final SubCategoryCreateMapper subCategoryCreateMapper;
     private final SubCategoryEditMapper subCategoryEditMapper;
 

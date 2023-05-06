@@ -23,7 +23,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class TopicService {
     private final TopicRepository topicRepository;
-    private final DtoMapper dtoMapper = DtoMapper.MAPPER;
+    private final DtoMapper dtoMapper;
     private final TopicCreateMapper topicCreateMapper;
     private final TopicMessageService topicMessageService;
     private final TopicEditMapper topicEditMapper;

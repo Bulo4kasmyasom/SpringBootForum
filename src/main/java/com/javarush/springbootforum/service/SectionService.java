@@ -20,7 +20,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class SectionService {
     private final SectionRepository sectionRepository;
-    private final DtoMapper dtoMapper = DtoMapper.MAPPER;
+    private final DtoMapper dtoMapper;
     private final SectionCreateEditMapper sectionCreateEditMapper;
 
     public List<SectionReadDto> findAll() {

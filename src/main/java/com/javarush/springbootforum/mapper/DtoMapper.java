@@ -4,11 +4,9 @@ import com.javarush.springbootforum.dto.*;
 import com.javarush.springbootforum.entity.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface DtoMapper {
-    DtoMapper MAPPER = Mappers.getMapper(DtoMapper.class);
 
     UserReadDto userToUserReadDto(User user);
 

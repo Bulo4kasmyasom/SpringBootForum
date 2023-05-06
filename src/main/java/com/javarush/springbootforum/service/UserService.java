@@ -30,7 +30,7 @@ import java.util.Optional;
 @CacheConfig(cacheNames = "users")
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
-    private final DtoMapper dtoMapper = DtoMapper.MAPPER;
+    private final DtoMapper dtoMapper;
     private final UserCreateEditMapper userCreateEditMapper;
 
     @Cacheable(key = "#pageable")
