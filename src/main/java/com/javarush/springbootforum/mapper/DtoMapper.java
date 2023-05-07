@@ -8,6 +8,7 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring", uses = {BaseDtoMapper.class})
 public interface DtoMapper {
+    @Mapping(target="lastActivity", dateFormat = " dd.MM.yyyy hh:mm:ss")
     UserReadDto userToUserReadDto(User user);
 
     @Mapping(target = "password", expression = "java(baseDtoMapper.setEncodingPasswordToUser(userCreateEditDto))")
@@ -15,6 +16,7 @@ public interface DtoMapper {
     User userCreateEditDtoToUser(UserCreateEditDto userCreateEditDto);
 
     @Mapping(target = "subCategory.category", source = "subCategory.category.title")
+    @Mapping(target="createdAt", dateFormat = "dd.MM.yyyy hh:mm:ss")
     TopicReadDto topicToTopicReadDto(Topic topic);
 
     TopicFieldReadDto topicToTopicFieldReadDto(Topic topic);

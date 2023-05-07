@@ -34,4 +34,4 @@ spring:
         jdbc:
           batch_size: 15
           batch_versioned_data: true
-        generate_statistics: true
+        generate_statistics: false
