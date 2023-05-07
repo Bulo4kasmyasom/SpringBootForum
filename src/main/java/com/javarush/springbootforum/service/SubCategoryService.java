@@ -6,8 +6,6 @@ import com.javarush.springbootforum.dto.SubCategoryFieldReadDto;
 import com.javarush.springbootforum.dto.SubCategoryReadDto;
 import com.javarush.springbootforum.entity.SubCategory;
 import com.javarush.springbootforum.mapper.DtoMapper;
-import com.javarush.springbootforum.mapper.SubCategoryCreateMapper;
-import com.javarush.springbootforum.mapper.SubCategoryEditMapper;
 import com.javarush.springbootforum.repository.SubCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,8 +22,6 @@ import java.util.Optional;
 public class SubCategoryService {
     private final SubCategoryRepository subCategoryRepository;
     private final DtoMapper dtoMapper;
-    private final SubCategoryCreateMapper subCategoryCreateMapper;
-    private final SubCategoryEditMapper subCategoryEditMapper;
 
     public List<SubCategoryReadDto> findAll() {
         return subCategoryRepository.findAll()
@@ -46,7 +42,7 @@ public class SubCategoryService {
     @Transactional
     public SubCategoryReadDto create(SubCategoryCreateDto subCategoryCreateDto) {
         return Optional.of(subCategoryCreateDto)
-                .map(subCategoryCreateMapper::map)
+                .map(dtoMapper::subCategoryCreateDtoToSubCategory)
                 .map(subCategoryRepository::save)
                 .map(dtoMapper::subCategoryToSubCategoryReadDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -55,7 +51,7 @@ public class SubCategoryService {
     @Transactional
     public Optional<SubCategoryFieldReadDto> update(Long id, SubCategoryEditDto subCategoryEditDto) {
         return subCategoryRepository.findById(id)
-                .map(section -> subCategoryEditMapper.map(subCategoryEditDto, section))
+                .map(subCategory -> dtoMapper.updateFromSubCategoryDtoToSubCategory(subCategory, subCategoryEditDto))
                 .map(subCategoryRepository::saveAndFlush)
                 .map(dtoMapper::subCategoryToSubCategoryFieldReadDto);
     }

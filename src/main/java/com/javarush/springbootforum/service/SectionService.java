@@ -4,7 +4,6 @@ import com.javarush.springbootforum.dto.SectionCreateEditDto;
 import com.javarush.springbootforum.dto.SectionReadDto;
 import com.javarush.springbootforum.dto.SectionWithoutCategoryListReadDto;
 import com.javarush.springbootforum.mapper.DtoMapper;
-import com.javarush.springbootforum.mapper.SectionCreateEditMapper;
 import com.javarush.springbootforum.repository.SectionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +20,6 @@ import java.util.Optional;
 public class SectionService {
     private final SectionRepository sectionRepository;
     private final DtoMapper dtoMapper;
-    private final SectionCreateEditMapper sectionCreateEditMapper;
 
     public List<SectionReadDto> findAll() {
         return sectionRepository.findAll()
@@ -38,7 +36,7 @@ public class SectionService {
     @Transactional
     public SectionReadDto create(SectionCreateEditDto sectionCreateEditDto) {
         return Optional.of(sectionCreateEditDto)
-                .map(sectionCreateEditMapper::map)
+                .map(dtoMapper::updateFromSectionDtoToSection)
                 .map(sectionRepository::save)
                 .map(dtoMapper::sectionToSectionReadDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -47,7 +45,7 @@ public class SectionService {
     @Transactional
     public Optional<SectionWithoutCategoryListReadDto> update(Long sectionId, SectionCreateEditDto sectionCreateEditDto) {
         return sectionRepository.findById(sectionId)
-                .map(section -> sectionCreateEditMapper.map(sectionCreateEditDto, section))
+                .map(section -> dtoMapper.updateFromSectionDtoToSection(section, sectionCreateEditDto))
                 .map(sectionRepository::saveAndFlush)
                 .map(dtoMapper::sectionToSectionWithoutCategoryListReadDto);
     }

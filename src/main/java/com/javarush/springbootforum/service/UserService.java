@@ -3,7 +3,6 @@ package com.javarush.springbootforum.service;
 import com.javarush.springbootforum.dto.UserCreateEditDto;
 import com.javarush.springbootforum.dto.UserReadDto;
 import com.javarush.springbootforum.mapper.DtoMapper;
-import com.javarush.springbootforum.mapper.UserCreateEditMapper;
 import com.javarush.springbootforum.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheConfig;
@@ -31,7 +30,6 @@ import java.util.Optional;
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final DtoMapper dtoMapper;
-    private final UserCreateEditMapper userCreateEditMapper;
 
     @Cacheable(key = "#pageable")
     public Page<UserReadDto> findAll(Pageable pageable) {
@@ -54,7 +52,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserReadDto create(UserCreateEditDto user) {
         return Optional.of(user)
-                .map(userCreateEditMapper::map)
+                .map(dtoMapper::userCreateEditDtoToUser)
                 .map(userRepository::save)
                 .map(dtoMapper::userToUserReadDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -64,7 +62,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public Optional<UserReadDto> update(Long id, UserCreateEditDto userCreateEditDto) {
         return userRepository.findById(id)
-                .map(user -> userCreateEditMapper.map(userCreateEditDto, user))
+                .map(user -> dtoMapper.updateFromUserCreateEditDtoToUser(user, userCreateEditDto))
                 .map(userRepository::saveAndFlush)
                 .map(dtoMapper::userToUserReadDto);
     }

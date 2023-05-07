@@ -3,8 +3,6 @@ package com.javarush.springbootforum.service;
 import com.javarush.springbootforum.dto.*;
 import com.javarush.springbootforum.entity.*;
 import com.javarush.springbootforum.mapper.DtoMapper;
-import com.javarush.springbootforum.mapper.TopicCreateMapper;
-import com.javarush.springbootforum.mapper.TopicEditMapper;
 import com.javarush.springbootforum.repository.TopicRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,9 +22,7 @@ import java.util.Optional;
 public class TopicService {
     private final TopicRepository topicRepository;
     private final DtoMapper dtoMapper;
-    private final TopicCreateMapper topicCreateMapper;
     private final TopicMessageService topicMessageService;
-    private final TopicEditMapper topicEditMapper;
     private final CategoryService categoryService;
     private final SubCategoryService subCategoryService;
 
@@ -58,7 +54,7 @@ public class TopicService {
     public TopicReadDto create(UserReadDto userReadDto, TopicCreateDto topicCreateDto) {
         topicCreateDto.setAuthorId(userReadDto.getId());
 
-        TopicMessage topicMessage = topicCreateMapper.map(topicCreateDto);
+        TopicMessage topicMessage = dtoMapper.topicCreateDtoToTopicMessage(topicCreateDto);
         return Optional.of(topicMessage)
                 .map(topicMessageService::create)
                 .map(message -> dtoMapper.topicToTopicReadDto(message.getTopic()))
@@ -68,7 +64,7 @@ public class TopicService {
     @Transactional
     public Optional<TopicFieldReadDto> update(Long topicId, TopicEditDto topicEditDto) {
         return topicRepository.findById(topicId)
-                .map(topic -> topicEditMapper.map(topicEditDto, topic))
+                .map(topic -> dtoMapper.updateFromTopicDtoToTopic(topic, topicEditDto))
                 .map(topicRepository::saveAndFlush)
                 .map(dtoMapper::topicToTopicFieldReadDto);
     }

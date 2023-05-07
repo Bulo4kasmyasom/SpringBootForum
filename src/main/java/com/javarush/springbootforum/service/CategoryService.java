@@ -5,8 +5,6 @@ import com.javarush.springbootforum.dto.CategoryEditDto;
 import com.javarush.springbootforum.dto.CategoryFieldReadDto;
 import com.javarush.springbootforum.dto.CategoryReadDto;
 import com.javarush.springbootforum.entity.Category;
-import com.javarush.springbootforum.mapper.CategoryCreateMapper;
-import com.javarush.springbootforum.mapper.CategoryEditMapper;
 import com.javarush.springbootforum.mapper.DtoMapper;
 import com.javarush.springbootforum.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +22,6 @@ import java.util.Optional;
 public class CategoryService implements CategoryServiceInterface {
     private final CategoryRepository categoryRepository;
     private final DtoMapper dtoMapper;
-    private final CategoryCreateMapper categoryCreateMapper;
-    private final CategoryEditMapper categoryEditMapper;
 
     @Override
     public List<CategoryReadDto> findAll() {
@@ -49,7 +45,7 @@ public class CategoryService implements CategoryServiceInterface {
     @Transactional
     public CategoryReadDto create(CategoryCreateDto categoryCreateDto) {
         return Optional.of(categoryCreateDto)
-                .map(categoryCreateMapper::map)
+                .map(dtoMapper::categoryCreateDtoToCategory)
                 .map(categoryRepository::save)
                 .map(dtoMapper::categoryToCategoryReadDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -59,7 +55,7 @@ public class CategoryService implements CategoryServiceInterface {
     @Transactional
     public Optional<CategoryFieldReadDto> update(Long id, CategoryEditDto categoryEditDto) {
         return categoryRepository.findById(id)
-                .map(section -> categoryEditMapper.map(categoryEditDto, section))
+                .map(category -> dtoMapper.updateFromCategoryDtoToCategory(category, categoryEditDto))
                 .map(categoryRepository::saveAndFlush)
                 .map(dtoMapper::categoryToCategoryFieldReadDto);
     }

@@ -5,7 +5,6 @@ import com.javarush.springbootforum.dto.TopicMessageReadDto;
 import com.javarush.springbootforum.dto.UserReadDto;
 import com.javarush.springbootforum.entity.TopicMessage;
 import com.javarush.springbootforum.mapper.DtoMapper;
-import com.javarush.springbootforum.mapper.TopicMessageCreateEditMapper;
 import com.javarush.springbootforum.repository.TopicMessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,7 +25,7 @@ import java.util.Optional;
 public class TopicMessageService {
     private final TopicMessageRepository topicMessageRepository;
     private final DtoMapper dtoMapper;
-    private final TopicMessageCreateEditMapper topicMessageCreateEditMapper;
+//    private final TopicMessageCreateEditMapper topicMessageCreateEditMapper;
 
     public List<TopicMessageReadDto> findAll() {
         Sort.TypedSort<TopicMessage> sort = Sort.sort(TopicMessage.class);
@@ -52,7 +51,7 @@ public class TopicMessageService {
         topicMessageCreateEditDto.setAuthorId(userReadDto.getId());
 
         return Optional.of(topicMessageCreateEditDto)
-                .map(topicMessageCreateEditMapper::map)
+                .map(dtoMapper::topicMessageCreateEditDtoToTopicMessage)
                 .map(topicMessageRepository::save)
                 .map(dtoMapper::topicMessageToTopicMessageReadDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -68,7 +67,7 @@ public class TopicMessageService {
     @Transactional
     public Optional<TopicMessageReadDto> update(Long id, TopicMessageCreateEditDto topicMessageCreateEditDto) {
         return topicMessageRepository.findById(id)
-                .map(topicMessage -> topicMessageCreateEditMapper.map(topicMessageCreateEditDto, topicMessage))
+                .map(topicMessage -> dtoMapper.updateFromTopicMessageCreateEditDtoToTopicMessage(topicMessage, topicMessageCreateEditDto))
                 .map(topicMessageRepository::saveAndFlush)
                 .map(dtoMapper::topicMessageToTopicMessageReadDto);
     }
