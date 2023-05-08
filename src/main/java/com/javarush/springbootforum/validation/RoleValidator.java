@@ -1,5 +1,6 @@
 package com.javarush.springbootforum.validation;
 
+import com.javarush.springbootforum.validation.impl.RoleValidatorImpl;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 

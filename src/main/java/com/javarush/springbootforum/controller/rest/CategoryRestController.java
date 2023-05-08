@@ -4,7 +4,7 @@ import com.javarush.springbootforum.controller.handler.exception.ValidationExcep
 import com.javarush.springbootforum.dto.CategoryEditDto;
 import com.javarush.springbootforum.dto.CategoryFieldReadDto;
 import com.javarush.springbootforum.dto.CategoryReadDto;
-import com.javarush.springbootforum.service.CategoryServiceInterface;
+import com.javarush.springbootforum.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -21,11 +21,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CategoryRestController {
 
-    private final CategoryServiceInterface categoryServiceInterface;
+    private final CategoryService categoryService;
 
     @GetMapping
     public List<CategoryReadDto> findAll() {
-        return categoryServiceInterface.findAll();
+        return categoryService.findAll();
     }
 
     @PutMapping("/{id}")
@@ -38,14 +38,14 @@ public class CategoryRestController {
                     .collect(Collectors.joining(", "));
             throw new ValidationException(errors);
         }
-        return categoryServiceInterface.update(id, categoryEditDto)
+        return categoryService.update(id, categoryEditDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     // todo возможно нужно изменить возвращаемый тип данных.
     @DeleteMapping("/{id}")
     public HttpStatus delete(@PathVariable("id") Long id) {
-        return categoryServiceInterface.delete(id)
+        return categoryService.delete(id)
                 ? HttpStatus.OK
                 : HttpStatus.NOT_FOUND;
     }

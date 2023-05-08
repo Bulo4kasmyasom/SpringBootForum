@@ -1,5 +1,6 @@
-package com.javarush.springbootforum.validation;
+package com.javarush.springbootforum.validation.impl;
 
+import com.javarush.springbootforum.validation.NumberValidator;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
