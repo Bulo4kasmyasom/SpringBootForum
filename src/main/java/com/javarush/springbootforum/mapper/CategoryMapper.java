@@ -9,14 +9,14 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(componentModel = "spring", uses = {SubCategoryMapper.class, BaseDtoMapper.class})
+@Mapper(componentModel = "spring", uses = {SubCategoryMapper.class, CategoryMapperBase.class})
 public interface CategoryMapper {
     @Mapping(target = "subCategory", source = "subCategoryList")
     CategoryReadDto toDto(Category category);
 
     CategoryFieldReadDto toDto2(Category category);
 
-    @Mapping(target = "section", source = "sectionId")
+    @Mapping(target = "section", source = "sectionId", qualifiedByName = "findSectionById")
     Category toEntity(CategoryCreateDto categoryCreateDto);
 
     Category toEntity(@MappingTarget Category category, CategoryEditDto categoryEditDto);

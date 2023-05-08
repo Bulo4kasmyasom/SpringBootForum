@@ -9,7 +9,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(componentModel = "spring", uses = {BaseDtoMapper.class})
+@Mapper(componentModel = "spring", uses = {SubCategoryMapperBase.class})
 public interface SubCategoryMapper {
 
     @Mapping(target = "category", source = "subCategory.category.title")
@@ -18,7 +18,7 @@ public interface SubCategoryMapper {
 
     SubCategoryFieldReadDto toDto2(SubCategory subCategory);
 
-    @Mapping(target = "category", source = "categoryId")
+    @Mapping(target = "category", source = "categoryId", qualifiedByName = "findCategoryById")
     SubCategory toEntity(SubCategoryCreateDto subCategoryCreateDto);
 
     SubCategory toEntity(@MappingTarget SubCategory subCategory, SubCategoryEditDto subCategoryEditDto);

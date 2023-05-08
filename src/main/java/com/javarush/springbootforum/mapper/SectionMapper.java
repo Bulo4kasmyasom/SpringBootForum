@@ -7,7 +7,7 @@ import com.javarush.springbootforum.entity.Section;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
-@Mapper(componentModel = "spring", uses = {CategoryMapper.class, SubCategoryMapper.class, BaseDtoMapper.class})
+@Mapper(componentModel = "spring", uses = {CategoryMapper.class})
 public interface SectionMapper {
     SectionReadDto toDto(Section section);
 

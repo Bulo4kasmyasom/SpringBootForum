@@ -10,10 +10,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(componentModel = "spring", uses = {BaseDtoMapper.class})
+@Mapper(componentModel = "spring", uses = {TopicMapperBase.class})
 public interface TopicMapper {
     @Mapping(target = "subCategory.category", source = "subCategory.category.title")
-    @Mapping(target = "createdAt", dateFormat = "dd.MM.yyyy hh:mm:ss")
+    @Mapping(target = "createdAt", dateFormat = "dd.MM.yyyy HH:mm:ss")
     TopicReadDto toDto(Topic topic);
 
     TopicFieldReadDto toDto2(Topic topic);
@@ -21,10 +21,10 @@ public interface TopicMapper {
     Topic toEntity(@MappingTarget Topic topic, TopicEditDto topicEditDto);
 
     @Mapping(target = "topic.title", source = "topicTitle")
-    @Mapping(target = "topic.category", source = "categoryId")
-    @Mapping(target = "topic.subCategory", source = "subCategoryId")
-    @Mapping(target = "topic.author", source = "authorId")
-    @Mapping(target = "author", source = "authorId")
+    @Mapping(target = "topic.category", source = "categoryId", qualifiedByName = "findCategoryById")
+    @Mapping(target = "topic.subCategory", source = "subCategoryId", qualifiedByName = "findSubCategoryById")
+    @Mapping(target = "topic.author", source = "authorId", qualifiedByName = "findUserByIdForTopicAuthor")
+    @Mapping(target = "author", source = "authorId", qualifiedByName = "findUserByIdForTopicMessageAuthor")
     @Mapping(target = "text", source = "messageText")
     TopicMessage toEntity(TopicCreateDto topic);
 

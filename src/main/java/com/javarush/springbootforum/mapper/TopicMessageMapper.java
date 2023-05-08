@@ -6,13 +6,16 @@ import com.javarush.springbootforum.entity.TopicMessage;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring", uses = {CategoryMapper.class, SubCategoryMapper.class, BaseDtoMapper.class})
+@Mapper(componentModel = "spring", uses = {TopicMessageMapperBase.class, CategoryMapper.class, SubCategoryMapper.class})
 public interface TopicMessageMapper {
     TopicMessageReadDto toDto(TopicMessage topicMessage);
 
-    @Mapping(target = "topic", source = "topicId")
-    @Mapping(target = "author", source = "authorId")
+    TopicMessageMapperBase t = Mappers.getMapper(TopicMessageMapperBase.class);
+
+    @Mapping(target = "topic", source = "topicId", qualifiedByName = "findTopicById")
+    @Mapping(target = "author", source = "authorId", qualifiedByName = "findUserById")
     TopicMessage toEntity(TopicMessageCreateEditDto topicMessageCreateEditDto);
 
     TopicMessage toEntity(@MappingTarget TopicMessage topicMessage, TopicMessageCreateEditDto topicMessageCreateEditDto);
