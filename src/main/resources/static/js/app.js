@@ -79,6 +79,19 @@ function sendRequest(method, url, body = null) {
 //         element.style.display = "none";
 // }
 
+
+function getFileNameWithExtension(attr) {
+    return attr.slice(attr.lastIndexOf("/") + 1);
+}
+
+function chooseDefaultAvatar(el = null) {
+    let imgSrcAttr = el.getAttribute("src");
+    let avatarImage = getQSelector("#avatar-image");
+    avatarImage.src = imgSrcAttr;
+    getQSelector(".btn-close").click();
+    getQSelector("#avatar-image-id").value = getFileNameWithExtension(imgSrcAttr)
+}
+
 function getQSelector(el) {
     return document.querySelector(el);
 }

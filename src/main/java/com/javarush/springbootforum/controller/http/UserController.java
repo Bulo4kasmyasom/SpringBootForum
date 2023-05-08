@@ -17,11 +17,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
+
+    private final List<String> getDefaultAvatarImagesList;
 
     @GetMapping
     public String findAll(Model model, Pageable pageable) {
@@ -36,6 +40,7 @@ public class UserController {
                 .map(user -> {
                     model.addAttribute("user", user);
                     model.addAttribute("roles", Role.values());
+                    model.addAttribute("defaultAvatars", getDefaultAvatarImagesList);
                     return "user";
                 })
                 .orElse("redirect:/users");

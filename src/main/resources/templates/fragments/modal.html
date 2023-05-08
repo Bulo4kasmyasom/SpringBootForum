@@ -1,3 +1,26 @@
+<th:block th:fragment="defaultAvatars(defaultAvatars)">
+    <div class="modal fade modal-lg" id="profile-image" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="profile-image-title">Выбрать аватар</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <img th:each="img: ${defaultAvatars}"
+                             th:src="|/img/avatars/${img}|"
+                             style="width: 75px" class="mx-1 my-1" alt="Profile image"
+                             onclick="chooseDefaultAvatar(this)">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+
 <!-- new topic message form -->
 <div class="row mt-4 mb-3" th:fragment="topic-message-new(topicId, topicMessageWhenErrorsGet)">
     <button type="button" class="btn btn-primary btn-sm btn-light" data-bs-toggle="modal"
@@ -107,13 +130,9 @@
                             <div class="invalid-feedback">Максимум 50 символов и тип email</div>
                         </div>
                         <div class="mb-3">
-                            <label for="registration-image" class="form-label">Аватар</label>
-                            <input type="text" name="image" class="form-control"
-                                   id="registration-image" value="x.png" required>
-                            <div class="invalid-feedback">Максимум 128 символов</div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="roles">
+                            <label for="roles"  class="form-label">Роль <small>(только для тестирования, <br>
+                                если убрать, то по <br>
+                                умолчанию будет USER)</small>
                                 <select class="form-select" id="roles" name="role">
                                     <option value="ADMIN">ADMIN</option>
                                     <option value="MODERATOR">MODERATOR</option>

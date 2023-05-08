@@ -39,6 +39,10 @@ public class BaseDtoMapper {
         return userCreateEditDto.getRole() == null ? Role.USER : Role.valueOf(userCreateEditDto.getRole());
     }
 
+    protected String setDefaultAvatarImageToUser(UserCreateEditDto userCreateEditDto) {
+        return userCreateEditDto.getImage() == null ? "avatar_no_image.jpg" : userCreateEditDto.getImage();
+    }
+
     protected Topic findTopicById(Long id) {
         return Optional.ofNullable(id)
                 .flatMap(topicRepository::findById)

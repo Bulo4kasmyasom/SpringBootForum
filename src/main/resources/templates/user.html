@@ -1,55 +1,73 @@
 <th:block th:insert="~{/fragments/header :: header}"></th:block>
 
-<div>[[#{page.user.enter}]]: [[${user.username}]]</div>
+<div class="container col-8">
 
-<th:block th:replace="~{/fragments/fragments :: errors(${errors})}">errors</th:block>
+    <th:block sec:authorize="hasAuthority('ADMIN')">
 
-<div>
-    <form th:action="@{/users/{userId}/update(userId=${user.id})}" method="post" th:object="${user}">
+        <th:block th:replace="~{/fragments/fragments :: errors(${errors})}">errors</th:block>
+        <form th:action="@{/users/{userId}/update(userId=${user.id})}" method="post" th:object="${user}">
 
-        <!--    <img th:src="@{image}" alt="Profile image" id="profile-image"><br>-->
-        <div>
-            <div class="mb-2">
-                <label for="username" class="form-label">Логин</label>
-                <input type="text" name="username" class="form-control" id="username" th:value="*{username}">
+            <img th:src="|/img/avatars/*{image}|" class="card-img-top mx-auto d-block" style="width: 220px"
+                 alt="Profile image" data-bs-toggle="modal"
+                 data-bs-target="#profile-image" id="avatar-image">
+            <th:block th:replace="~{/fragments/modal :: defaultAvatars(${defaultAvatars})}"></th:block>
+            <div>
+                <div class="mb-2">
+                    <label for="username" class="form-label">Логин</label>
+                    <input type="text" name="username" class="form-control" id="username" th:value="*{username}">
+                </div>
+                <div class="mb-2">
+                    <label for="password" class="form-label">Пароль</label>
+                    <input type="password" name="password" class="form-control" id="password">
+                </div>
+                <div class="mb-2">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" id="email" th:value="*{email}">
+                </div>
+
+                <div class="mb-2">
+                    <label for="roles">Роль:
+                        <select class="form-select" id="roles" name="role">
+                            <option th:each="role : ${roles}"
+                                    th:text="${role.name}"
+                                    th:value="${role.name}"
+                                    th:selected="${role.name == user.role}">
+                        </select>
+                    </label>
+                </div>
             </div>
-            <div class="mb-2">
-                <label for="password" class="form-label">Пароль</label>
-                <input type="password" name="password" class="form-control" id="password">
+            <div class="mb-3">
+                <input type="submit" class="btn btn-primary btn-sm btn-light"
+                       sec:authorize="hasAuthority('ADMIN')"
+                       th:value="#{page.user.form.submit}">
             </div>
-            <div class="mb-2">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" name="email" class="form-control" id="email" th:value="*{email}">
-            </div>
-            <div class="mb-2">
-                <label for="image" class="form-label">Аватар</label>
-                <input type="text" name="image" class="form-control" id="image" value="x.png" th:value="*{image}">
-            </div>
-            <div class="mb-2">
-                <label for="roles">Роль:
-                    <select class="form-select" id="roles" name="role">
-                        <option th:each="role : ${roles}"
-                                th:text="${role.name}"
-                                th:value="${role.name}"
-                                th:selected="${role.name == user.role}">
-                    </select>
-                </label>
-            </div>
+            <input type="hidden" name="image" id="avatar-image-id" th:value="*{image}">
+        </form>
+
+
+        <form th:action="@{/users/{userId}/delete(userId=${user.id})}" sec:authorize="hasAuthority('ADMIN')"
+              method="post">
+            <input type="submit" class="btn btn-primary btn-sm btn-light" th:value="Удалить">
+        </form>
+        <form th:action="@{/users/{userId}/ban(userId=${user.id})}" sec:authorize="hasAuthority('ADMIN')" method="post">
+            <input type="submit" class="btn btn-primary btn-sm btn-light" th:value="Заблокировать">
+        </form>
+    </th:block>
+
+
+    <div class="card w-30 mt-4 mb-4" sec:authorize="!hasAuthority('ADMIN')">
+        <img src="/img/avatars/0.png" class="card-img-top mx-auto d-block" style="width: 220px" alt="Profile image">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${user.username}">Username</h5>
+            <p class="card-text">Возможно здесь будет подпись пользователя когда-нибудь =)</p>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Последняя активность: [[${user.lastActivity}]]</li>
+                <li class="list-group-item">Дата регистрации: [[${user.createdAt}]]</li>
+            </ul>
+            <a href="#" class="btn btn-primary" sec:authorize="isAuthenticated()">Отправить сообщение</a>
         </div>
-        <div class="mb-3">
-            <input type="submit" class="btn btn-primary btn-sm btn-light"
-                   sec:authorize="hasAuthority('ADMIN')"
-                   th:value="#{page.user.form.submit}">
-        </div>
-    </form>
+    </div>
 
-
-    <form th:action="@{/users/{userId}/delete(userId=${user.id})}" sec:authorize="hasAuthority('ADMIN')" method="post">
-        <input type="submit" class="btn btn-primary btn-sm btn-light" th:value="Удалить">
-    </form>
-    <form th:action="@{/users/{userId}/ban(userId=${user.id})}" sec:authorize="hasAuthority('ADMIN')" method="post">
-        <input type="submit" class="btn btn-primary btn-sm btn-light" th:value="Заблокировать">
-    </form>
 
 </div>
 
