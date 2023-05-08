@@ -5,6 +5,8 @@ import com.javarush.springbootforum.dto.UserCreateEditDto;
 import com.javarush.springbootforum.dto.UserReadDto;
 import com.javarush.springbootforum.entity.Role;
 import com.javarush.springbootforum.service.UserService;
+import com.javarush.springbootforum.validation.OnCreate;
+import com.javarush.springbootforum.validation.OnUpdate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,7 +49,7 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public String create(@ModelAttribute @Validated UserCreateEditDto user,
+    public String create(@ModelAttribute @Validated(OnCreate.class) UserCreateEditDto user,
                          BindingResult bindingResult,
                          RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
@@ -61,7 +63,7 @@ public class UserController {
 
     @PostMapping("/{id}/update")
     public String update(@PathVariable("id") Long id,
-                         @ModelAttribute @Validated UserCreateEditDto user,
+                         @ModelAttribute @Validated(OnUpdate.class) UserCreateEditDto user,
                          BindingResult bindingResult,
                          RedirectAttributes redirectAttributes) {
 
