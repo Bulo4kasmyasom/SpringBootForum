@@ -5,7 +5,7 @@ import com.javarush.springbootforum.dto.CategoryEditDto;
 import com.javarush.springbootforum.dto.CategoryFieldReadDto;
 import com.javarush.springbootforum.dto.CategoryReadDto;
 import com.javarush.springbootforum.entity.Category;
-import com.javarush.springbootforum.mapper.DtoMapper;
+import com.javarush.springbootforum.mapper.CategoryMapper;
 import com.javarush.springbootforum.repository.CategoryRepository;
 import com.javarush.springbootforum.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -22,20 +22,20 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
-    private final DtoMapper dtoMapper;
+    private final CategoryMapper categoryMapper;
 
     @Override
     public List<CategoryReadDto> findAll() {
         return categoryRepository.findAll()
                 .stream()
-                .map(dtoMapper::categoryToCategoryReadDto)
+                .map(categoryMapper::toDto)
                 .toList();
     }
 
     @Override
     public Optional<CategoryReadDto> findById(Long id) {
         return categoryRepository.findById(id)
-                .map(dtoMapper::categoryToCategoryReadDto);
+                .map(categoryMapper::toDto);
     }
 
     public Optional<Category> findByIdAndReturnCategory(Long id) {
@@ -46,9 +46,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public CategoryReadDto create(CategoryCreateDto categoryCreateDto) {
         return Optional.of(categoryCreateDto)
-                .map(dtoMapper::categoryCreateDtoToCategory)
+                .map(categoryMapper::toEntity)
                 .map(categoryRepository::save)
-                .map(dtoMapper::categoryToCategoryReadDto)
+                .map(categoryMapper::toDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
@@ -56,9 +56,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public Optional<CategoryFieldReadDto> update(Long id, CategoryEditDto categoryEditDto) {
         return categoryRepository.findById(id)
-                .map(category -> dtoMapper.updateFromCategoryDtoToCategory(category, categoryEditDto))
+                .map(category -> categoryMapper.toEntity(category, categoryEditDto))
                 .map(categoryRepository::saveAndFlush)
-                .map(dtoMapper::categoryToCategoryFieldReadDto);
+                .map(categoryMapper::toDto2);
     }
 
     @Transactional

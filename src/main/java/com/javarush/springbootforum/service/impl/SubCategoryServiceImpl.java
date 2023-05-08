@@ -5,7 +5,7 @@ import com.javarush.springbootforum.dto.SubCategoryEditDto;
 import com.javarush.springbootforum.dto.SubCategoryFieldReadDto;
 import com.javarush.springbootforum.dto.SubCategoryReadDto;
 import com.javarush.springbootforum.entity.SubCategory;
-import com.javarush.springbootforum.mapper.DtoMapper;
+import com.javarush.springbootforum.mapper.SubCategoryMapper;
 import com.javarush.springbootforum.repository.SubCategoryRepository;
 import com.javarush.springbootforum.service.SubCategoryService;
 import lombok.RequiredArgsConstructor;
@@ -22,20 +22,20 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class SubCategoryServiceImpl implements SubCategoryService {
     private final SubCategoryRepository subCategoryRepository;
-    private final DtoMapper dtoMapper;
+    private final SubCategoryMapper subCategoryMapper;
 
     @Override
     public List<SubCategoryReadDto> findAll() {
         return subCategoryRepository.findAll()
                 .stream()
-                .map(dtoMapper::subCategoryToSubCategoryReadDto)
+                .map(subCategoryMapper::toDto)
                 .toList();
     }
 
     @Override
     public Optional<SubCategoryReadDto> findById(Long id) {
         return subCategoryRepository.findById(id)
-                .map(dtoMapper::subCategoryToSubCategoryReadDto);
+                .map(subCategoryMapper::toDto);
     }
 
     @Override
@@ -47,9 +47,9 @@ public class SubCategoryServiceImpl implements SubCategoryService {
     @Transactional
     public SubCategoryReadDto create(SubCategoryCreateDto subCategoryCreateDto) {
         return Optional.of(subCategoryCreateDto)
-                .map(dtoMapper::subCategoryCreateDtoToSubCategory)
+                .map(subCategoryMapper::toEntity)
                 .map(subCategoryRepository::save)
-                .map(dtoMapper::subCategoryToSubCategoryReadDto)
+                .map(subCategoryMapper::toDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
@@ -57,9 +57,9 @@ public class SubCategoryServiceImpl implements SubCategoryService {
     @Transactional
     public Optional<SubCategoryFieldReadDto> update(Long id, SubCategoryEditDto subCategoryEditDto) {
         return subCategoryRepository.findById(id)
-                .map(subCategory -> dtoMapper.updateFromSubCategoryDtoToSubCategory(subCategory, subCategoryEditDto))
+                .map(subCategory -> subCategoryMapper.toEntity(subCategory, subCategoryEditDto))
                 .map(subCategoryRepository::saveAndFlush)
-                .map(dtoMapper::subCategoryToSubCategoryFieldReadDto);
+                .map(subCategoryMapper::toDto2);
     }
 
     @Override

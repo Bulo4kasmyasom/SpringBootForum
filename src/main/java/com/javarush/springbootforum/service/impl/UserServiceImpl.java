@@ -2,7 +2,7 @@ package com.javarush.springbootforum.service.impl;
 
 import com.javarush.springbootforum.dto.UserCreateEditDto;
 import com.javarush.springbootforum.dto.UserReadDto;
-import com.javarush.springbootforum.mapper.DtoMapper;
+import com.javarush.springbootforum.mapper.UserMapper;
 import com.javarush.springbootforum.repository.UserRepository;
 import com.javarush.springbootforum.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,36 +29,36 @@ import java.util.Optional;
 @CacheConfig(cacheNames = "users")
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final DtoMapper dtoMapper;
+    private final UserMapper userMapper;
 
     @Override
     @Cacheable(key = "#pageable")
     public Page<UserReadDto> findAll(Pageable pageable) {
         return userRepository.findAll(pageable)
-                .map(dtoMapper::userToUserReadDto);
+                .map(userMapper::toDto);
     }
 
     @Override
     @Cacheable(key = "#id")
     public Optional<UserReadDto> findById(Long id) {
         return userRepository.findById(id)
-                .map(dtoMapper::userToUserReadDto);
+                .map(userMapper::toDto);
     }
 
     @Override
     @Cacheable(key = "#username")
     public Optional<UserReadDto> findByUsername(String username) {
         return userRepository.findByUsername(username)
-                .map(dtoMapper::userToUserReadDto);
+                .map(userMapper::toDto);
     }
 
     @Override
     @Transactional
     public UserReadDto create(UserCreateEditDto user) {
         return Optional.of(user)
-                .map(dtoMapper::userCreateEditDtoToUser)
+                .map(userMapper::toEntity)
                 .map(userRepository::save)
-                .map(dtoMapper::userToUserReadDto)
+                .map(userMapper::toDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
@@ -68,9 +67,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public Optional<UserReadDto> update(Long id, UserCreateEditDto userCreateEditDto) {
         return userRepository.findById(id)
-                .map(user -> dtoMapper.updateFromUserCreateEditDtoToUser(user, userCreateEditDto))
+                .map(user -> userMapper.toEntity(user, userCreateEditDto))
                 .map(userRepository::saveAndFlush)
-                .map(dtoMapper::userToUserReadDto);
+                .map(userMapper::toDto);
     }
 
     @Override

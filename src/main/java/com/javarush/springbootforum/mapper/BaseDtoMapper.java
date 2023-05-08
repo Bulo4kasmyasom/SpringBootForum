@@ -1,6 +1,5 @@
 package com.javarush.springbootforum.mapper;
 
-import com.javarush.springbootforum.dto.UserCreateEditDto;
 import com.javarush.springbootforum.entity.*;
 import com.javarush.springbootforum.repository.*;
 import org.mapstruct.Mapper;
@@ -11,12 +10,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
-@Mapper(componentModel = "spring", uses = {
-        SectionRepository.class, CategoryRepository.class,
-        SubCategoryRepository.class, UserRepository.class,
-        TopicRepository.class, PasswordEncoder.class
-})
+@Mapper(componentModel = "spring")
 public class BaseDtoMapper {
+    // todo убрать все методы по своим мапперам. Но сперва разобраться с тем,
+    //  как инжектить репозитории в разные мапперы. Поэтому используется абстрактный класс.
+
     @Autowired
     private CategoryRepository categoryRepository;
     @Autowired
@@ -28,20 +26,8 @@ public class BaseDtoMapper {
     @Autowired
     private TopicRepository topicRepository;
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    PasswordEncoder passwordEncoder;
     protected Role role;
-
-    protected String setEncodingPasswordToUser(UserCreateEditDto userCreateEditDto) {
-        return passwordEncoder.encode(userCreateEditDto.getPassword());
-    }
-
-    protected Role setDefaultRoleToUser(UserCreateEditDto userCreateEditDto) {
-        return userCreateEditDto.getRole() == null ? Role.USER : Role.valueOf(userCreateEditDto.getRole());
-    }
-
-    protected String setDefaultAvatarImageToUser(UserCreateEditDto userCreateEditDto) {
-        return userCreateEditDto.getImage() == null ? "avatar_no_image.jpg" : userCreateEditDto.getImage();
-    }
 
     protected Topic findTopicById(Long id) {
         return Optional.ofNullable(id)

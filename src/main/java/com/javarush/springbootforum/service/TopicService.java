@@ -1,9 +1,6 @@
 package com.javarush.springbootforum.service;
 
 import com.javarush.springbootforum.dto.*;
-import com.javarush.springbootforum.entity.Category;
-import com.javarush.springbootforum.entity.SubCategory;
-import com.javarush.springbootforum.entity.Topic;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;

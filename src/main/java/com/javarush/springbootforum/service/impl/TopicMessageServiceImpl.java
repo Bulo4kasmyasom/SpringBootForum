@@ -4,7 +4,7 @@ import com.javarush.springbootforum.dto.TopicMessageCreateEditDto;
 import com.javarush.springbootforum.dto.TopicMessageReadDto;
 import com.javarush.springbootforum.dto.UserReadDto;
 import com.javarush.springbootforum.entity.TopicMessage;
-import com.javarush.springbootforum.mapper.DtoMapper;
+import com.javarush.springbootforum.mapper.TopicMessageMapper;
 import com.javarush.springbootforum.repository.TopicMessageRepository;
 import com.javarush.springbootforum.service.TopicMessageService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class TopicMessageServiceImpl implements TopicMessageService {
     private final TopicMessageRepository topicMessageRepository;
-    private final DtoMapper dtoMapper;
+    private final TopicMessageMapper topicMessageMapper;
 
     @Override
     public List<TopicMessageReadDto> findAll() {
@@ -33,20 +33,20 @@ public class TopicMessageServiceImpl implements TopicMessageService {
         Sort.TypedSort<LocalDateTime> sortBy = sort.by(TopicMessage::getCreatedAt);
         return topicMessageRepository.findAll(sortBy)
                 .stream()
-                .map(dtoMapper::topicMessageToTopicMessageReadDto)
+                .map(topicMessageMapper::toDto)
                 .toList();
     }
 
     @Override
     public Page<TopicMessageReadDto> findAllByTopicId(Long id, Pageable pageable) {
         return topicMessageRepository.findAllByTopicId(id, pageable)
-                .map(dtoMapper::topicMessageToTopicMessageReadDto);
+                .map(topicMessageMapper::toDto);
     }
 
     @Override
     public Optional<TopicMessageReadDto> findById(Long id) {
         return topicMessageRepository.findById(id)
-                .map(dtoMapper::topicMessageToTopicMessageReadDto);
+                .map(topicMessageMapper::toDto);
     }
 
     @Override
@@ -55,9 +55,9 @@ public class TopicMessageServiceImpl implements TopicMessageService {
         topicMessageCreateEditDto.setAuthorId(userReadDto.getId());
 
         return Optional.of(topicMessageCreateEditDto)
-                .map(dtoMapper::topicMessageCreateEditDtoToTopicMessage)
+                .map(topicMessageMapper::toEntity)
                 .map(topicMessageRepository::save)
-                .map(dtoMapper::topicMessageToTopicMessageReadDto)
+                .map(topicMessageMapper::toDto)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
@@ -73,9 +73,9 @@ public class TopicMessageServiceImpl implements TopicMessageService {
     @Transactional
     public Optional<TopicMessageReadDto> update(Long id, TopicMessageCreateEditDto topicMessageCreateEditDto) {
         return topicMessageRepository.findById(id)
-                .map(topicMessage -> dtoMapper.updateFromTopicMessageCreateEditDtoToTopicMessage(topicMessage, topicMessageCreateEditDto))
+                .map(topicMessage -> topicMessageMapper.toEntity(topicMessage, topicMessageCreateEditDto))
                 .map(topicMessageRepository::saveAndFlush)
-                .map(dtoMapper::topicMessageToTopicMessageReadDto);
+                .map(topicMessageMapper::toDto);
     }
 
     @Override

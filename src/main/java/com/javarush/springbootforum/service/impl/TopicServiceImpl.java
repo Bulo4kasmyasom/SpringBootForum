@@ -2,7 +2,7 @@ package com.javarush.springbootforum.service.impl;
 
 import com.javarush.springbootforum.dto.*;
 import com.javarush.springbootforum.entity.*;
-import com.javarush.springbootforum.mapper.DtoMapper;
+import com.javarush.springbootforum.mapper.TopicMapper;
 import com.javarush.springbootforum.repository.TopicRepository;
 import com.javarush.springbootforum.service.SubCategoryService;
 import com.javarush.springbootforum.service.TopicMessageService;
@@ -24,7 +24,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class TopicServiceImpl implements TopicService {
     private final TopicRepository topicRepository;
-    private final DtoMapper dtoMapper;
+    private final TopicMapper topicMapper;
     private final TopicMessageService topicMessageService;
     private final SubCategoryService subCategoryService;
     private final CategoryServiceImpl categoryServiceImpl;
@@ -35,26 +35,26 @@ public class TopicServiceImpl implements TopicService {
         Sort sortByUpdatedAt = sort.by(Section::getUpdatedAt);
         return topicRepository.findAll(sortByUpdatedAt)
                 .stream()
-                .map(dtoMapper::topicToTopicReadDto)
+                .map(topicMapper::toDto)
                 .toList();
     }
 
     @Override
     public Optional<TopicReadDto> findById(Long id) {
         return topicRepository.findById(id)
-                .map(dtoMapper::topicToTopicReadDto);
+                .map(topicMapper::toDto);
     }
 
     @Override
     public Page<TopicReadDto> findAllByCategoryIdAndSubCategoryIsNull(Long id, Pageable pageable) {
         return topicRepository.findAllByCategoryIdAndSubCategoryIsNull(id, pageable)
-                .map(dtoMapper::topicToTopicReadDto);
+                .map(topicMapper::toDto);
     }
 
     @Override
     public Page<TopicReadDto> findAllByCategoryIdAndSubCategoryId(Long catId, Long subCatId, Pageable pageable) {
         return topicRepository.findAllByCategoryIdAndSubCategoryId(catId, subCatId, pageable)
-                .map(dtoMapper::topicToTopicReadDto);
+                .map(topicMapper::toDto);
     }
 
     @Override
@@ -62,10 +62,10 @@ public class TopicServiceImpl implements TopicService {
     public TopicReadDto create(UserReadDto userReadDto, TopicCreateDto topicCreateDto) {
         topicCreateDto.setAuthorId(userReadDto.getId());
 
-        TopicMessage topicMessage = dtoMapper.topicCreateDtoToTopicMessage(topicCreateDto);
+        TopicMessage topicMessage = topicMapper.toEntity(topicCreateDto);
         return Optional.of(topicMessage)
                 .map(topicMessageService::create)
-                .map(message -> dtoMapper.topicToTopicReadDto(message.getTopic()))
+                .map(message -> topicMapper.toDto(message.getTopic()))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
@@ -73,9 +73,9 @@ public class TopicServiceImpl implements TopicService {
     @Transactional
     public Optional<TopicFieldReadDto> update(Long topicId, TopicEditDto topicEditDto) {
         return topicRepository.findById(topicId)
-                .map(topic -> dtoMapper.updateFromTopicDtoToTopic(topic, topicEditDto))
+                .map(topic -> topicMapper.toEntity(topic, topicEditDto))
                 .map(topicRepository::saveAndFlush)
-                .map(dtoMapper::topicToTopicFieldReadDto);
+                .map(topicMapper::toDto2);
     }
 
     @Override
