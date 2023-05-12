@@ -1,8 +1,8 @@
-<th:block th:insert="~{/fragments/header :: header}"></th:block>
+<th:block th:insert="~{fragments/header :: header}"></th:block>
 
 <div class="container">
 
-    <th:block th:replace="~{/fragments/fragments :: errors(${errors})}">errors</th:block>
+    <th:block th:replace="~{fragments/fragments :: errors(${errors})}">errors</th:block>
 
     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" class="mt-2">
         <ol class="breadcrumb">
@@ -46,7 +46,7 @@
     </th:block>
 
     <th:block sec:authorize="isAuthenticated()"
-              th:replace="~{/fragments/modal :: topic-new(${category.id},
+              th:replace="~{fragments/modal :: topic-new(${category.id},
             ${subCategory!=null}?${subCategory.id}:null,
             ${topicMessage!=null}?${topicMessage}:null)}">
     </th:block>
@@ -110,10 +110,10 @@
     </th:block>
 
     <th:block th:if="${topics.content.size()>0}">
-        <th:block th:replace="~{/fragments/pagination :: pagination(${topics.metadata},
+        <th:block th:replace="~{fragments/pagination :: pagination(${topics.metadata},
     '/cat/'+${category.id} + ${subCategory != null ? '/subcat/'+subCategory.id :''})}"></th:block>
     </th:block>
 
 </div>
 
-<th:block th:insert="~{/fragments/footer ::footer}"></th:block>
+<th:block th:insert="~{fragments/footer ::footer}"></th:block>

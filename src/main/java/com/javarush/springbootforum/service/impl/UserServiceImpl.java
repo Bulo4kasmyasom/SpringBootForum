@@ -26,27 +26,26 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-@CacheConfig(cacheNames = "users")
+@CacheConfig(cacheManager = "redisCacheManager")
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
     @Override
-    @Cacheable(key = "#pageable")
+//    @Cacheable(value = "UserService::findAll", key = "#pageable")
     public Page<UserReadDto> findAll(Pageable pageable) {
         return userRepository.findAll(pageable)
                 .map(userMapper::toDto);
     }
 
     @Override
-    @Cacheable(key = "#id")
+    @Cacheable(value = "UserService::findById", key = "#id")
     public Optional<UserReadDto> findById(Long id) {
         return userRepository.findById(id)
                 .map(userMapper::toDto);
     }
 
     @Override
-    @Cacheable(key = "#username")
     public Optional<UserReadDto> findByUsername(String username) {
         return userRepository.findByUsername(username)
                 .map(userMapper::toDto);
@@ -63,7 +62,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @CachePut(key = "#id") // todo метод findAll не обновляет список после обновления пользователя
+    @CachePut(value = "UserService::findById", key = "#id")
     @Transactional
     public Optional<UserReadDto> update(Long id, UserCreateEditDto userCreateEditDto) {
         return userRepository.findById(id)
@@ -74,7 +73,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    @CacheEvict(key = "#id")
+    @CacheEvict(value = "UserService::findById", key = "#id")
     public boolean delete(Long id) {
         return userRepository.findById(id)
                 .map(user -> {

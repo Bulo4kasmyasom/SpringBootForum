@@ -1,16 +1,16 @@
-<th:block th:insert="~{/fragments/header :: header}"></th:block>
+<th:block th:insert="~{fragments/header :: header}"></th:block>
 
 <div class="container">
 
-    <th:block th:replace="~{/fragments/fragments :: errors(${errors})}">errors</th:block>
+    <th:block th:replace="~{fragments/fragments :: errors(${errors})}">errors</th:block>
 
     <div class="row mt-4">
 
         <th:block sec:authorize="isAuthenticated()">
             <div class="mb-4">
-                <th:block th:replace="~{/fragments/modal :: section-new}"></th:block>
-                <th:block th:replace="~{/fragments/modal :: category-new(${sections})}"></th:block>
-                <th:block th:replace="~{/fragments/modal :: subcategory-new(${sections})}"></th:block>
+                <th:block th:replace="~{fragments/modal :: section-new}"></th:block>
+                <th:block th:replace="~{fragments/modal :: category-new(${sections})}"></th:block>
+                <th:block th:replace="~{fragments/modal :: subcategory-new(${sections})}"></th:block>
             </div>
         </th:block>
 
@@ -67,4 +67,4 @@
     </div>
 </div>
 
-<th:block th:insert="~{/fragments/footer ::footer}"></th:block>
+<th:block th:insert="~{fragments/footer ::footer}"></th:block>

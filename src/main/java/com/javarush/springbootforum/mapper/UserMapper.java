@@ -9,8 +9,8 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring", uses = {UserMapperBase.class})
 public interface UserMapper {
-    @Mapping(target = "lastActivity", dateFormat = " dd.MM.yyyy hh:mm:ss")
-    @Mapping(target = "createdAt", dateFormat = "dd.MM.yyyy hh:mm:ss")
+    @Mapping(target = "lastActivity", source = "lastActivity", dateFormat = " dd.MM.yyyy hh:mm:ss")
+    @Mapping(target = "createdAt", source = "createdAt", dateFormat = "dd.MM.yyyy hh:mm:ss")
     UserReadDto toDto(User user);
 
     @Mapping(target = "password", source = "password", qualifiedByName = "setEncodingPasswordToUser")

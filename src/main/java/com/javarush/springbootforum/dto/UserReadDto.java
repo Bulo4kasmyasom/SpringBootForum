@@ -1,14 +1,16 @@
 package com.javarush.springbootforum.dto;
 
-import lombok.Value;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Value
+@Data
+@NoArgsConstructor
 public class UserReadDto {
-    Long id;
-    String username;
-    String image;
-    String role;
-    String email;
-    String lastActivity;
-    String createdAt;
+    private Long id;
+    private String username;
+    private String image;
+    private String role;
+    private String email;
+    private String lastActivity;
+    private String createdAt;
 }
