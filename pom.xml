@@ -16,6 +16,8 @@
     <properties>
         <java.version>17</java.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <springdoc.version>2.1.0</springdoc.version>
+        <commons-io.version>2.11.0</commons-io.version>
     </properties>
     <dependencies>
         <dependency>
@@ -76,17 +78,17 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
         </dependency>
-
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.hibernate/hibernate-ehcache &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.hibernate</groupId>-->
-<!--            <artifactId>hibernate-ehcache</artifactId>-->
-<!--            <version>5.6.15.Final</version>-->
-<!--        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/org.mapstruct/mapstruct -->
         <dependency>
@@ -95,13 +97,11 @@
             <version>${mapstruct.version}</version>
         </dependency>
 
-
-
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <dependency>
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
-        <version>2.11.0</version>
+        <version>${commons-io.version}</version>
         </dependency>
 
     </dependencies>

@@ -48,3 +48,6 @@ spring:
           batch_size: 15
           batch_versioned_data: true
         generate_statistics: false
+
+springdoc:
+  override-with-generic-response: false # убирает из swagger лишние коды ошибок

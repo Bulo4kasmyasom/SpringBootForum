@@ -6,6 +6,8 @@ import com.javarush.springbootforum.dto.TopicMessageReadDto;
 import com.javarush.springbootforum.dto.UserReadDto;
 import com.javarush.springbootforum.service.TopicMessageService;
 import com.javarush.springbootforum.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -22,17 +24,20 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/topic-message")
 @RequiredArgsConstructor
+@Tag(name="TopicMessage Rest Controller", description = "TopicMessage API")
 public class TopicMessageRestController {
     private final TopicMessageService topicMessageService;
     private final UserService userService;
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Topic message find by id and return TopicMessageReadDto")
     public TopicMessageReadDto findById(@PathVariable("id") Long id) {
         return topicMessageService.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @PutMapping(value = "/{id}")
+    @Operation(summary = "Update topic message and return TopicMessageReadDto")
     public TopicMessageReadDto update(@PathVariable("id") Long topicMessageId,
                                       @RequestBody @Validated TopicMessageCreateEditDto topicMessageCreateEditDto,
                                       BindingResult bindingResult,
@@ -56,6 +61,7 @@ public class TopicMessageRestController {
 
     // todo возможно нужно изменить возвращаемый тип данных.
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete topic message by id")
     public HttpStatus delete(@PathVariable("id") Long id) {
         return topicMessageService.delete(id)
                 ? HttpStatus.OK

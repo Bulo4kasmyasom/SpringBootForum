@@ -29,7 +29,9 @@ public class SecurityConfiguration {
                         "/login",
                         "/users/**",
                         "/api/v1/**",
-                        "/js/**"
+                        "/js/**",
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**"
                 ).permitAll()
                 .requestMatchers("/topic-message/new")
                 .hasAnyAuthority(Role.ADMIN.getAuthority(),
