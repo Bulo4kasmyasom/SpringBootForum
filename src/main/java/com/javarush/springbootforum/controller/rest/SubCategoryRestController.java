@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/subcat")
 @RequiredArgsConstructor
-@Tag(name="SubCategory Rest Controller", description = "SubCategory API")
+@Tag(name = "SubCategory Rest Controller", description = "SubCategory API")
 public class SubCategoryRestController {
 
     private final SubCategoryService subCategoryService;

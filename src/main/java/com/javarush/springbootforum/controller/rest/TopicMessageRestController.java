@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/topic-message")
 @RequiredArgsConstructor
-@Tag(name="TopicMessage Rest Controller", description = "TopicMessage API")
+@Tag(name = "TopicMessage Rest Controller", description = "TopicMessage API")
 public class TopicMessageRestController {
     private final TopicMessageService topicMessageService;
     private final UserService userService;

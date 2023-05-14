@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/topic")
 @RequiredArgsConstructor
-@Tag(name="Topic Rest Controller", description = "Topic API")
+@Tag(name = "Topic Rest Controller", description = "Topic API")
 public class TopicRestController {
     private final TopicService topicService;
 

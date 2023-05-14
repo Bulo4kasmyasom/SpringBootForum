@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/sections")
 @RequiredArgsConstructor
-@Tag(name="Section Rest Controller", description = "Section API")
+@Tag(name = "Section Rest Controller", description = "Section API")
 public class SectionRestController {
 
     private final SectionService sectionService;
