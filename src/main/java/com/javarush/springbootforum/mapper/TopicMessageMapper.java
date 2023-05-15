@@ -10,6 +10,8 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring", uses = {TopicMessageMapperBase.class, CategoryMapper.class, SubCategoryMapper.class})
 public interface TopicMessageMapper {
+    @Mapping(target = "createdAt", source = "createdAt", dateFormat = "dd.MM.yyyy HH:mm:ss")
+    @Mapping(target = "author.createdAt", source = "author.createdAt", dateFormat = "dd.MM.yyyy HH:mm:ss")
     TopicMessageReadDto toDto(TopicMessage topicMessage);
 
     TopicMessageMapperBase t = Mappers.getMapper(TopicMessageMapperBase.class);

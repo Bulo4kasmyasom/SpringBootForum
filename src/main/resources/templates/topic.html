@@ -30,7 +30,7 @@
                     <a th:href="@{'/users/' + ${message.author.id}}" th:text="${message.author.username}">User</a><br>
                 </div>
                 <div>
-                    <img th:src="|#{user.images.path}/${message.author.image}|" alt="avatar">
+                    <img th:src="|#{user.images.path}/${message.author.image}|" style="width: 200px" alt="avatar">
                 </div>
                 <div>
                     Дата регистрации:<br>
