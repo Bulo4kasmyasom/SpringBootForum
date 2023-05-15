@@ -10,6 +10,7 @@ import com.javarush.springbootforum.mapper.CategoryMapper;
 import com.javarush.springbootforum.repository.CategoryRepository;
 import com.javarush.springbootforum.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryReadDto> findAll() {
-        return categoryRepository.findAll()
+        return categoryRepository.findAll(Sort.by("id"))
                 .stream()
                 .map(categoryMapper::toDto)
                 .toList();

@@ -8,6 +8,7 @@ import com.javarush.springbootforum.mapper.SectionMapper;
 import com.javarush.springbootforum.repository.SectionRepository;
 import com.javarush.springbootforum.service.SectionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +24,7 @@ public class SectionServiceImpl implements SectionService {
 
     @Override
     public List<SectionReadDto> findAll() {
-        return sectionRepository.findAll()
+        return sectionRepository.findAll(Sort.by("id"))
                 .stream()
                 .map(sectionMapper::toDto)
                 .toList();

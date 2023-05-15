@@ -12,7 +12,9 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,6 +35,13 @@ public class UserServiceImpl implements UserService {
     @Override
 //    @Cacheable(value = "UserService::findAll", key = "#pageable")
     public Page<UserReadDto> findAll(Pageable pageable) {
+        Sort.TypedSort<User> typedSort = Sort.sort(User.class);
+        Sort sort = typedSort.by(User::getUsername).ascending();
+        int pageNumber = pageable.getPageNumber();
+        int pageSize = pageable.getPageSize();
+
+        pageable = PageRequest.of(pageNumber, pageSize, sort);
+
         return userRepository.findAll(pageable)
                 .map(userMapper::toDto);
     }
