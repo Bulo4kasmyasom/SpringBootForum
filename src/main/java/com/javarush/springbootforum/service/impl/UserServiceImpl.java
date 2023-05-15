@@ -1,5 +1,6 @@
 package com.javarush.springbootforum.service.impl;
 
+import com.javarush.springbootforum.controller.handler.exception.ResourceNotFoundException;
 import com.javarush.springbootforum.dto.UserCreateEditDto;
 import com.javarush.springbootforum.dto.UserReadDto;
 import com.javarush.springbootforum.mapper.UserMapper;
@@ -39,7 +40,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = "UserService::findById", key = "#id")
+    @Cacheable(value = "UserService::findById", key = "#id", unless="#result == null")
     public Optional<UserReadDto> findById(Long id) {
         return userRepository.findById(id)
                 .map(userMapper::toDto);
@@ -54,6 +55,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserReadDto create(UserCreateEditDto user) {
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new IllegalStateException("User already exists."); // todo обработать
+        }
+
         return Optional.of(user)
                 .map(userMapper::toEntity)
                 .map(userRepository::save)
@@ -91,6 +96,6 @@ public class UserServiceImpl implements UserService {
                         user.getPassword(),
                         Collections.singleton(user.getRole()))
                 )
-                .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user" + username));
+                .orElseThrow(() -> new ResourceNotFoundException("Failed to retrieve user" + username));
     }
 }

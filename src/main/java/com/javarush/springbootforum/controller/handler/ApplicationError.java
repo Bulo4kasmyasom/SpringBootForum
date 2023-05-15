@@ -1,9 +1,17 @@
 package com.javarush.springbootforum.controller.handler;
 
-import lombok.Value;
+import lombok.*;
 
-@Value
+import java.util.Map;
+
+@Data
+@AllArgsConstructor
 public class ApplicationError {
-    int statusCode;
-    String message;
+    private int statusCode;
+    private String message;
+    private Map<String, String> errors;
+
+    public ApplicationError(String message) {
+        this.message = message;
+    }
 }

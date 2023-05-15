@@ -1,5 +1,6 @@
 package com.javarush.springbootforum.service.impl;
 
+import com.javarush.springbootforum.controller.handler.exception.ResourceNotFoundException;
 import com.javarush.springbootforum.dto.*;
 import com.javarush.springbootforum.entity.*;
 import com.javarush.springbootforum.mapper.TopicMapper;
@@ -66,7 +67,7 @@ public class TopicServiceImpl implements TopicService {
         return Optional.of(topicMessage)
                 .map(topicMessageService::create)
                 .map(message -> topicMapper.toDto(message.getTopic()))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("Topic not found"));
     }
 
     @Override
@@ -93,9 +94,9 @@ public class TopicServiceImpl implements TopicService {
     @Transactional
     public boolean moveTopicsInCategory(Long catId, Long[] topicsIds) {
         Category newCategory = categoryServiceImpl.findByIdAndReturnCategory(catId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
-        List<Topic> topics = getTopicsForMove(topicsIds, newCategory, null); // null т.к. нет подкатегории
+        List<Topic> topics = getTopicsForMove(topicsIds, newCategory, null);
 
         // todo  N + 1 при обновлении, batch не работает из application.yaml
         return topicRepository.saveAllAndFlush(topics).size() > 0;
@@ -105,10 +106,10 @@ public class TopicServiceImpl implements TopicService {
     @Transactional
     public boolean moveTopicsInSubCategory(Long catId, Long subCatId, Long[] topicsIds) {
         Category newCategory = categoryServiceImpl.findByIdAndReturnCategory(catId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
         SubCategory newSubCategory = subCategoryService.findByCategoryIdAndId(catId, subCatId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("Subcategory not found"));
 
         List<Topic> topics = getTopicsForMove(topicsIds, newCategory, newSubCategory);
 

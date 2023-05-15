@@ -1,5 +1,6 @@
 package com.javarush.springbootforum.service.impl;
 
+import com.javarush.springbootforum.controller.handler.exception.ResourceNotFoundException;
 import com.javarush.springbootforum.dto.CategoryCreateDto;
 import com.javarush.springbootforum.dto.CategoryEditDto;
 import com.javarush.springbootforum.dto.CategoryFieldReadDto;
@@ -49,7 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .map(categoryMapper::toEntity)
                 .map(categoryRepository::save)
                 .map(categoryMapper::toDto)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.javarush.springbootforum.controller.rest;
 
+import com.javarush.springbootforum.controller.handler.exception.ResourceNotFoundException;
 import com.javarush.springbootforum.controller.handler.exception.ValidationException;
 import com.javarush.springbootforum.dto.SectionCreateEditDto;
 import com.javarush.springbootforum.dto.SectionWithoutCategoryListReadDto;
@@ -27,16 +28,9 @@ public class SectionRestController {
     @PutMapping("/{id}")
     @Operation(summary = "Update section and return SectionWithoutCategoryListReadDto")
     public SectionWithoutCategoryListReadDto update(@PathVariable("id") Long sectionId,
-                                                    @RequestBody @Validated SectionCreateEditDto sectionCreateEditDto,
-                                                    BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            String errors = bindingResult.getAllErrors().stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .collect(Collectors.joining(", "));
-            throw new ValidationException(errors);
-        }
+                                                    @RequestBody @Validated SectionCreateEditDto sectionCreateEditDto) {
         return sectionService.update(sectionId, sectionCreateEditDto)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("Section not found"));
     }
 
     // todo возможно нужно изменить возвращаемый тип данных.

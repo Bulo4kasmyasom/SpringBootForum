@@ -2,32 +2,84 @@ package com.javarush.springbootforum.controller.handler;
 
 import com.javarush.springbootforum.controller.handler.exception.ResourceNotFoundException;
 import com.javarush.springbootforum.controller.handler.exception.ValidationException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Slf4j
-@ControllerAdvice(basePackages = "com.javarush.springbootforum.controller.rest")
+@RestControllerAdvice(basePackages = "com.javarush.springbootforum.controller.rest")
 public class ExceptionHandlerRestController {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ResourceNotFoundException.class)
-    @ResponseBody
-    public ApplicationError handleException(ResourceNotFoundException e) {
-//        exception.printStackTrace(); // писать в логи нужно
-        return new ApplicationError(HttpStatus.NOT_FOUND.value(), e.getMessage());
+    public ApplicationError handleResourceNotFoundException(ResourceNotFoundException e) {
+        return new ApplicationError(e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ValidationException.class)
-    @ResponseBody
-    public ApplicationError handleException(ValidationException e) {
-//        exception.printStackTrace(); // писать в логи нужно
-        return new ApplicationError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+    public ApplicationError handleValidationException(ValidationException e) {
+        return new ApplicationError(e.getMessage());
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApplicationError handleIllegalState(IllegalStateException e) {
+        return new ApplicationError(e.getMessage());
+    }
+
+    /*
+    ConstraintViolationException возникает в Spring при нарушении ограничений целостности данных в базе данных.
+    Это может произойти, например, когда вы пытаетесь сохранить объект в базу данных, который содержит значения,
+    не соответствующие определенным ограничениям, таким как уникальность значений или ссылочная целостность.
+    В таком случае, Hibernate (или другой ORM) генерирует исключение ConstraintViolationException, которое
+    перехватывается Spring и преобразуется в HTTP-ответ с кодом ошибки 400 (Bad Request).
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApplicationError handleConstraintViolation(ConstraintViolationException e) {
+        ApplicationError ApplicationError = new ApplicationError("Validation failed.");
+        ApplicationError.setErrors(e.getConstraintViolations().stream()
+                .collect(Collectors.toMap(
+                        violation -> violation.getPropertyPath().toString(),
+                        ConstraintViolation::getMessage
+                )));
+        return ApplicationError;
+    }
+
+
+    // todo MethodArgumentTypeMismatchException.class для PathVariable
+    @ExceptionHandler({MethodArgumentNotValidException.class}) // validation in dto
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApplicationError handleMethodArgumentNotValid(MethodArgumentNotValidException e) {
+        ApplicationError applicationError = new ApplicationError("Validation failed.");
+        List<FieldError> errorsList = e.getBindingResult().getFieldErrors();
+
+        String errors = errorsList.stream()
+                .map(FieldError::getDefaultMessage)
+                .collect(Collectors.joining(", "));
+
+        applicationError.setMessage(errors);
+
+        return applicationError;
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ApplicationError handleException(Exception e) {
+        e.printStackTrace();
+        return new ApplicationError("Internal error.");
     }
 
 }

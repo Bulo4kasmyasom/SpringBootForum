@@ -4,6 +4,8 @@ spring:
   cache:
     type: redis
     cache-names: redis-cache
+    redis:
+      cache-null-values: off
   profiles:
     active: dev
   messages:

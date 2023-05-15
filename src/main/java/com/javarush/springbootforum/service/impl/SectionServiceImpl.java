@@ -1,5 +1,6 @@
 package com.javarush.springbootforum.service.impl;
 
+import com.javarush.springbootforum.controller.handler.exception.ResourceNotFoundException;
 import com.javarush.springbootforum.dto.SectionCreateEditDto;
 import com.javarush.springbootforum.dto.SectionReadDto;
 import com.javarush.springbootforum.dto.SectionWithoutCategoryListReadDto;
@@ -43,7 +44,7 @@ public class SectionServiceImpl implements SectionService {
                 .map(sectionMapper::toEntity)
                 .map(sectionRepository::save)
                 .map(sectionMapper::toDto)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("Section not found"));
     }
 
     @Override

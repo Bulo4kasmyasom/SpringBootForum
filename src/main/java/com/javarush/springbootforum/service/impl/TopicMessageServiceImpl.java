@@ -1,5 +1,6 @@
 package com.javarush.springbootforum.service.impl;
 
+import com.javarush.springbootforum.controller.handler.exception.ResourceNotFoundException;
 import com.javarush.springbootforum.dto.TopicMessageCreateEditDto;
 import com.javarush.springbootforum.dto.TopicMessageReadDto;
 import com.javarush.springbootforum.dto.UserReadDto;
@@ -58,7 +59,7 @@ public class TopicMessageServiceImpl implements TopicMessageService {
                 .map(topicMessageMapper::toEntity)
                 .map(topicMessageRepository::save)
                 .map(topicMessageMapper::toDto)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("Topic message not found"));
     }
 
     @Override
@@ -66,7 +67,7 @@ public class TopicMessageServiceImpl implements TopicMessageService {
     public TopicMessage create(TopicMessage topicMessage) {
         return Optional.of(topicMessage)
                 .map(topicMessageRepository::save)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("Topic message not found"));
     }
 
     @Override

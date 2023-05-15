@@ -1,5 +1,6 @@
 package com.javarush.springbootforum.controller.rest;
 
+import com.javarush.springbootforum.controller.handler.exception.ResourceNotFoundException;
 import com.javarush.springbootforum.controller.handler.exception.ValidationException;
 import com.javarush.springbootforum.dto.SubCategoryEditDto;
 import com.javarush.springbootforum.dto.SubCategoryFieldReadDto;
@@ -27,16 +28,9 @@ public class SubCategoryRestController {
     @PutMapping("/{id}")
     @Operation(summary = "Update subcategory and return SubCategoryFieldReadDto")
     public SubCategoryFieldReadDto update(@PathVariable("id") Long id,
-                                          @RequestBody @Validated SubCategoryEditDto subCategoryEditDto,
-                                          BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            String errors = bindingResult.getAllErrors().stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .collect(Collectors.joining(", "));
-            throw new ValidationException(errors);
-        }
+                                          @RequestBody @Validated SubCategoryEditDto subCategoryEditDto) {
         return subCategoryService.update(id, subCategoryEditDto)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("Subcategory not found"));
     }
 
     // todo возможно нужно изменить возвращаемый тип данных.

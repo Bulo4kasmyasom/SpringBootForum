@@ -1,5 +1,6 @@
 package com.javarush.springbootforum.controller.rest;
 
+import com.javarush.springbootforum.controller.handler.exception.ResourceNotFoundException;
 import com.javarush.springbootforum.controller.handler.exception.ValidationException;
 import com.javarush.springbootforum.dto.TopicEditDto;
 import com.javarush.springbootforum.dto.TopicFieldReadDto;
@@ -26,16 +27,9 @@ public class TopicRestController {
     @PutMapping("/{id}")
     @Operation(summary = "Update topic by topicId, and return TopicFieldReadDto")
     public TopicFieldReadDto update(@PathVariable("id") Long topicId,
-                                    @RequestBody @Validated TopicEditDto topicEditDto,
-                                    BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            String errors = bindingResult.getAllErrors().stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .collect(Collectors.joining(", "));
-            throw new ValidationException(errors);
-        }
+                                    @RequestBody @Validated TopicEditDto topicEditDto) {
         return topicService.update(topicId, topicEditDto)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("Topic not found"));
     }
 
     @PatchMapping("/cat/{catId}")

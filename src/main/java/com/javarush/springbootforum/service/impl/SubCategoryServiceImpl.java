@@ -1,5 +1,6 @@
 package com.javarush.springbootforum.service.impl;
 
+import com.javarush.springbootforum.controller.handler.exception.ResourceNotFoundException;
 import com.javarush.springbootforum.dto.SubCategoryCreateDto;
 import com.javarush.springbootforum.dto.SubCategoryEditDto;
 import com.javarush.springbootforum.dto.SubCategoryFieldReadDto;
@@ -50,7 +51,7 @@ public class SubCategoryServiceImpl implements SubCategoryService {
                 .map(subCategoryMapper::toEntity)
                 .map(subCategoryRepository::save)
                 .map(subCategoryMapper::toDto)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("Subcategory not found"));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.javarush.springbootforum.controller.rest;
 
+import com.javarush.springbootforum.controller.handler.exception.ResourceNotFoundException;
 import com.javarush.springbootforum.controller.handler.exception.ValidationException;
 import com.javarush.springbootforum.dto.TopicMessageCreateEditDto;
 import com.javarush.springbootforum.dto.TopicMessageReadDto;
@@ -40,22 +41,14 @@ public class TopicMessageRestController {
     @Operation(summary = "Update topic message and return TopicMessageReadDto")
     public TopicMessageReadDto update(@PathVariable("id") Long topicMessageId,
                                       @RequestBody @Validated TopicMessageCreateEditDto topicMessageCreateEditDto,
-                                      BindingResult bindingResult,
                                       @AuthenticationPrincipal UserDetails userDetails
     ) {
-        if (bindingResult.hasErrors()) {
-            String errors = bindingResult.getAllErrors().stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .collect(Collectors.joining(", "));
-            throw new ValidationException(errors);
-        }
-
         UserReadDto userReadDto = userService.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         topicMessageCreateEditDto.setAuthorId(userReadDto.getId()); // todo сеттер в контроллере - плохо?
 
         return topicMessageService.update(topicMessageId, topicMessageCreateEditDto)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("Topic message not found"));
     }
 
 

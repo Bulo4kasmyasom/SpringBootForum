@@ -1,5 +1,6 @@
 package com.javarush.springbootforum.controller.rest;
 
+import com.javarush.springbootforum.controller.handler.exception.ResourceNotFoundException;
 import com.javarush.springbootforum.controller.handler.exception.ValidationException;
 import com.javarush.springbootforum.dto.CategoryEditDto;
 import com.javarush.springbootforum.dto.CategoryFieldReadDto;
@@ -7,8 +8,11 @@ import com.javarush.springbootforum.dto.CategoryReadDto;
 import com.javarush.springbootforum.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.format.annotation.NumberFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +25,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/cat")
 @RequiredArgsConstructor
+@Validated
 @Tag(name = "Category Rest Controller", description = "Category API")
 public class CategoryRestController {
 
@@ -35,16 +40,9 @@ public class CategoryRestController {
     @PutMapping("/{id}")
     @Operation(summary = "Update category and return CategoryFieldReadDto")
     public CategoryFieldReadDto update(@PathVariable("id") Long id,
-                                       @RequestBody @Validated CategoryEditDto categoryEditDto,
-                                       BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            String errors = bindingResult.getAllErrors().stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .collect(Collectors.joining(", "));
-            throw new ValidationException(errors);
-        }
+                                       @RequestBody @Validated CategoryEditDto categoryEditDto) {
         return categoryService.update(id, categoryEditDto)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
     }
 
     // todo возможно нужно изменить возвращаемый тип данных.

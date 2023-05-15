@@ -16,7 +16,7 @@ public class UserCreateEditDto {
     @Schema(description = "Username", example = "alex")
     String username;
 
-    @Size(min = 2, max = 20, message = "{validation.error.password.size}", groups = {OnCreate.class, OnUpdate.class})
+    @Size(min = 2, max = 20, message = "{validation.error.password.size}", groups = {OnCreate.class, OnUpdate.class}) // todo при обновлении меняется пароль если он пустой когда убираешь OnUpdate
     @Schema(description = "Password", example = "123456")
     String password;
 
