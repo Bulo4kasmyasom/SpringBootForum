@@ -19,7 +19,7 @@
     <tr th:each="user : ${users.content}">
         <th scope="row" th:text="${user.id}">id</th>
         <td><a th:href="@{'/users/' + ${user.id}}" th:text="${user.username}">User</a></td>
-        <td><img th:src="|#{user.images.path}/${user.image}|" alt="avatar"></td>
+        <td><img th:src="|#{user.images.path}/${user.image}|" style="width: 30px" alt="avatar"></td>
         <td th:text="${user.role}">role</td>
         <td th:text="${user.lastActivity}">last activity</td>
         <td th:text="${user.email}" sec:authorize="hasAuthority('ADMIN')">email</td>
