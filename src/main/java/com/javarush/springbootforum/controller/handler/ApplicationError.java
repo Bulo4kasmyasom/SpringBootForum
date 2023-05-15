@@ -1,6 +1,7 @@
 package com.javarush.springbootforum.controller.handler;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 import java.util.Map;
 

@@ -1,26 +1,18 @@
 package com.javarush.springbootforum.controller.rest;
 
 import com.javarush.springbootforum.controller.handler.exception.ResourceNotFoundException;
-import com.javarush.springbootforum.controller.handler.exception.ValidationException;
 import com.javarush.springbootforum.dto.CategoryEditDto;
 import com.javarush.springbootforum.dto.CategoryFieldReadDto;
 import com.javarush.springbootforum.dto.CategoryReadDto;
 import com.javarush.springbootforum.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.format.annotation.NumberFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/cat")

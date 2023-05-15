@@ -22,7 +22,7 @@ public interface UserMapper {
 
     @Mapping(target = "password", source = "password",
             conditionExpression = "java(!userCreateEditDto.getPassword().isEmpty())",
-            nullValuePropertyMappingStrategy= NullValuePropertyMappingStrategy.IGNORE,
+            nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
             qualifiedByName = "setEncodingPasswordToUser")
     @Mapping(target = "role", source = "role", qualifiedByName = "setDefaultRoleToUser")
     User toEntity(@MappingTarget User user, UserCreateEditDto userCreateEditDto);

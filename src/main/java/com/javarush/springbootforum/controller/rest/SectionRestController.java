@@ -1,21 +1,15 @@
 package com.javarush.springbootforum.controller.rest;
 
 import com.javarush.springbootforum.controller.handler.exception.ResourceNotFoundException;
-import com.javarush.springbootforum.controller.handler.exception.ValidationException;
 import com.javarush.springbootforum.dto.SectionCreateEditDto;
 import com.javarush.springbootforum.dto.SectionWithoutCategoryListReadDto;
 import com.javarush.springbootforum.service.SectionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/sections")

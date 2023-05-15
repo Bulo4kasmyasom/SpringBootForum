@@ -13,13 +13,11 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -40,7 +38,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = "UserService::findById", key = "#id", unless="#result == null")
+    @Cacheable(value = "UserService::findById", key = "#id", unless = "#result == null")
     public Optional<UserReadDto> findById(Long id) {
         return userRepository.findById(id)
                 .map(userMapper::toDto);
@@ -55,21 +53,29 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserReadDto create(UserCreateEditDto user) {
-        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            throw new IllegalStateException("User already exists."); // todo обработать
+        if (userRepository.findByUsername(user.getUsername()).isPresent() ||
+                userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalStateException("User with this login or email already exists");
         }
-
         return Optional.of(user)
                 .map(userMapper::toEntity)
                 .map(userRepository::save)
                 .map(userMapper::toDto)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     @Override
     @CachePut(value = "UserService::findById", key = "#id")
     @Transactional
     public Optional<UserReadDto> update(Long id, UserCreateEditDto userCreateEditDto) {
+        String email = userCreateEditDto.getEmail();
+        String username = userCreateEditDto.getUsername();
+        Long countUsersByEmailOrUsername = userRepository.countUsersByEmailOrUsername(email, username);
+
+        if (countUsersByEmailOrUsername > 1) {
+            throw new IllegalStateException("User with this login or email already exists");
+        }
+
         return userRepository.findById(id)
                 .map(user -> userMapper.toEntity(user, userCreateEditDto))
                 .map(userRepository::saveAndFlush)

@@ -11,7 +11,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,7 +34,7 @@ public class ExceptionHandlerRestController {
 
     @ExceptionHandler(IllegalStateException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApplicationError handleIllegalState(IllegalStateException e) {
+    public ApplicationError handleIllegalStateException(IllegalStateException e) {
         return new ApplicationError(e.getMessage());
     }
 
@@ -48,7 +47,7 @@ public class ExceptionHandlerRestController {
      */
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApplicationError handleConstraintViolation(ConstraintViolationException e) {
+    public ApplicationError handleConstraintViolationException(ConstraintViolationException e) {
         ApplicationError ApplicationError = new ApplicationError("Validation failed.");
         ApplicationError.setErrors(e.getConstraintViolations().stream()
                 .collect(Collectors.toMap(
@@ -62,7 +61,7 @@ public class ExceptionHandlerRestController {
     // todo MethodArgumentTypeMismatchException.class для PathVariable
     @ExceptionHandler({MethodArgumentNotValidException.class}) // validation in dto
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApplicationError handleMethodArgumentNotValid(MethodArgumentNotValidException e) {
+    public ApplicationError handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         ApplicationError applicationError = new ApplicationError("Validation failed.");
         List<FieldError> errorsList = e.getBindingResult().getFieldErrors();
 

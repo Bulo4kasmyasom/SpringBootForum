@@ -12,7 +12,7 @@ import lombok.Value;
 @Value
 @Schema(description = "UserCreateEditDto")
 public class UserCreateEditDto {
-    @Size(min = 2, max = 20, message = "{validation.error.login.size}")
+    @Size(min = 2, max = 20, message = "{validation.error.login.size}", groups = {OnCreate.class, OnUpdate.class})
     @Schema(description = "Username", example = "alex")
     String username;
 
@@ -23,11 +23,11 @@ public class UserCreateEditDto {
     @Schema(description = "image", example = "5.png")
     String image;
 
-    @Email(message = "{validation.error.email}") // todo не работает проверка
+    @Email(message = "{validation.error.email}", groups = {OnCreate.class, OnUpdate.class}) // todo не работает проверка
     @Schema(description = "email", example = "alex@gmail.com")
     String email;
 
-    @RoleValidator(enumClass = Role.class, message = "{validation.error.role}")
+    @RoleValidator(enumClass = Role.class, message = "{validation.error.role}", groups = {OnCreate.class, OnUpdate.class})
     @Schema(description = "role", example = "USER")
     String role;
 }
