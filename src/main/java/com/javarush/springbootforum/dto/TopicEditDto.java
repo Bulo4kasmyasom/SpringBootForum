@@ -19,7 +19,6 @@ public class TopicEditDto {
         this.title = title;
     }
 
-//    todo
 //    Without @JsonCreator:
 //    Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot construct
 //    instance of `com.javarush.springbootforum.dto.TopicEditDto` (although at least one Creator exists): cannot

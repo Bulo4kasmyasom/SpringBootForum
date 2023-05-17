@@ -27,7 +27,7 @@ public class SubCategoryRestController {
                 .orElseThrow(() -> new ResourceNotFoundException("Subcategory not found"));
     }
 
-    // todo возможно нужно изменить возвращаемый тип данных.
+
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete subcategory by id")
     public HttpStatus delete(@PathVariable("id") Long id) {

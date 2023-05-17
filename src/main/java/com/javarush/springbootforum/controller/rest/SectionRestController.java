@@ -27,7 +27,7 @@ public class SectionRestController {
                 .orElseThrow(() -> new ResourceNotFoundException("Section not found"));
     }
 
-    // todo возможно нужно изменить возвращаемый тип данных.
+
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete section by id")
     public HttpStatus delete(@PathVariable("id") Long id) {

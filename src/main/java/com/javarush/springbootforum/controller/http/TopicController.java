@@ -12,11 +12,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/topic")
@@ -28,7 +26,6 @@ public class TopicController {
 
     @GetMapping("/{id}")
     public String topicWithMessages(@PathVariable("id") Long id, Model model, Pageable pageable) {
-
         TopicReadDto topicReadDto = topicService.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -42,22 +39,11 @@ public class TopicController {
 
     @PostMapping("/new")
     public String create(@ModelAttribute @Validated TopicCreateDto topicCreateDto,
-                         BindingResult bindingResult,
-                         RedirectAttributes redirectAttributes,
-                         @AuthenticationPrincipal UserDetails userDetails,
-                         @RequestHeader(value = "referer") String referer) {
-
+                         @AuthenticationPrincipal UserDetails userDetails) {
         UserReadDto userReadDto = userService.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("topicMessage", topicCreateDto);
-            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-            return "redirect:" + referer;
-        }
-
         TopicReadDto topicReadDto = topicService.create(userReadDto, topicCreateDto);
-
         return "redirect:/topic/" + topicReadDto.getId();
     }
 

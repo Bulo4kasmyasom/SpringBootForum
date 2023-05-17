@@ -40,14 +40,11 @@ public class TopicMessageRestController {
     ) {
         UserReadDto userReadDto = userService.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        topicMessageCreateEditDto.setAuthorId(userReadDto.getId()); // todo сеттер в контроллере - плохо?
 
-        return topicMessageService.update(topicMessageId, topicMessageCreateEditDto)
+        return topicMessageService.update(userReadDto.getId(), topicMessageId, topicMessageCreateEditDto)
                 .orElseThrow(() -> new ResourceNotFoundException("Topic message not found"));
     }
 
-
-    // todo возможно нужно изменить возвращаемый тип данных.
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete topic message by id")
     public HttpStatus delete(@PathVariable("id") Long id) {

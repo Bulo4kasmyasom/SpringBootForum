@@ -36,6 +36,6 @@ public class Category extends BaseEntity {
 
     @Builder.Default
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    @BatchSize(size = 30)// todo bad?
+    @BatchSize(size = 30)
     List<SubCategory> subCategoryList = new ArrayList<>();
 }

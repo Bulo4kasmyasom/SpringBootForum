@@ -6,6 +6,7 @@ import com.javarush.springbootforum.validation.OnUpdate;
 import com.javarush.springbootforum.validation.RoleValidator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Value;
 
@@ -23,7 +24,8 @@ public class UserCreateEditDto {
     @Schema(description = "image", example = "5.png")
     String image;
 
-    @Email(message = "{validation.error.email}", groups = {OnCreate.class, OnUpdate.class}) // todo не работает проверка
+    @Email(message = "{validation.error.email}", groups = {OnCreate.class, OnUpdate.class})
+    @NotEmpty(message = "{validation.error.email}", groups = {OnCreate.class, OnUpdate.class})
     @Schema(description = "email", example = "alex@gmail.com")
     String email;
 

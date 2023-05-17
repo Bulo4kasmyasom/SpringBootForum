@@ -45,7 +45,7 @@ public class TopicRestController {
                 : HttpStatus.BAD_REQUEST;
     }
 
-    // todo возможно нужно изменить возвращаемый тип данных.
+
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete topic by id")
     public HttpStatus delete(@PathVariable("id") Long id) {

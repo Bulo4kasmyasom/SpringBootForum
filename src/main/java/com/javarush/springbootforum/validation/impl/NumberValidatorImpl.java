@@ -20,10 +20,3 @@ public class NumberValidatorImpl implements ConstraintValidator<NumberValidator,
             return false;
     }
 }
-
-//
-//    @Override
-//    public boolean isValid(String value, ConstraintValidatorContext context) {
-//        if (value == null) return false;
-//        return (Pattern.matches("^[0-9]+$", value) && Long.parseLong(value) < Long.MAX_VALUE);
-//    }

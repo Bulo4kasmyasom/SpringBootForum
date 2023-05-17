@@ -37,7 +37,6 @@ public class CategoryRestController {
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
     }
 
-    // todo возможно нужно изменить возвращаемый тип данных.
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete category by id")
     public HttpStatus delete(@PathVariable("id") Long id) {

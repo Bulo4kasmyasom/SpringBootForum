@@ -13,15 +13,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -51,42 +47,14 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public String create(@ModelAttribute @Validated(OnCreate.class) UserCreateEditDto user,
-                         BindingResult bindingResult,
-                         RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            String errors = bindingResult
-                    .getFieldErrors()
-                    .stream()
-                    .map(FieldError::getDefaultMessage)
-                    .collect(Collectors.joining(", "));
-
-            redirectAttributes.addFlashAttribute("user", user);
-            redirectAttributes.addFlashAttribute("errors", errors);
-            return "redirect:/home";
-        }
+    public String create(@ModelAttribute @Validated(OnCreate.class) UserCreateEditDto user) {
         userService.create(user);
         return "redirect:/home";
     }
 
     @PostMapping("/{id}/update")
     public String update(@PathVariable("id") Long id,
-                         @ModelAttribute @Validated(OnUpdate.class) UserCreateEditDto user,
-                         BindingResult bindingResult,
-                         RedirectAttributes redirectAttributes) {
-
-        if (bindingResult.hasErrors()) {
-            String errors = bindingResult
-                    .getFieldErrors()
-                    .stream()
-                    .map(FieldError::getDefaultMessage)
-                    .collect(Collectors.joining(", "));
-
-            redirectAttributes.addFlashAttribute("user", user);
-            redirectAttributes.addFlashAttribute("errors", errors);
-            return "redirect:/users/{id}";
-        }
-
+                         @ModelAttribute @Validated(OnUpdate.class) UserCreateEditDto user) {
         return userService.update(id, user)
                 .map(it -> "redirect:/users/{id}")
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

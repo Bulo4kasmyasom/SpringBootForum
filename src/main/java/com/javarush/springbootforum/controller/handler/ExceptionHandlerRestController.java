@@ -57,8 +57,6 @@ public class ExceptionHandlerRestController {
         return ApplicationError;
     }
 
-
-    // todo MethodArgumentTypeMismatchException.class для PathVariable
     @ExceptionHandler({MethodArgumentNotValidException.class}) // validation in dto
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApplicationError handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {

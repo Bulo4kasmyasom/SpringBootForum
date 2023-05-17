@@ -10,11 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -54,24 +52,17 @@ public class CategoryController {
         SubCategoryReadDto subCategoryDto = subCategoryService.findById(subCatId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        Page<TopicReadDto> topicsByCategoryAndSubCategory = topicService.findAllByCategoryIdAndSubCategoryId(catId, subCatId, pageable);
+        Page<TopicReadDto> topics = topicService.findAllByCategoryIdAndSubCategoryId(catId, subCatId, pageable);
 
         model.addAttribute("category", categoryDto);
         model.addAttribute("subCategory", subCategoryDto);
-        model.addAttribute("topics", PageResponseDto.of(topicsByCategoryAndSubCategory));
+        model.addAttribute("topics", PageResponseDto.of(topics));
         return "categories";
     }
 
 
     @PostMapping("/new")
-    public String create(@ModelAttribute @Validated CategoryCreateDto categoryCreateDto,
-                         BindingResult bindingResult,
-                         RedirectAttributes redirectAttributes) {
-
-        if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-            return "redirect:/home";
-        }
+    public String create(@ModelAttribute @Validated CategoryCreateDto categoryCreateDto) {
         categoryService.create(categoryCreateDto);
         return "redirect:/home";
     }

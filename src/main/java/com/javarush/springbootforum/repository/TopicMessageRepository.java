@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TopicMessageRepository extends JpaRepository<TopicMessage, Long> {
     Page<TopicMessage> findAllByTopicId(Long id, Pageable pageable);
+
+    Long countTopicMessageByTopicId(Long id);
 }

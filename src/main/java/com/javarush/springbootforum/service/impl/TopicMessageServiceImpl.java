@@ -3,10 +3,11 @@ package com.javarush.springbootforum.service.impl;
 import com.javarush.springbootforum.controller.handler.exception.ResourceNotFoundException;
 import com.javarush.springbootforum.dto.TopicMessageCreateEditDto;
 import com.javarush.springbootforum.dto.TopicMessageReadDto;
-import com.javarush.springbootforum.dto.UserReadDto;
+import com.javarush.springbootforum.entity.Topic;
 import com.javarush.springbootforum.entity.TopicMessage;
 import com.javarush.springbootforum.mapper.TopicMessageMapper;
 import com.javarush.springbootforum.repository.TopicMessageRepository;
+import com.javarush.springbootforum.repository.TopicRepository;
 import com.javarush.springbootforum.service.TopicMessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class TopicMessageServiceImpl implements TopicMessageService {
     private final TopicMessageRepository topicMessageRepository;
+    private final TopicRepository topicRepository;
     private final TopicMessageMapper topicMessageMapper;
 
     @Override
@@ -50,8 +52,8 @@ public class TopicMessageServiceImpl implements TopicMessageService {
 
     @Override
     @Transactional
-    public TopicMessageReadDto create(UserReadDto userReadDto, TopicMessageCreateEditDto topicMessageCreateEditDto) {
-        topicMessageCreateEditDto.setAuthorId(userReadDto.getId());
+    public TopicMessageReadDto create(Long authorId, TopicMessageCreateEditDto topicMessageCreateEditDto) {
+        topicMessageCreateEditDto.setAuthorId(authorId);
 
         return Optional.of(topicMessageCreateEditDto)
                 .map(topicMessageMapper::toEntity)
@@ -70,8 +72,9 @@ public class TopicMessageServiceImpl implements TopicMessageService {
 
     @Override
     @Transactional
-    public Optional<TopicMessageReadDto> update(Long id, TopicMessageCreateEditDto topicMessageCreateEditDto) {
-        return topicMessageRepository.findById(id)
+    public Optional<TopicMessageReadDto> update(Long userId, Long topicMessageId, TopicMessageCreateEditDto topicMessageCreateEditDto) {
+        topicMessageCreateEditDto.setAuthorId(userId);
+        return topicMessageRepository.findById(topicMessageId)
                 .map(topicMessage -> topicMessageMapper.toEntity(topicMessage, topicMessageCreateEditDto))
                 .map(topicMessageRepository::saveAndFlush)
                 .map(topicMessageMapper::toDto);
@@ -79,11 +82,17 @@ public class TopicMessageServiceImpl implements TopicMessageService {
 
     @Override
     @Transactional
-    public boolean delete(Long id) { // todo в топике может не остаться сообщений, пофиксить
+    public boolean delete(Long id) {
         return topicMessageRepository.findById(id)
                 .map(topicMessage -> {
                     topicMessageRepository.delete(topicMessage);
                     topicMessageRepository.flush();
+                    Topic topic = topicMessage.getTopic();
+                    Long topicId = topic.getId();
+                    if (topicMessageRepository.countTopicMessageByTopicId(topicId) == 0) {
+                        topicRepository.delete(topic);
+                        topicRepository.flush();
+                    }
                     return true;
                 }).orElse(false);
     }
