@@ -1,5 +1,6 @@
 package com.javarush.springbootforum.controller.http;
 
+import com.javarush.springbootforum.controller.handler.exception.ResourceNotFoundException;
 import com.javarush.springbootforum.dto.*;
 import com.javarush.springbootforum.service.TopicMessageService;
 import com.javarush.springbootforum.service.TopicService;
@@ -7,14 +8,12 @@ import com.javarush.springbootforum.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 @Controller
 @RequestMapping("/topic")
@@ -27,7 +26,7 @@ public class TopicController {
     @GetMapping("/{id}")
     public String topicWithMessages(@PathVariable("id") Long id, Model model, Pageable pageable) {
         TopicReadDto topicReadDto = topicService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("Topic not found"));
 
         Page<TopicMessageReadDto> pageMessages = topicMessageService.findAllByTopicId(id, pageable);
 
@@ -41,7 +40,7 @@ public class TopicController {
     public String create(@ModelAttribute @Validated TopicCreateDto topicCreateDto,
                          @AuthenticationPrincipal UserDetails userDetails) {
         UserReadDto userReadDto = userService.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         TopicReadDto topicReadDto = topicService.create(userReadDto, topicCreateDto);
         return "redirect:/topic/" + topicReadDto.getId();

@@ -1,5 +1,6 @@
 package com.javarush.springbootforum.controller.http;
 
+import com.javarush.springbootforum.controller.handler.exception.ResourceNotFoundException;
 import com.javarush.springbootforum.dto.*;
 import com.javarush.springbootforum.service.CategoryService;
 import com.javarush.springbootforum.service.SubCategoryService;
@@ -47,10 +48,10 @@ public class CategoryController {
             Pageable pageable
     ) {
         CategoryReadDto categoryDto = categoryService.findById(catId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
         SubCategoryReadDto subCategoryDto = subCategoryService.findById(subCatId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("Subcategory not found"));
 
         Page<TopicReadDto> topics = topicService.findAllByCategoryIdAndSubCategoryId(catId, subCatId, pageable);
 
