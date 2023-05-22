@@ -20,27 +20,21 @@
 
     <th:block th:if="${subCategories != null && subCategories.size()>0}">
         <div class="row align-items-end border border-secondary-subtle rounded-3">
-            <div class="col-6  border border-secondary-subtle">
+            <div class="col-10 text-center fw-bold border border-secondary-subtle">
                 Подкатегории
             </div>
-            <div class="col  border border-secondary-subtle">
+            <div class="col text-center fw-bold border border-secondary-subtle">
                 Тем
-            </div>
-            <div class="col  border border-secondary-subtle">
-                Ответов
             </div>
         </div>
 
         <div class="row align-items-end" th:each="subcat : ${subCategories}">
-            <div class="col-6 border border-secondary-subtle">
+            <div class="col-10 border border-secondary-subtle">
                 <a th:href="@{/cat/{catId}/subcat/{subCatId}(catId=${category.id},subCatId=${subcat.id})}"
                    th:text="${subcat.title}"></a>
             </div>
-            <div class="col border border-secondary-subtle">
+            <div class="col text-center border border-secondary-subtle">
                 [[${subcat.topicCount}]]
-            </div>
-            <div class="col border border-secondary-subtle">
-                000000
             </div>
         </div>
     </th:block>
