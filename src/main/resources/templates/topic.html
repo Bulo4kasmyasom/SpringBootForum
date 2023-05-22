@@ -45,7 +45,9 @@
                  th:id="|topic-message-text-${message.id}|">text
             </div>
             <div class="col-12 border border-secondary" th:text="${message.createdAt}">Date</div>
-            <div th:if="${#authentication.name == message.author.username} or ${#authorization.expression('hasAuthority(''ADMIN'')')}">
+
+            <div th:if="${#authentication.name == message.author.username} or
+            ${#authorization.expression('hasAnyAuthority(''ADMIN'', ''MODERATOR'')')}">
                 <button type="submit" class="btn btn-primary btn-sm btn-light"
                         th:name="|topic-message-text-${message.id}|">Редактировать
                 </button>

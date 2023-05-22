@@ -1,18 +1,18 @@
 --liquibase formatted sql
 
---changeset bulo4kasmyasom:0
+--changeset bulo4kasmyasom:create_schema
 create schema if not exists public;
 
---changeset bulo4kasmyasom:0.1
+--changeset bulo4kasmyasom:set_schema
 set schema 'public';
 
---changeset bulo4kasmyasom:1
+--changeset bulo4kasmyasom:create_table_roles
 create table public.roles
 (
     value varchar(20) unique not null
 );
 
---changeset bulo4kasmyasom:2
+--changeset bulo4kasmyasom:create_table_users
 create table public.users
 (
     id            bigserial primary key,
@@ -20,13 +20,13 @@ create table public.users
     password      varchar(256)       not null,
     email         varchar(50) unique not null,
     role          varchar(20)        not null references roles (value),
-    image         varchar(128)       not null default 'default.png',
+    image         varchar(128)       not null default 'avatar_no_image.jpg',
     last_activity timestamp          not null,
     created_at    timestamp          not null,
     updated_at    timestamp
 );
 
---changeset bulo4kasmyasom:3
+--changeset bulo4kasmyasom:create_table_sections
 create table public.sections
 (
     id          bigserial primary key,
@@ -36,7 +36,7 @@ create table public.sections
     updated_at  timestamp
 );
 
---changeset bulo4kasmyasom:4
+--changeset bulo4kasmyasom:create_table_categories
 create table public.categories
 (
     id          bigserial primary key,
@@ -48,7 +48,7 @@ create table public.categories
     updated_at  timestamp
 );
 
---changeset bulo4kasmyasom:5
+--changeset bulo4kasmyasom:create_table_sub_categories
 create table public.sub_categories
 (
     id          bigserial primary key,
@@ -60,7 +60,7 @@ create table public.sub_categories
     updated_at  timestamp
 );
 
---changeset bulo4kasmyasom:6
+--changeset bulo4kasmyasom:create_table_topics
 create table public.topics
 (
     id              bigserial primary key,
@@ -73,7 +73,7 @@ create table public.topics
     updated_at      timestamp
 );
 
---changeset bulo4kasmyasom:7
+--changeset bulo4kasmyasom:create_table_topic_messages
 create table public.topic_messages
 (
     id         bigserial primary key,
@@ -84,8 +84,7 @@ create table public.topic_messages
     updated_at timestamp
 );
 
-
---changeset bulo4kasmyasom:8
+--changeset bulo4kasmyasom:added_roles_in_table_roles
 INSERT INTO public.roles (value)
 VALUES ('ADMIN'),
        ('MODERATOR'),
