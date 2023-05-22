@@ -1,7 +1,6 @@
 <th:block th:insert="~{fragments/header :: header}"></th:block>
 
 <div class="container">
-
     <th:block th:replace="~{fragments/fragments :: errors(${errors})}">errors</th:block>
 
     <div class="row mt-4">
@@ -14,16 +13,14 @@
             </div>
         </th:block>
 
-
         <div class="mt-3" th:each="section: ${sections}" th:id="|section-${section.id}|">
-
             <div class="row border border-secondary-subtle rounded-3 bg-dark-subtle">
                 <div class="col-12 border border-secondary-subtle">
                     <span class="card-header d-inline-block"
                           th:id="|section-title-${section.id}|">[[${section.title}]]</span>
                     <th:block sec:authorize="hasAuthority('ADMIN')">
-                    <span th:class="|section-edit-${section.id}|">[E]</span>
-                    <span th:class="|section-delete-${section.id}|">[D]</span>
+                        <span th:class="|section-edit-${section.id}|">[E]</span>
+                        <span th:class="|section-delete-${section.id}|">[D]</span>
                     </th:block>
                 </div>
             </div>
@@ -35,34 +32,44 @@
                     Тем
                 </div>
             </div>
+
             <div class="row mt-1 border border-secondary-subtle rounded-3" th:each="category:${section.categoryList}"
                  th:id="|category-${category.id}|">
-                <div class="col-11 border border-secondary-subtle">
-                    <a th:href="@{/cat/{id}(id=${category.id})}" th:text="${category.title}"
-                       th:id="|category-title-${category.id}|">Category</a>
-                    <th:block sec:authorize="hasAuthority('ADMIN')">
-                    <span th:class="|category-edit-${category.id}|">[E]</span>
-                    <span th:class="|category-delete-${category.id}|">[D]</span>
-                    </th:block>
-                    <div th:id="|category-description-${category.id}|" class="small">[[${category.description}]]</div>
-                </div>
-                <div class="col-1 border border-secondary-subtle">[[${category.topicCount}]]</div>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-sm-11 border border-secondary-subtle rounded-3">
+                            <a th:href="@{/cat/{id}(id=${category.id})}" th:text="${category.title}"
+                               th:id="|category-title-${category.id}|">Category</a>
+                            <th:block sec:authorize="hasAuthority('ADMIN')">
+                                <span th:class="|category-edit-${category.id}|">[E]</span>
+                                <span th:class="|category-delete-${category.id}|">[D]</span>
+                            </th:block>
+                            <div th:id="|category-description-${category.id}|" class="small">
+                                [[${category.description}]]
+                            </div>
 
-                <div class="row" th:each="subCategory:${category.subCategory}" th:id="|subCategory-${subCategory.id}|">
-                    <div class="col-11 border border-secondary-subtle px-5">
-                        <a th:href="@{/cat/{catId}/subcat/{subCatId}(catId=${category.id},subCatId=${subCategory.id})}"
-                           th:text="${subCategory.title}" th:id="|subCategory-title-${subCategory.id}|">SubCategory</a>
-                        <th:block sec:authorize="hasAuthority('ADMIN')">
-                        <span th:class="|subCategory-edit-${subCategory.id}|">[E]</span>
-                        <span th:class="|subCategory-delete-${subCategory.id}|">[D]</span>
-                        </th:block>
-                        <div th:id="|subCategory-description-${subCategory.id}|" class="small">[[${subCategory.description}]]</div>
+                        </div>
+                        <div class="col-1 border border-secondary-subtle">[[${category.topicCount}]]</div>
                     </div>
-                    <div class="col-1 border border-secondary-subtle">[[${subCategory.topicCount}]]</div>
+                    <div class="row" th:each="subCategory:${category.subCategory}"
+                         th:id="|subCategory-${subCategory.id}|">
+                        <div class="col-11 border border-secondary-subtle px-5">
+                            <a th:href="@{/cat/{catId}/subcat/{subCatId}(catId=${category.id},subCatId=${subCategory.id})}"
+                               th:text="${subCategory.title}"
+                               th:id="|subCategory-title-${subCategory.id}|">SubCategory</a>
+                            <th:block sec:authorize="hasAuthority('ADMIN')">
+                                <span th:class="|subCategory-edit-${subCategory.id}|">[E]</span>
+                                <span th:class="|subCategory-delete-${subCategory.id}|">[D]</span>
+                            </th:block>
+                            <div th:id="|subCategory-description-${subCategory.id}|" class="small">
+                                [[${subCategory.description}]]
+                            </div>
+                        </div>
+                        <div class="col-1 border border-secondary-subtle">[[${subCategory.topicCount}]]</div>
+                    </div>
                 </div>
             </div>
         </div>
-
 
     </div>
 </div>
