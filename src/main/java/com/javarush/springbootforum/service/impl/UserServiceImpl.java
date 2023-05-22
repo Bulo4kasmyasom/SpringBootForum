@@ -105,13 +105,14 @@ public class UserServiceImpl implements UserService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
                 .map(user -> com.javarush.springbootforum.entity.User
-                                .builder()
-                                .id(user.getId())
-                                .username(user.getUsername())
-                                .role(user.getRole())
-                                .image(user.getImage())
-                                .authorities(Collections.singleton(user.getRole()))
-                                .build()
+                        .builder()
+                        .id(user.getId())
+                        .username(user.getUsername())
+                        .password(user.getPassword())
+                        .role(user.getRole())
+                        .image(user.getImage())
+                        .authorities(Collections.singleton(user.getRole()))
+                        .build()
                 )
                 .orElseThrow(() -> new ResourceNotFoundException("Failed to retrieve user" + username));
     }
