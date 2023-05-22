@@ -17,16 +17,16 @@ const messageIfDeleteAction = "Данные будут удалены без в�
 
 window.onload = () => {
     addListeners('input[name^=topic]', 'change', moveDeleteTopics, 'value');
-    addListeners('span[id^=topic-delete-]', 'click', deleteTopic, 'id');
+    addListeners('img[id^=topic-delete-]', 'click', deleteTopic, 'id');
     addListeners('button[name^=topic-message-id-]', 'click', deleteTopicMessage, 'name');
     addListeners('button[name^=topic-message-text-]', 'click', editTopicMessage, 'name');
-    addListeners('span[id^=topic-edit-]', 'click', topicEdit, 'id', 'topic');
-    addListeners('span[class^=section-edit-]', 'click', sectionCatSubCatEdit, 'class', 'sections', 'section');
-    addListeners('span[class^=category-edit-]', 'click', sectionCatSubCatEdit, 'class', 'cat', 'category');
-    addListeners('span[class^=subCategory-edit-]', 'click', sectionCatSubCatEdit, 'class', 'subcat', 'subCategory');
-    addListeners('span[class^=section-delete-]', 'click', sectionCatSubCatDelete, 'class', 'sections', 'section');
-    addListeners('span[class^=category-delete-]', 'click', sectionCatSubCatDelete, 'class', 'cat', 'category');
-    addListeners('span[class^=subCategory-delete-]', 'click', sectionCatSubCatDelete, 'class', 'subcat', 'subCategory');
+    addListeners('img[id^=topic-edit-]', 'click', topicEdit, 'id', 'topic');
+    addListeners('img[class^=section-edit-]', 'click', sectionCatSubCatEdit, 'class', 'sections', 'section');
+    addListeners('img[class^=category-edit-]', 'click', sectionCatSubCatEdit, 'class', 'cat', 'category');
+    addListeners('img[class^=subCategory-edit-]', 'click', sectionCatSubCatEdit, 'class', 'subcat', 'subCategory');
+    addListeners('img[class^=section-delete-]', 'click', sectionCatSubCatDelete, 'class', 'sections', 'section');
+    addListeners('img[class^=category-delete-]', 'click', sectionCatSubCatDelete, 'class', 'cat', 'category');
+    addListeners('img[class^=subCategory-delete-]', 'click', sectionCatSubCatDelete, 'class', 'subcat', 'subCategory');
 }
 
 function addListeners(selector, type, func, attr, url = null, elem = null) {
@@ -134,7 +134,8 @@ function topicEdit(el) {
     title.parentNode.replaceChild(inputTitle, title)
 
     let newButton = button.cloneNode(true);
-    newButton.textContent = 'Сохранить'
+    newButton.src = '/img/site/save.png'
+    newButton.alt = 'save'
 
     button.parentNode.replaceChild(newButton, button);
     newButton.addEventListener('click', function (event) {

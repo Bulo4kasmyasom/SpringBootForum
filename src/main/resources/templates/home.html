@@ -19,8 +19,10 @@
                     <span class="card-header d-inline-block"
                           th:id="|section-title-${section.id}|">[[${section.title}]]</span>
                     <th:block sec:authorize="hasAuthority('ADMIN')">
-                        <span th:class="|section-edit-${section.id}|">[E]</span>
-                        <span th:class="|section-delete-${section.id}|">[D]</span>
+                        <img th:class="|section-edit-${section.id}|" th:src="|#{site.images.path}/edit.png|"
+                             style="width: 18px" alt="edit">
+                        <img th:class="|section-delete-${section.id}|" th:src="|#{site.images.path}/delete.png|"
+                             style="width: 18px" alt="delete">
                     </th:block>
                 </div>
             </div>
@@ -41,8 +43,10 @@
                             <a th:href="@{/cat/{id}(id=${category.id})}" th:text="${category.title}"
                                th:id="|category-title-${category.id}|">Category</a>
                             <th:block sec:authorize="hasAuthority('ADMIN')">
-                                <span th:class="|category-edit-${category.id}|">[E]</span>
-                                <span th:class="|category-delete-${category.id}|">[D]</span>
+                                <img th:class="|category-edit-${category.id}|" th:src="|#{site.images.path}/edit.png|"
+                                     style="width: 18px" alt="edit">
+                                <img th:class="|category-delete-${category.id}|" th:src="|#{site.images.path}/delete.png|"
+                                     style="width: 18px" alt="delete">
                             </th:block>
                             <div th:id="|category-description-${category.id}|" class="small">
                                 [[${category.description}]]
@@ -58,8 +62,10 @@
                                th:text="${subCategory.title}"
                                th:id="|subCategory-title-${subCategory.id}|">SubCategory</a>
                             <th:block sec:authorize="hasAuthority('ADMIN')">
-                                <span th:class="|subCategory-edit-${subCategory.id}|">[E]</span>
-                                <span th:class="|subCategory-delete-${subCategory.id}|">[D]</span>
+                                <img th:class="|subCategory-edit-${subCategory.id}|" th:src="|#{site.images.path}/edit.png|"
+                                     style="width: 18px" alt="edit">
+                                <img th:class="|subCategory-delete-${subCategory.id}|" th:src="|#{site.images.path}/delete.png|"
+                                     style="width: 18px" alt="delete">
                             </th:block>
                             <div th:id="|subCategory-description-${subCategory.id}|" class="small">
                                 [[${subCategory.description}]]

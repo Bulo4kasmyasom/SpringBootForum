@@ -27,18 +27,18 @@
              th:id="|topic-message-id-${message.id}|">
             <div class="col-2 border border-secondary">
                 <div>
-                    <a th:href="@{'/users/' + ${message.author.id}}" th:text="${message.author.username}">User</a><br>
+                    <a th:href="@{'/users/' + ${message.author.id}}" th:text="${message.author.username}"
+                    th:if="${message.author.role=='ADMIN'}" class="link-danger">User</a>
+
+                    <a th:href="@{'/users/' + ${message.author.id}}" th:text="${message.author.username}"
+                       th:if="${message.author.role=='MODERATOR'}" class="link-warning">User</a>
+
+                    <a th:href="@{'/users/' + ${message.author.id}}" th:text="${message.author.username}"
+                       th:if="${message.author.role=='USER'}">User</a>
+                    <br>
                 </div>
                 <div>
-                    <img th:src="|#{user.images.path}/${message.author.image}|" style="width: 200px" alt="avatar">
-                </div>
-                <div>
-                    Дата регистрации:<br>
-                    [[${message.author.createdAt}]]
-                </div>
-                Сообщений: 50
-                <div>
-                    [[${message.author.role}]]
+                    <img th:src="|#{user.images.path}/${message.author.image}|" style="width: 160px" alt="avatar">
                 </div>
             </div>
             <div class="col-10 border border-secondary" th:text="${message.text}"
