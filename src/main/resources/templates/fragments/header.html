@@ -29,35 +29,20 @@
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="/users">Пользователи</a>
                         </li>
-
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
-                               aria-expanded="false">Dropdown</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </li>
                     </ul>
 
-
                     <div class="d-lg-flex col-lg-3 justify-content-lg-end">
-
                         <th:block sec:authorize="!isAuthenticated()">
-
                             <th:block th:replace="~{fragments/modal :: login-form}"></th:block>
                             <th:block th:replace="~{fragments/modal :: registration-form}"></th:block>
-
                         </th:block>
 
                         <th:block sec:authorize="isAuthenticated()">
-                            <a class="nav-link active mt-1 me-2" href="/users/{id}" sec:authentication="name">Login</a>
+                            <a class="nav-link active mt-1 me-2" th:href="@{'/users/'+ ${#authentication.principal.id}}" sec:authentication="name">Login</a>
                             <form th:action="@{/logout}" method="post">
                                 <input type="submit" class="btn btn-primary btn-sm btn-light" value="Выйти">
                             </form>
                         </th:block>
-
                     </div>
                 </div>
             </div>

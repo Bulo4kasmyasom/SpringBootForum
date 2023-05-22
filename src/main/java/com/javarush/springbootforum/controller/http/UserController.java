@@ -5,8 +5,8 @@ import com.javarush.springbootforum.dto.UserCreateEditDto;
 import com.javarush.springbootforum.dto.UserReadDto;
 import com.javarush.springbootforum.entity.Role;
 import com.javarush.springbootforum.service.UserService;
-import com.javarush.springbootforum.validation.OnCreate;
-import com.javarush.springbootforum.validation.OnUpdate;
+import com.javarush.springbootforum.validation.OnCreatable;
+import com.javarush.springbootforum.validation.OnUpdatable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,14 +47,14 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public String create(@ModelAttribute @Validated(OnCreate.class) UserCreateEditDto user) {
+    public String create(@ModelAttribute @Validated(OnCreatable.class) UserCreateEditDto user) {
         userService.create(user);
         return "redirect:/home";
     }
 
     @PostMapping("/{id}/update")
     public String update(@PathVariable("id") Long id,
-                         @ModelAttribute @Validated(OnUpdate.class) UserCreateEditDto user) {
+                         @ModelAttribute @Validated(OnUpdatable.class) UserCreateEditDto user) {
         return userService.update(id, user)
                 .map(it -> "redirect:/users/{id}")
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

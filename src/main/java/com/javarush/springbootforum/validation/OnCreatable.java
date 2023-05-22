@@ -1,4 +1,4 @@
 package com.javarush.springbootforum.validation;
 
-public interface OnCreate {
+public interface OnCreatable {
 }

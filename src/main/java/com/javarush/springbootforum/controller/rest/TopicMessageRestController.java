@@ -29,7 +29,7 @@ public class TopicMessageRestController {
     @Operation(summary = "Topic message find by id and return TopicMessageReadDto")
     public TopicMessageReadDto findById(@PathVariable("id") Long id) {
         return topicMessageService.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("Topic message not found"));
     }
 
     @PutMapping(value = "/{id}")

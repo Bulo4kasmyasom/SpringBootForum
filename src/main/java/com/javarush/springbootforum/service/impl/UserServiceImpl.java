@@ -33,15 +33,14 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
-//    @Cacheable(value = "UserService::findAll", key = "#pageable")
     public Page<UserReadDto> findAll(Pageable pageable) {
         Sort.TypedSort<User> typedSort = Sort.sort(User.class);
         Sort sort = typedSort.by(User::getUsername).ascending();
+
         int pageNumber = pageable.getPageNumber();
         int pageSize = pageable.getPageSize();
 
         pageable = PageRequest.of(pageNumber, pageSize, sort);
-
         return userRepository.findAll(pageable)
                 .map(userMapper::toDto);
     }
@@ -81,9 +80,8 @@ public class UserServiceImpl implements UserService {
         String username = userCreateEditDto.getUsername();
         Long countUsersByEmailOrUsername = userRepository.countUsersByEmailOrUsername(email, username);
 
-        if (countUsersByEmailOrUsername > 1) {
+        if (countUsersByEmailOrUsername > 1)
             throw new IllegalStateException("User with this login or email already exists");
-        }
 
         return userRepository.findById(id)
                 .map(user -> userMapper.toEntity(user, userCreateEditDto))
@@ -106,10 +104,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
-                .map(user -> new User(
-                        user.getUsername(),
-                        user.getPassword(),
-                        Collections.singleton(user.getRole()))
+                .map(user -> com.javarush.springbootforum.entity.User
+                                .builder()
+                                .id(user.getId())
+                                .username(user.getUsername())
+                                .role(user.getRole())
+                                .image(user.getImage())
+                                .authorities(Collections.singleton(user.getRole()))
+                                .build()
                 )
                 .orElseThrow(() -> new ResourceNotFoundException("Failed to retrieve user" + username));
     }
