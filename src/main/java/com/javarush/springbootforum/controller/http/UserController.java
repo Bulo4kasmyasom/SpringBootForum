@@ -1,5 +1,6 @@
 package com.javarush.springbootforum.controller.http;
 
+import com.javarush.springbootforum.controller.handler.exception.ResourceNotFoundException;
 import com.javarush.springbootforum.dto.PageResponseDto;
 import com.javarush.springbootforum.dto.UserCreateEditDto;
 import com.javarush.springbootforum.dto.UserReadDto;
@@ -57,13 +58,13 @@ public class UserController {
                          @ModelAttribute @Validated(OnUpdatable.class) UserCreateEditDto user) {
         return userService.update(id, user)
                 .map(it -> "redirect:/users/{id}")
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable("id") Long id) {
         if (!userService.delete(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException("User not found, not deleted");
         }
         return "redirect:/users";
     }

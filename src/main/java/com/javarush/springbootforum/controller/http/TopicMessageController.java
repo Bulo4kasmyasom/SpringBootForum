@@ -1,5 +1,6 @@
 package com.javarush.springbootforum.controller.http;
 
+import com.javarush.springbootforum.controller.handler.exception.ResourceNotFoundException;
 import com.javarush.springbootforum.dto.TopicMessageCreateEditDto;
 import com.javarush.springbootforum.dto.UserReadDto;
 import com.javarush.springbootforum.service.TopicMessageService;
@@ -29,7 +30,7 @@ public class TopicMessageController {
                          @RequestHeader(value = "referer") String referer
     ) {
         UserReadDto userReadDto = userService.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         topicMessageService.create(userReadDto.getId(), message);
         return "redirect:" + referer;
