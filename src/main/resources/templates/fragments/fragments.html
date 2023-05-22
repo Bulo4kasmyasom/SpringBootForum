@@ -1,4 +1,5 @@
-<div th:fragment="errors(errors)" th:if="${errors}" class="p-2 text-danger-emphasis bg-danger-subtle border border-danger-subtle rounded-3">
+<div th:fragment="errors(errors)" th:if="${errors}"
+     class="p-2 text-danger-emphasis bg-danger-subtle border border-danger-subtle rounded-3">
     <ul>
         <li th:each="error: ${errors}" th:text="${error}">errors</li>
     </ul>

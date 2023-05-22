@@ -43,7 +43,7 @@ create table public.categories
     section_id  bigint references sections (id) on update cascade on delete cascade,
     title       varchar(128) not null,
     description varchar(512) not null,
-    topic_count bigint not null default 0,
+    topic_count bigint       not null default 0,
     created_at  timestamp    not null,
     updated_at  timestamp
 );
@@ -55,7 +55,7 @@ create table public.sub_categories
     category_id bigint       not null references categories (id) on update cascade on delete cascade,
     title       varchar(128) not null,
     description varchar(512) not null,
-    topic_count bigint not null default 0,
+    topic_count bigint       not null default 0,
     created_at  timestamp    not null,
     updated_at  timestamp
 );

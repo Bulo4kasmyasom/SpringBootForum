@@ -28,7 +28,7 @@
             <div class="col-2 border border-secondary">
                 <div>
                     <a th:href="@{'/users/' + ${message.author.id}}" th:text="${message.author.username}"
-                    th:if="${message.author.role=='ADMIN'}" class="link-danger">User</a>
+                       th:if="${message.author.role=='ADMIN'}" class="link-danger">User</a>
 
                     <a th:href="@{'/users/' + ${message.author.id}}" th:text="${message.author.username}"
                        th:if="${message.author.role=='MODERATOR'}" class="link-warning">User</a>

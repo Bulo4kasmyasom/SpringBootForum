@@ -2,7 +2,8 @@
 
 --changeset bulo4kasmyasom:1
 INSERT INTO public.users (id, username, password, email, role, image, last_activity, created_at, updated_at)
-VALUES (DEFAULT, 'admin', '$2a$10$Ac3TtVhpGSRfk5fLJiDjF.mCJSzwiWMhnNl1pS7VKwiXJJYemnyui', 'admin@localhost.ru', 'ADMIN', DEFAULT, current_timestamp,
+VALUES (DEFAULT, 'admin', '$2a$10$Ac3TtVhpGSRfk5fLJiDjF.mCJSzwiWMhnNl1pS7VKwiXJJYemnyui', 'admin@localhost.ru', 'ADMIN',
+        DEFAULT, current_timestamp,
         current_timestamp, null);
 
 --changeset bulo4kasmyasom:2
@@ -46,19 +47,19 @@ VALUES (DEFAULT, 1, null, 'Тема 1 в категории Java', 1, current_ti
 
 --changeset bulo4kasmyasom:6
 INSERT INTO public.topic_messages (id, topic_id, text, author_id, created_at, updated_at)
-VALUES (DEFAULT, 1, 'Текст сообщения  ' || trunc(random()*10000), 1, current_timestamp, null),
-       (DEFAULT, 1, 'Текст сообщения  ' || trunc(random()*10000), 1, current_timestamp, null),
-       (DEFAULT, 1, 'Текст сообщения  ' || trunc(random()*10000), 1, current_timestamp, null),
-       (DEFAULT, 2, 'Текст сообщения  ' || trunc(random()*10000), 1, current_timestamp, null),
-       (DEFAULT, 2, 'Текст сообщения  ' || trunc(random()*10000), 1, current_timestamp, null),
-       (DEFAULT, 2, 'Текст сообщения  ' || trunc(random()*10000), 1, current_timestamp, null),
-       (DEFAULT, 2, 'Текст сообщения  ' || trunc(random()*10000), 1, current_timestamp, null),
-       (DEFAULT, 3, 'Текст сообщения  ' || trunc(random()*10000), 1, current_timestamp, null),
-       (DEFAULT, 3, 'Текст сообщения  ' || trunc(random()*10000), 1, current_timestamp, null),
-       (DEFAULT, 3, 'Текст сообщения  ' || trunc(random()*10000), 1, current_timestamp, null),
-       (DEFAULT, 4, 'Текст сообщения  ' || trunc(random()*10000), 1, current_timestamp, null),
-       (DEFAULT, 5, 'Текст сообщения  ' || trunc(random()*10000), 1, current_timestamp, null),
-       (DEFAULT, 5, 'Текст сообщения  ' || trunc(random()*10000), 1, current_timestamp, null),
-       (DEFAULT, 6, 'Текст сообщения  ' || trunc(random()*10000), 1, current_timestamp, null),
-       (DEFAULT, 7, 'Текст сообщения  ' || trunc(random()*10000), 1, current_timestamp, null),
-       (DEFAULT, 7, 'Текст сообщения  ' || trunc(random()*10000), 1, current_timestamp, null);
+VALUES (DEFAULT, 1, 'Текст сообщения  ' || trunc(random() * 10000), 1, current_timestamp, null),
+       (DEFAULT, 1, 'Текст сообщения  ' || trunc(random() * 10000), 1, current_timestamp, null),
+       (DEFAULT, 1, 'Текст сообщения  ' || trunc(random() * 10000), 1, current_timestamp, null),
+       (DEFAULT, 2, 'Текст сообщения  ' || trunc(random() * 10000), 1, current_timestamp, null),
+       (DEFAULT, 2, 'Текст сообщения  ' || trunc(random() * 10000), 1, current_timestamp, null),
+       (DEFAULT, 2, 'Текст сообщения  ' || trunc(random() * 10000), 1, current_timestamp, null),
+       (DEFAULT, 2, 'Текст сообщения  ' || trunc(random() * 10000), 1, current_timestamp, null),
+       (DEFAULT, 3, 'Текст сообщения  ' || trunc(random() * 10000), 1, current_timestamp, null),
+       (DEFAULT, 3, 'Текст сообщения  ' || trunc(random() * 10000), 1, current_timestamp, null),
+       (DEFAULT, 3, 'Текст сообщения  ' || trunc(random() * 10000), 1, current_timestamp, null),
+       (DEFAULT, 4, 'Текст сообщения  ' || trunc(random() * 10000), 1, current_timestamp, null),
+       (DEFAULT, 5, 'Текст сообщения  ' || trunc(random() * 10000), 1, current_timestamp, null),
+       (DEFAULT, 5, 'Текст сообщения  ' || trunc(random() * 10000), 1, current_timestamp, null),
+       (DEFAULT, 6, 'Текст сообщения  ' || trunc(random() * 10000), 1, current_timestamp, null),
+       (DEFAULT, 7, 'Текст сообщения  ' || trunc(random() * 10000), 1, current_timestamp, null),
+       (DEFAULT, 7, 'Текст сообщения  ' || trunc(random() * 10000), 1, current_timestamp, null);

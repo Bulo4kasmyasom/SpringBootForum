@@ -35,7 +35,8 @@
                         </th:block>
 
                         <th:block sec:authorize="isAuthenticated()">
-                            <a class="nav-link active mt-1 me-2" th:href="@{'/users/'+ ${#authentication.principal.id}}" sec:authentication="name">Login</a>
+                            <a class="nav-link active mt-1 me-2" th:href="@{'/users/'+ ${#authentication.principal.id}}"
+                               sec:authentication="name">Login</a>
                             <form th:action="@{/logout}" method="post">
                                 <input type="submit" class="btn btn-primary btn-sm btn-light" value="Выйти">
                             </form>

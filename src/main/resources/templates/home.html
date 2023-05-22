@@ -45,7 +45,8 @@
                             <th:block sec:authorize="hasAuthority('ADMIN')">
                                 <img th:class="|category-edit-${category.id}|" th:src="|#{site.images.path}/edit.png|"
                                      style="width: 18px" alt="edit">
-                                <img th:class="|category-delete-${category.id}|" th:src="|#{site.images.path}/delete.png|"
+                                <img th:class="|category-delete-${category.id}|"
+                                     th:src="|#{site.images.path}/delete.png|"
                                      style="width: 18px" alt="delete">
                             </th:block>
                             <div th:id="|category-description-${category.id}|" class="small">
@@ -62,9 +63,11 @@
                                th:text="${subCategory.title}"
                                th:id="|subCategory-title-${subCategory.id}|">SubCategory</a>
                             <th:block sec:authorize="hasAuthority('ADMIN')">
-                                <img th:class="|subCategory-edit-${subCategory.id}|" th:src="|#{site.images.path}/edit.png|"
+                                <img th:class="|subCategory-edit-${subCategory.id}|"
+                                     th:src="|#{site.images.path}/edit.png|"
                                      style="width: 18px" alt="edit">
-                                <img th:class="|subCategory-delete-${subCategory.id}|" th:src="|#{site.images.path}/delete.png|"
+                                <img th:class="|subCategory-delete-${subCategory.id}|"
+                                     th:src="|#{site.images.path}/delete.png|"
                                      style="width: 18px" alt="delete">
                             </th:block>
                             <div th:id="|subCategory-description-${subCategory.id}|" class="small">
