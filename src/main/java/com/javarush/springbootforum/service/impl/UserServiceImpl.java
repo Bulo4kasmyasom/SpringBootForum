@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -60,6 +61,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    @PreAuthorize("!hasAnyAuthority('USER','MODERATOR','ADMIN')")
     public UserReadDto create(UserCreateEditDto user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent() ||
                 userRepository.existsByEmail(user.getEmail())) {
@@ -75,9 +77,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @CachePut(value = "UserService::findById", key = "#id")
     @Transactional
+    @PreAuthorize("@userSecurityExpression.isUserOrAdminEdit(#id, 'ADMIN')")
     public Optional<UserReadDto> update(Long id, UserCreateEditDto userCreateEditDto) {
         String email = userCreateEditDto.getEmail();
         String username = userCreateEditDto.getUsername();
+
         Long countUsersByEmailOrUsername = userRepository.countUsersByEmailOrUsername(email, username);
 
         if (countUsersByEmailOrUsername > 1)
@@ -92,6 +96,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     @CacheEvict(value = "UserService::findById", key = "#id")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public boolean delete(Long id) {
         return userRepository.findById(id)
                 .map(user -> {

@@ -1,5 +1,6 @@
 package com.javarush.springbootforum.controller.handler;
 
+import com.javarush.springbootforum.controller.handler.exception.AccessDeniedException;
 import com.javarush.springbootforum.controller.handler.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,12 @@ public class ExceptionHandlerController {
         redirectAttributes.addFlashAttribute("errors", e.getMessage());
         String referer = request.getHeader("Referer");
         return "redirect:" + ((referer != null) ? referer : "/home");
+    }
+
+    @ExceptionHandler({AccessDeniedException.class, org.springframework.security.access.AccessDeniedException.class})
+    public String handleAccessDeniedException(RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("errors", "Access denied");
+        return "redirect:/home";
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)

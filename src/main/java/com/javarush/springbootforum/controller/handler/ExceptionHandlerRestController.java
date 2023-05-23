@@ -1,5 +1,6 @@
 package com.javarush.springbootforum.controller.handler;
 
+import com.javarush.springbootforum.controller.handler.exception.AccessDeniedException;
 import com.javarush.springbootforum.controller.handler.exception.ResourceNotFoundException;
 import com.javarush.springbootforum.controller.handler.exception.ValidationException;
 import jakarta.validation.ConstraintViolation;
@@ -30,6 +31,12 @@ public class ExceptionHandlerRestController {
     @ExceptionHandler(ValidationException.class)
     public ApplicationError handleValidationException(ValidationException e) {
         return new ApplicationError(e.getMessage());
+    }
+
+    @ExceptionHandler({AccessDeniedException.class, org.springframework.security.access.AccessDeniedException.class})
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ApplicationError handleAccessDeniedException() {
+        return new ApplicationError("Access denied");
     }
 
     @ExceptionHandler(IllegalStateException.class)

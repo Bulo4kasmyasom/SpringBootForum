@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class TopicMessageServiceImpl implements TopicMessageService {
+
     private final TopicMessageRepository topicMessageRepository;
     private final TopicRepository topicRepository;
     private final TopicMessageMapper topicMessageMapper;
@@ -55,6 +57,7 @@ public class TopicMessageServiceImpl implements TopicMessageService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAnyAuthority('USER','MODERATOR','ADMIN')")
     public TopicMessageReadDto create(Long authorId, TopicMessageCreateEditDto topicMessageCreateEditDto) {
         topicMessageCreateEditDto.setAuthorId(authorId);
 
@@ -67,6 +70,7 @@ public class TopicMessageServiceImpl implements TopicMessageService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAnyAuthority('USER','MODERATOR','ADMIN')")
     public TopicMessage create(TopicMessage topicMessage) {
         return Optional.of(topicMessage)
                 .map(topicMessageRepository::save)
@@ -75,9 +79,11 @@ public class TopicMessageServiceImpl implements TopicMessageService {
 
     @Override
     @Transactional
+    @PreAuthorize("@topicMessageSecurityExpression.canUserEditDeleteMessage(#topicMessageId, 'MODERATOR','ADMIN')")
+    // todo проверить а своё ли он сообщение обновляет - USER
     public Optional<TopicMessageReadDto> update(Long topicMessageId, TopicMessageCreateEditDto topicMessageCreateEditDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User)authentication.getPrincipal();
+        User user = (User) authentication.getPrincipal();
         topicMessageCreateEditDto.setAuthorId(user.getId());
 
         return topicMessageRepository.findById(topicMessageId)
@@ -88,6 +94,7 @@ public class TopicMessageServiceImpl implements TopicMessageService {
 
     @Override
     @Transactional
+    @PreAuthorize("@topicMessageSecurityExpression.canUserEditDeleteMessage(#id, 'MODERATOR','ADMIN')")
     public boolean delete(Long id) {
         return topicMessageRepository.findById(id)
                 .map(topicMessage -> {

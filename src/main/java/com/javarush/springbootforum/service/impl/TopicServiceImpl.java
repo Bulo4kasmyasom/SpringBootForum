@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class TopicServiceImpl implements TopicService {
+
     private final TopicRepository topicRepository;
     private final TopicMapper topicMapper;
     private final TopicMessageService topicMessageService;
@@ -58,6 +60,7 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAnyAuthority('USER','MODERATOR','ADMIN')")
     public TopicReadDto create(UserReadDto userReadDto, TopicCreateDto topicCreateDto) {
         topicCreateDto.setAuthorId(userReadDto.getId());
 
@@ -70,6 +73,7 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAnyAuthority('MODERATOR','ADMIN')")
     public Optional<TopicFieldReadDto> update(Long topicId, TopicEditDto topicEditDto) {
         return topicRepository.findById(topicId)
                 .map(topic -> topicMapper.toEntity(topic, topicEditDto))
@@ -79,6 +83,7 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAnyAuthority('MODERATOR','ADMIN')")
     public boolean delete(Long id) {
         return topicRepository.findById(id)
                 .map(topic -> {
@@ -90,6 +95,7 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAnyAuthority('MODERATOR','ADMIN')")
     public boolean moveTopicsInCategory(Long catId, Long[] topicsIds) {
         Category newCategory = categoryServiceImpl.findByIdAndReturnCategory(catId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
@@ -102,6 +108,7 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAnyAuthority('MODERATOR','ADMIN')")
     public boolean moveTopicsInSubCategory(Long catId, Long subCatId, Long[] topicsIds) {
         Category newCategory = categoryServiceImpl.findByIdAndReturnCategory(catId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
@@ -117,6 +124,7 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAnyAuthority('MODERATOR','ADMIN')")
     public boolean massDelete(Long[] topicsIds) {
         if (topicsIds.length > 0) {
             topicRepository.deleteAllByIdInBatch(List.of(topicsIds));

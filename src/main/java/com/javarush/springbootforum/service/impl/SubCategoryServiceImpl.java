@@ -10,6 +10,7 @@ import com.javarush.springbootforum.mapper.SubCategoryMapper;
 import com.javarush.springbootforum.repository.SubCategoryRepository;
 import com.javarush.springbootforum.service.SubCategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +45,7 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     public SubCategoryReadDto create(SubCategoryCreateDto subCategoryCreateDto) {
         return Optional.of(subCategoryCreateDto)
                 .map(subCategoryMapper::toEntity)
@@ -54,6 +56,7 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Optional<SubCategoryFieldReadDto> update(Long id, SubCategoryEditDto subCategoryEditDto) {
         return subCategoryRepository.findById(id)
                 .map(subCategory -> subCategoryMapper.toEntity(subCategory, subCategoryEditDto))
@@ -63,6 +66,7 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     public boolean delete(Long id) {
         return subCategoryRepository.findById(id)
                 .map(topic -> {

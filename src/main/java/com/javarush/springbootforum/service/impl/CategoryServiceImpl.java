@@ -11,6 +11,7 @@ import com.javarush.springbootforum.repository.CategoryRepository;
 import com.javarush.springbootforum.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class CategoryServiceImpl implements CategoryService {
+
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
@@ -44,6 +46,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     public CategoryReadDto create(CategoryCreateDto categoryCreateDto) {
         return Optional.of(categoryCreateDto)
                 .map(categoryMapper::toEntity)
@@ -54,6 +57,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Optional<CategoryFieldReadDto> update(Long id, CategoryEditDto categoryEditDto) {
         return categoryRepository.findById(id)
                 .map(category -> categoryMapper.toEntity(category, categoryEditDto))
@@ -62,6 +66,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     public boolean delete(Long id) {
         return categoryRepository.findById(id)
                 .map(topic -> {

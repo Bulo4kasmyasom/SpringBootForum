@@ -9,6 +9,7 @@ import com.javarush.springbootforum.repository.SectionRepository;
 import com.javarush.springbootforum.service.SectionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +39,7 @@ public class SectionServiceImpl implements SectionService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     public SectionReadDto create(SectionCreateEditDto sectionCreateEditDto) {
         return Optional.of(sectionCreateEditDto)
                 .map(sectionMapper::toEntity)
@@ -48,6 +50,7 @@ public class SectionServiceImpl implements SectionService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Optional<SectionWithoutCategoryListReadDto> update(Long sectionId, SectionCreateEditDto sectionCreateEditDto) {
         return sectionRepository.findById(sectionId)
                 .map(section -> sectionMapper.toEntity(section, sectionCreateEditDto))
@@ -57,6 +60,7 @@ public class SectionServiceImpl implements SectionService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     public boolean delete(Long id) {
         return sectionRepository.findById(id)
                 .map(topic -> {

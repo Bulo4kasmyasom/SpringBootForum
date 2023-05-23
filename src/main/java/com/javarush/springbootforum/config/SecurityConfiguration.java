@@ -14,6 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableMethodSecurity
+//@EnableGlobalMethodSecurity
 @EnableWebSecurity
 public class SecurityConfiguration {
 
@@ -28,7 +29,7 @@ public class SecurityConfiguration {
                         "/home",
                         "/login",
                         "/users/**",
-                        "/api/v1/**",
+                        "/api/**",
                         "/js/**",
                         "/v3/api-docs/**",
                         "/swagger-ui/**"
