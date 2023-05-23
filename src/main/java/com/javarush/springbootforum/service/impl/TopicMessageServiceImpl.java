@@ -5,6 +5,7 @@ import com.javarush.springbootforum.dto.TopicMessageCreateEditDto;
 import com.javarush.springbootforum.dto.TopicMessageReadDto;
 import com.javarush.springbootforum.entity.Topic;
 import com.javarush.springbootforum.entity.TopicMessage;
+import com.javarush.springbootforum.entity.User;
 import com.javarush.springbootforum.mapper.TopicMessageMapper;
 import com.javarush.springbootforum.repository.TopicMessageRepository;
 import com.javarush.springbootforum.repository.TopicRepository;
@@ -13,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,8 +75,11 @@ public class TopicMessageServiceImpl implements TopicMessageService {
 
     @Override
     @Transactional
-    public Optional<TopicMessageReadDto> update(Long userId, Long topicMessageId, TopicMessageCreateEditDto topicMessageCreateEditDto) {
-        topicMessageCreateEditDto.setAuthorId(userId);
+    public Optional<TopicMessageReadDto> update(Long topicMessageId, TopicMessageCreateEditDto topicMessageCreateEditDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User)authentication.getPrincipal();
+        topicMessageCreateEditDto.setAuthorId(user.getId());
+
         return topicMessageRepository.findById(topicMessageId)
                 .map(topicMessage -> topicMessageMapper.toEntity(topicMessage, topicMessageCreateEditDto))
                 .map(topicMessageRepository::saveAndFlush)
@@ -90,6 +96,7 @@ public class TopicMessageServiceImpl implements TopicMessageService {
                     Topic topic = topicMessage.getTopic();
                     Long topicId = topic.getId();
                     if (topicMessageRepository.countTopicMessageByTopicId(topicId) == 0) {
+                        // delete topic if count of messages == 0
                         topicRepository.delete(topic);
                         topicRepository.flush();
                     }

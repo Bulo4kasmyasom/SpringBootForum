@@ -24,7 +24,7 @@ public interface TopicMessageService {
     TopicMessage create(TopicMessage topicMessage);
 
     @Transactional
-    Optional<TopicMessageReadDto> update(Long userId, Long id, TopicMessageCreateEditDto topicMessageCreateEditDto);
+    Optional<TopicMessageReadDto> update(Long id, TopicMessageCreateEditDto topicMessageCreateEditDto);
 
     @Transactional
     boolean delete(Long id);
