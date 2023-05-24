@@ -9,6 +9,7 @@ import com.javarush.springbootforum.service.UserService;
 import com.javarush.springbootforum.validation.OnCreatable;
 import com.javarush.springbootforum.validation.OnUpdatable;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -27,8 +28,9 @@ public class UserController {
     private final List<String> getDefaultAvatarImagesList;
 
     @GetMapping
-    public String findAll(Model model, Pageable pageable) {
+    public String findAll(Model model, Pageable pageable, @Value("${page.title.users.findAll}") String pageTitle) {
         Page<UserReadDto> page = userService.findAll(pageable);
+        model.addAttribute("pageTitle", pageTitle);
         model.addAttribute("users", PageResponseDto.of(page));
         return "users";
     }
@@ -38,6 +40,7 @@ public class UserController {
         return userService.findById(id)
                 .map(user -> {
                     model.addAttribute("user", user);
+                    model.addAttribute("pageTitle", user.getUsername());
                     model.addAttribute("roles", Role.values());
                     model.addAttribute("defaultAvatars", getDefaultAvatarImagesList);
                     return "user";

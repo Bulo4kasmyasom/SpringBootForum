@@ -30,6 +30,7 @@ public class TopicController {
 
         Page<TopicMessageReadDto> pageMessages = topicMessageService.findAllByTopicId(id, pageable);
 
+        model.addAttribute("pageTitle", topicReadDto.getTitle());
         model.addAttribute("topic", topicReadDto);
         model.addAttribute("topicMessages", PageResponseDto.of(pageMessages));
         return "topic";

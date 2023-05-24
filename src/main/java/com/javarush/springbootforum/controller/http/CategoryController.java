@@ -34,6 +34,7 @@ public class CategoryController {
 
         Page<TopicReadDto> topicsByCategoryId = topicService.findAllByCategoryIdAndSubCategoryIsNull(id, pageable);
 
+        model.addAttribute("pageTitle", categoryDto.getTitle());
         model.addAttribute("category", categoryDto);
         model.addAttribute("subCategories", subCategoryListDto);
         model.addAttribute("topics", PageResponseDto.of(topicsByCategoryId));
@@ -55,6 +56,7 @@ public class CategoryController {
 
         Page<TopicReadDto> topics = topicService.findAllByCategoryIdAndSubCategoryId(catId, subCatId, pageable);
 
+        model.addAttribute("pageTitle", subCategoryDto.getTitle());
         model.addAttribute("category", categoryDto);
         model.addAttribute("subCategory", subCategoryDto);
         model.addAttribute("topics", PageResponseDto.of(topics));

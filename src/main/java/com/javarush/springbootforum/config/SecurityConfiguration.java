@@ -14,7 +14,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableMethodSecurity
-//@EnableGlobalMethodSecurity
 @EnableWebSecurity
 public class SecurityConfiguration {
 
@@ -41,6 +40,7 @@ public class SecurityConfiguration {
                 .anyRequest().permitAll()
                 .and()
                 .formLogin().defaultSuccessUrl("/home", true)
+                // todo что делать если авторизация не прошла. Написать.
                 .and()
                 .logout().logoutUrl("/logout").logoutSuccessUrl("/home").invalidateHttpSession(true)
                 .and()
