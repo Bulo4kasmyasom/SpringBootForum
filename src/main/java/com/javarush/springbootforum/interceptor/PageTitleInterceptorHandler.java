@@ -7,7 +7,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 @AllArgsConstructor
-public class PageTitleInterceptor implements HandlerInterceptor {
+public class PageTitleInterceptorHandler implements HandlerInterceptor {
 
     private String beforeTitle;
     private String afterTitle;
