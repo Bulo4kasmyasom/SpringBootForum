@@ -30,9 +30,7 @@
                 <div class="col-11 border border-secondary-subtle" th:id="|section-description-${section.id}|">
                     [[${section.description}]]
                 </div>
-                <div class="col-1 border border-secondary-subtle">
-                    Тем
-                </div>
+                <div class="col-1 border border-secondary-subtle" th:text="#{page.home.count.themes}"></div>
             </div>
 
             <div class="row mt-1 border border-secondary-subtle rounded-3" th:each="category:${section.categoryList}"

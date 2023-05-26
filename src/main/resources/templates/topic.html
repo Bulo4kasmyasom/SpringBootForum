@@ -15,9 +15,7 @@
                 <a th:href="@{/cat/{catId}/subcat/{subCatId}(catId=${topic.category.id},subCatId=${topic.subCategory.id})}"
                    th:text="${topic.subCategory.title}">SubCategory</a></li>
 
-            <li class="breadcrumb-item active" aria-current="page"
-                th:text="${topic.title}">Topic
-            </li>
+            <li class="breadcrumb-item active" aria-current="page" th:text="${topic.title}">Topic</li>
         </ol>
     </nav>
 
@@ -49,10 +47,10 @@
             <div th:if="${#authentication.name == message.author.username} or
             ${#authorization.expression('hasAnyAuthority(''ADMIN'', ''MODERATOR'')')}">
                 <button type="submit" class="btn btn-primary btn-sm btn-light"
-                        th:name="|topic-message-text-${message.id}|">Редактировать
+                        th:name="|topic-message-text-${message.id}|" th:text="#{page.topic.message.edit}">
                 </button>
                 <button type="submit" class="btn btn-primary btn-sm btn-light"
-                        th:name="|topic-message-id-${message.id}|">Удалить
+                        th:name="|topic-message-id-${message.id}|" th:text="#{page.topic.message.delete}">
                 </button>
             </div>
         </div>

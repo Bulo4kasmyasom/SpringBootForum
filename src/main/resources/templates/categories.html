@@ -20,11 +20,11 @@
 
     <th:block th:if="${subCategories != null && subCategories.size()>0}">
         <div class="row align-items-end border border-secondary-subtle rounded-3">
-            <div class="col-10 text-center fw-bold border border-secondary-subtle">
-                Подкатегории
+            <div class="col-10 text-center fw-bold border border-secondary-subtle"
+                 th:text="#{page.categories.subcategories}">
             </div>
-            <div class="col text-center fw-bold border border-secondary-subtle">
-                Тем
+            <div class="col text-center fw-bold border border-secondary-subtle"
+                 th:text="#{page.categories.count.themes}">
             </div>
         </div>
 
@@ -52,9 +52,9 @@
                      th:classappend="${#authorization.expression('hasAnyAuthority(''ADMIN'', ''MODERATOR'')') } ? 'col-4' : 'col-7'">
                     Тема
                 </div>
-                <div class="col-2 text-center fw-bold">Создана</div>
-                <div class="col-1 text-center fw-bold">Ответов</div>
-                <div class="col-2 text-center fw-bold">Автор</div>
+                <div class="col-2 text-center fw-bold" th:text="#{page.categories.createdAt}"></div>
+                <div class="col-1 text-center fw-bold" th:text="#{page.categories.count.answers}"></div>
+                <div class="col-2 text-center fw-bold" th:text="#{page.categories.author}"></div>
 
                 <th:block sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')">
                     <div class="col-1 text-center">
@@ -63,9 +63,7 @@
                     <div class="col-1 text-center">
                         <img th:src="|#{site.images.path}/delete.png|" style="width: 25px" alt="delete">
                     </div>
-                    <div class="col-1 text-center fw-bold">
-                        Выбрать
-                    </div>
+                    <div class="col-1 text-center fw-bold" th:text="#{page.categories.choose}"></div>
                 </th:block>
             </div>
 

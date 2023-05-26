@@ -13,20 +13,20 @@
             <th:block th:replace="~{fragments/modal :: defaultAvatars(${defaultAvatars})}"></th:block>
             <div>
                 <div class="mb-2">
-                    <label for="username" class="form-label">Логин</label>
+                    <label for="username" class="form-label" th:text="#{page.user.form.login}"></label>
                     <input type="text" name="username" class="form-control" id="username" th:value="*{username}">
                 </div>
                 <div class="mb-2">
-                    <label for="password" class="form-label">Пароль</label>
+                    <label for="password" class="form-label" th:text="#{page.user.form.password}"></label>
                     <input type="password" name="password" class="form-control" id="password">
                 </div>
                 <div class="mb-2">
-                    <label for="email" class="form-label">Email</label>
+                    <label for="email" class="form-label" th:text="#{page.user.form.email}"></label>
                     <input type="email" name="email" class="form-control" id="email" th:value="*{email}">
                 </div>
 
                 <div class="mb-2">
-                    <label for="roles">Роль:
+                    <label for="roles" th:text="#{page.user.form.roles}">Роль
                         <select class="form-select" id="roles" name="role">
                             <option th:each="role : ${roles}"
                                     th:text="${role.name}"
@@ -44,13 +44,12 @@
             <input type="hidden" name="image" id="avatar-image-id" th:value="*{image}">
         </form>
 
-
         <form th:action="@{/users/{userId}/delete(userId=${user.id})}" sec:authorize="hasAuthority('ADMIN')"
               method="post">
-            <input type="submit" class="btn btn-primary btn-sm btn-light" th:value="Удалить">
+            <input type="submit" class="btn btn-primary btn-sm btn-light" th:value="#{page.user.delete}">
         </form>
         <form th:action="@{/users/{userId}/ban(userId=${user.id})}" sec:authorize="hasAuthority('ADMIN')" method="post">
-            <input type="submit" class="btn btn-primary btn-sm btn-light" th:value="Заблокировать">
+            <input type="submit" class="btn btn-primary btn-sm btn-light" th:value="#{page.user.ban}">
         </form>
     </th:block>
 
@@ -58,16 +57,14 @@
     <div class="card w-30 mt-4 mb-4" sec:authorize="!hasAuthority('ADMIN')">
         <img src="/img/avatars/0.png" class="card-img-top mx-auto d-block" style="width: 220px" alt="Profile image">
         <div class="card-body">
-            <h5 class="card-title" th:text="${user.username}">Username</h5>
-            <p class="card-text">Возможно здесь будет подпись пользователя когда-нибудь =)</p>
+            <h5 class="card-title" th:text="${user.username}"></h5>
+            <p class="card-text">Возможно здесь будет подпись пользователя когда-нибудь или ещё чего-то...</p>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">Последняя активность: [[${user.lastActivity}]]</li>
-                <li class="list-group-item">Дата регистрации: [[${user.createdAt}]]</li>
+                <li class="list-group-item" th:text="|#{page.user.lastActivity}: ${user.lastActivity}|"></li>
+                <li class="list-group-item" th:text="|#{page.user.createdAt}: ${user.createdAt}|"></li>
             </ul>
-            <a href="#" class="btn btn-primary" sec:authorize="isAuthenticated()">Отправить сообщение</a>
         </div>
     </div>
-
 
 </div>
 
