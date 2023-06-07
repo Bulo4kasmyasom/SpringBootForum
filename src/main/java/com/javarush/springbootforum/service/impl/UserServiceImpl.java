@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    @PreAuthorize("!hasAnyAuthority('USER','MODERATOR','ADMIN')")
+    @PreAuthorize("isAnonymous()") //  !hasAnyAuthority('USER','MODERATOR','ADMIN')
     public UserReadDto create(UserCreateEditDto user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent() ||
                 userRepository.existsByEmail(user.getEmail())) {
@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws ResourceNotFoundException {
         return userRepository.findByUsername(username)
                 .map(user -> com.javarush.springbootforum.entity.User
                         .builder()

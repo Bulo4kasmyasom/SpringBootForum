@@ -1,5 +1,6 @@
 package com.javarush.springbootforum.service;
 
+import com.javarush.springbootforum.controller.handler.exception.ResourceNotFoundException;
 import com.javarush.springbootforum.dto.UserCreateEditDto;
 import com.javarush.springbootforum.dto.UserReadDto;
 import org.springframework.data.domain.Page;
@@ -28,5 +29,5 @@ public interface UserService extends UserDetailsService {
     boolean delete(Long id);
 
     @Override
-    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+    UserDetails loadUserByUsername(String username) throws ResourceNotFoundException;
 }

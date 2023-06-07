@@ -1,0 +1,11 @@
+#spring:
+#  data:
+#    redis:
+#      username: test
+#      password: test
+#  datasource:
+#    username: test
+#    password: test
+#  jpa:
+#    properties.hibernate:
+#      hbm2ddl.auto: validate
