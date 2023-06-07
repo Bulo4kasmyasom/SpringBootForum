@@ -115,6 +115,8 @@ class UserServiceTest extends IntegrationBaseTest {
         assertThat(userReadDto).isPresent();
     }
 
+    // todo проверить если пользователь сам себя пробует редактировать, а не админ
+
     @Test
     @WithMockUser(authorities = "ADMIN")
     void deleteUserIfAdmin() {

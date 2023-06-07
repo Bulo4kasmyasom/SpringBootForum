@@ -9,9 +9,11 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Value;
+import lombok.experimental.FieldNameConstants;
 
 @Value
 @Schema(description = "UserCreateEditDto")
+@FieldNameConstants
 public class UserCreateEditDto {
     @Size(min = 2, max = 20, message = "{validation.error.login.size}", groups = {OnCreatable.class, OnUpdatable.class})
     @Schema(description = "Username", example = "alex")

@@ -1,8 +1,8 @@
 package com.javarush.springbootforum;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -18,7 +18,8 @@ import org.testcontainers.utility.DockerImageName;
 //        properties = { "spring.datasource.url=jdbc:tc:postgres:15.1:///databasename" }
 )
 @Transactional
-@TestConfiguration
+//@TestConfiguration("mockMvc")
+@AutoConfigureMockMvc
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 //@ActiveProfiles("test")
 @ContextConfiguration

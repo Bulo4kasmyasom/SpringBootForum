@@ -21,9 +21,11 @@ public class PageTitleInterceptorHandler implements HandlerInterceptor {
                 String pageTitle = (String) modelAndView.getModel().get("pageTitle");
                 String fullPageTitle = beforeTitle + pageTitle + afterTitle;
                 modelAndView.getModel().put("pageTitle", fullPageTitle);
-            } else {
-                modelAndView.getModel().put("pageTitle", defaultTitle);
             }
+            // todo нужно ли это вообще. Код ниже.
+//            else {
+//                modelAndView.getModel().put("pageTitle", defaultTitle);
+//            }
         }
     }
 
