@@ -115,7 +115,12 @@ class UserServiceTest extends IntegrationBaseTest {
         assertThat(userReadDto).isPresent();
     }
 
-    // todo проверить если пользователь сам себя пробует редактировать, а не админ
+    @Test
+    @WithMockUser(username = "user", authorities = "USER")
+    void updateUserProfileUserHimself() {
+        Optional<UserReadDto> userReadDto = userService.update(3L, user);
+        assertThat(userReadDto).isPresent();
+    }
 
     @Test
     @WithMockUser(authorities = "ADMIN")
