@@ -27,8 +27,6 @@ class UserControllerTest extends IntegrationBaseTest {
         mockMvc.perform(get("/users"))
                 .andExpect(view().name("users"))
                 .andExpect(model().attributeExists("pageTitle", "users"));
-//                .andExpect(model().attribute("users", PageResponseDto.class))
-//                .andExpect(model().attribute("pageTitle", notNullValue()));
     }
 
     @Test
@@ -41,7 +39,7 @@ class UserControllerTest extends IntegrationBaseTest {
     @Test
     public void findByIdAndNotFountThenExpectRedirect() throws Exception {
         mockMvc.perform(get("/users/{id}", 0))
-//                .andExpect(redirectedUrl("/users"))
+                .andExpect(redirectedUrl("/users"))
                 .andExpect(status().is3xxRedirection());
     }
 
