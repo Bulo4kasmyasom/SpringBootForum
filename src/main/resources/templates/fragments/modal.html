@@ -1,0 +1,343 @@
+<th:block th:fragment="defaultAvatars(defaultAvatars)">
+    <div class="modal fade modal-lg" id="profile-image" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="profile-image-title" th:text="#{profile.image.choose.avatar}"></h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <img th:each="img: ${defaultAvatars}"
+                             th:src="|/img/avatars/${img}|"
+                             style="width: 75px" class="mx-1 my-1" alt="Profile image"
+                             onclick="chooseDefaultAvatar(this)">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+
+<!-- new topic message form -->
+<div class="row mt-4 mb-3" th:fragment="topic-message-new(topicId, topicMessageWhenErrorsGet)">
+    <button type="button" class="btn btn-primary btn-sm btn-light" data-bs-toggle="modal"
+            data-bs-target="#topic-message-new" th:text="#{page.topic.message.form.button}">
+    </button>
+
+    <div class="modal fade modal-lg" id="topic-message-new" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="topic-message-new-title"
+                        th:text="#{page.topic.message.form.card.title}"></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form th:action="@{/topic-message/new}" method="post" class="needs-validation" novalidate>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="topic-message-new-text" class="form-label"
+                                   th:text="#{page.topic.message.form.card.text}"></label>
+                            <textarea name="text" class="form-control"
+                                      id="topic-message-new-text"
+                                      rows="13" minlength="2" maxlength="4000" required
+                            >[[${topicMessageWhenErrorsGet!=null ? topicMessageWhenErrorsGet.text :''}]]</textarea>
+                            <input type="hidden" name="topicId" id="topicId" th:value="${topicId}">
+                            <div class="invalid-feedback"
+                                 th:text="#{page.topic.message.form.card.text.invalid.feedback}"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" th:value="#{page.topic.message.form.submit}"
+                               class="btn btn-primary btn-sm btn-light">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- login form -->
+<th:block th:fragment="login-form">
+    <button type="button" class="btn btn-primary btn-sm btn-light" data-bs-toggle="modal"
+            data-bs-target="#login-modal" th:text="#{login.form.button}">
+    </button>
+
+    <div class="modal fade" id="login-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="login-modal-title" th:text="#{login.form.card.title}"></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <form th:action="@{/login}" method="post" class="needs-validation" novalidate>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="login-username" class="form-label" th:text="#{login.form.login}"></label>
+                            <input type="text" name="username" class="form-control"
+                                   id="login-username" required>
+                            <div class="invalid-feedback" th:text="#{login.form.login.invalid.feedback}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="login-password" class="form-label" th:text="#{login.form.password}"></label>
+                            <input type="password" name="password" class="form-control"
+                                   id="login-password" required>
+                            <div class="invalid-feedback" th:text="#{login.form.password.invalid.feedback}"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-primary btn-sm btn-light" th:value="#{login.form.submit}">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<!-- registration form -->
+<th:block th:fragment="registration-form">
+    <button type="button" class="btn btn-primary btn-sm btn-light" data-bs-toggle="modal"
+            data-bs-target="#registration-modal" th:text="#{registration.form.registration.button}">
+    </button>
+
+    <div class="modal fade" id="registration-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="registration-modal-title" th:text="#{registration.form.card.title}"></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <form th:action="@{/users/registration}" method="post" class="needs-validation" novalidate>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="registration-username" class="form-label" th:text="#{registration.form.login}"></label>
+                            <input type="text" name="username" class="form-control"
+                                   id="registration-username" required>
+                            <div class="invalid-feedback" th:text="#{registration.form.login.invalid.feedback}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="registration-password" class="form-label" th:text="#{registration.form.password}"></label>
+                            <input type="password" name="password" class="form-control"
+                                   id="registration-password" required>
+                            <div class="invalid-feedback" th:text="#{registration.form.password.invalid.feedback}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="registration-email" class="form-label" th:text="#{registration.form.email}"></label>
+                            <input type="email" name="email" class="form-control"
+                                   id="registration-email" required>
+                            <div class="invalid-feedback" th:text="#{registration.form.email.invalid.feedback}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="roles" class="form-label">Роль <small>(только для тестирования сделано)</small>
+                                <select class="form-select" id="roles" name="role">
+                                    <option value="ADMIN">ADMIN</option>
+                                    <option value="MODERATOR">MODERATOR</option>
+                                    <option value="USER" selected>USER</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-primary btn-sm btn-light"
+                               th:value="#{registration.form.submit}">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+
+<!-- new topic create form -->
+<th:block th:fragment="topic-new(category, subCategory, topicMessageWhenErrorsGet)">
+    <button type="button" class="btn btn-primary btn-sm btn-light" data-bs-toggle="modal"
+            data-bs-target="#topic-new" th:text="#{topic.create.form.button}">
+    </button>
+
+    <div class="modal fade modal-lg" id="topic-new" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="topic-new-title-h" th:text="#{topic.create.form.topic.title}"></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <form th:action="@{/topic/new}" method="post" class="needs-validation" novalidate>
+                    <div class="modal-body">
+
+                        <div class="mb-3">
+                            <label for="topic-new-title" class="form-label" th:text="#{topic.create.form.card.title}"></label>
+                            <input type="text" name="topicTitle" class="form-control"
+                                   id="topic-new-title" required
+                                   th:value="${topicMessageWhenErrorsGet!=null ? topicMessageWhenErrorsGet.topicTitle :''}">
+                            <div class="invalid-feedback" th:text="#{topic.create.form.topic.title.invalid.feedback}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="topic-new-message" class="form-label"
+                                   th:text="#{topic.create.form.card.message}"></label>
+                            <textarea name="messageText" class="form-control" id="topic-new-message"
+                                      minlength="2" maxlength="4000" required
+                                      rows="13">[[${topicMessageWhenErrorsGet!=null ? topicMessageWhenErrorsGet.messageText :''}]]</textarea>
+                            <div class="invalid-feedback" th:text="#{topic.create.form.message.text.invalid.feedback}"></div>
+                        </div>
+                        <input type="hidden" name="categoryId" th:value="${category}">
+                        <input type="hidden" name="subCategoryId" th:value="${subCategory}">
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-primary btn-sm btn-light" th:value="#{topic.create.form.submit}">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+
+<!-- new section form -->
+<th:block th:fragment="section-new">
+    <button type="button" class="btn btn-primary btn-sm btn-light mt-2" data-bs-toggle="modal"
+            data-bs-target="#section-new" th:text="#{section.create.form.button}">
+    </button>
+
+    <div class="modal fade modal-lg" id="section-new" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="section-new-title-h" th:text="#{section.create.form.card.title}"></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form th:action="@{/sections/new}" method="post" class="needs-validation" novalidate>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="section-new-title" class="form-label"
+                                   th:text="#{section.create.form.title}"></label>
+                            <input type="text" name="title" required class="form-control" id="section-new-title">
+                            <div class="invalid-feedback" th:text="#{section.create.form.title.invalid.feedback}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="section-new-description" class="form-label"
+                                   th:text="#{section.create.form.description}"></label>
+                            <textarea name="description" class="form-control" id="section-new-description"
+                                      maxlength="512" rows="7"></textarea>
+                            <div class="invalid-feedback" th:text="#{section.create.form.description.invalid.feedback}"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-primary btn-sm btn-light"
+                               th:value="#{section.create.form.submit}">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+
+<!-- new category form -->
+<th:block th:fragment="category-new(sections)">
+    <button type="button" class="btn btn-primary btn-sm btn-light mt-2" data-bs-toggle="modal"
+            data-bs-target="#category-new" th:text="#{category.create.form.button}">
+    </button>
+
+    <div class="modal fade modal-lg" id="category-new" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="category-new-title-h" th:text="#{category.create.form.card.title}"></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form th:action="@{/cat/new}" method="post" class="needs-validation" novalidate>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="section-new-title" class="form-label"
+                                   th:text="#{category.create.form.title}"></label>
+                            <input type="text" name="title" required class="form-control" id="category-new-title">
+                            <div class="invalid-feedback"
+                                 th:text="#{category.create.form.title.invalid.feedback}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="sectionId" th:text="#{category.create.form.section}"></label>
+                            <select class="form-select" name="sectionId" id="sectionId">
+                                <option th:each="section: ${sections}"
+                                        th:value="${section.id}"
+                                        th:text="${section.title}">section
+                                </option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="category-new-description" class="form-label"
+                                   th:text="#{category.create.form.description}"></label>
+                            <textarea name="description" class="form-control" id="category-new-description"
+                                      maxlength="512" rows="7"></textarea>
+                            <div class="invalid-feedback"
+                                 th:text="#{category.create.form.description.invalid.feedback}"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-primary btn-sm btn-light"
+                               th:value="#{category.create.form.submit}">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+
+<!-- new subcategory form -->
+<th:block th:fragment="subcategory-new(sections)">
+    <button type="button" class="btn btn-primary btn-sm btn-light mt-2" data-bs-toggle="modal"
+            data-bs-target="#subcategory-new" th:text="#{subcategory.create.form.button}">
+    </button>
+
+    <div class="modal fade modal-lg" id="subcategory-new" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="subcategory-new-title-h"
+                        th:text="#{subcategory.create.form.card.title}"></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form th:action="@{/subcat/new}" method="post" class="needs-validation" novalidate>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="section-new-title" class="form-label"
+                                   th:text="#{subcategory.create.form.title}"></label>
+                            <input type="text" name="title" required class="form-control" id="subcategory-new-title">
+                            <div class="invalid-feedback"
+                                 th:text="#{subcategory.create.form.title.invalid.feedback}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="categoryId" th:text="#{subcategory.create.form.category}">Категория</label>
+                            <select class="form-select" name="categoryId" id="categoryId">
+                                <option disabled selected th:text="#{subcategory.create.form.select.category}"></option>
+                                <optgroup th:each="section: ${sections}" th:label="${section.title}">
+                                    <option th:each="category: ${section.categoryList}"
+                                            th:value="${category.id}"
+                                            th:text="${category.title}">
+                                        Category
+                                    </option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="category-new-description" class="form-label"
+                                   th:text="#{subcategory.create.form.description}"></label>
+                            <textarea name="description" class="form-control" id="subcategory-new-description"
+                                      maxlength="512" rows="7"></textarea>
+                            <div class="invalid-feedback" th:text="#{subcategory.create.form.description.invalid.feedback}"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-primary btn-sm btn-light"
+                               th:value="#{subcategory.create.form.submit}">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</th:block>

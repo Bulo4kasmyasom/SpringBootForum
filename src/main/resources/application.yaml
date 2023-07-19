@@ -1,0 +1,55 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  cache:
+    type: redis
+    cache-names: redis-cache
+    redis:
+      cache-null-values: off
+  profiles:
+    active: dev
+  messages:
+    basename: language, site
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: true
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      username: ${REDIS_USERNAME}
+      password: ${REDIS_PASSWORD}
+    web:
+      pageable:
+        one-indexed-parameters: true
+        default-page-size: 10
+        max-page-size: 500
+        page-parameter: page
+        size-parameter: size
+      sort:
+        sort-parameter: sort
+
+  datasource:
+    url: jdbc:postgresql://${HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?currentSchema=${POSTGRES_SCHEMA}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        order_inserts: true
+        order_updates: true
+        highlight_sql: true
+        format_sql: true
+        show_sql: true
+        hbm2ddl:
+          auto: validate
+        jdbc:
+          batch_size: 15
+          batch_versioned_data: true
+        generate_statistics: false
+
+springdoc:
+  override-with-generic-response: false # убирает из swagger лишние коды ошибок

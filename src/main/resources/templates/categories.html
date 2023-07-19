@@ -1,0 +1,106 @@
+<th:block th:insert="~{fragments/header :: header}"></th:block>
+
+<div class="container">
+
+    <th:block th:replace="~{fragments/fragments :: errors(${errors})}">errors</th:block>
+
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" class="mt-2">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Главная</a></li>
+            <li class="breadcrumb-item">
+                <a th:href="@{/cat/{catId}(catId=${category.id})}"
+                   th:text="${category.title}">Category</a></li>
+
+            <li class="breadcrumb-item" th:if="${subCategory!=null}">
+                <a th:href="@{/cat/{catId}/subcat/{subCatId}(catId=${category.id},subCatId=${subCategory.id})}"
+                   th:text="${subCategory.title}">SubCategory</a></li>
+        </ol>
+    </nav>
+
+
+    <th:block th:if="${subCategories != null && subCategories.size()>0}">
+        <div class="row align-items-end border border-secondary-subtle rounded-3">
+            <div class="col-10 text-center fw-bold border border-secondary-subtle"
+                 th:text="#{page.categories.subcategories}">
+            </div>
+            <div class="col text-center fw-bold border border-secondary-subtle"
+                 th:text="#{page.categories.count.themes}">
+            </div>
+        </div>
+
+        <div class="row align-items-end" th:each="subcat : ${subCategories}">
+            <div class="col-10 border border-secondary-subtle">
+                <a th:href="@{/cat/{catId}/subcat/{subCatId}(catId=${category.id},subCatId=${subcat.id})}"
+                   th:text="${subcat.title}"></a>
+            </div>
+            <div class="col text-center border border-secondary-subtle">
+                [[${subcat.topicCount}]]
+            </div>
+        </div>
+    </th:block>
+
+    <th:block sec:authorize="isAuthenticated()"
+              th:replace="~{fragments/modal :: topic-new(${category.id},
+            ${subCategory!=null}?${subCategory.id}:null,
+            ${topicMessage!=null}?${topicMessage}:null)}">
+    </th:block>
+
+    <th:block th:if="${topics.content.size()>0}">
+        <div class="mt-3" id="topics-table">
+            <div class="row align-items-end border border-secondary-subtle rounded-3">
+                <div class="text-center fw-bold"
+                     th:classappend="${#authorization.expression('hasAnyAuthority(''ADMIN'', ''MODERATOR'')') } ? 'col-4' : 'col-7'">
+                    Тема
+                </div>
+                <div class="col-2 text-center fw-bold" th:text="#{page.categories.createdAt}"></div>
+                <div class="col-1 text-center fw-bold" th:text="#{page.categories.count.answers}"></div>
+                <div class="col-2 text-center fw-bold" th:text="#{page.categories.author}"></div>
+
+                <th:block sec:authorize="hasAnyAuthority('ADMIN', 'MODERATOR')">
+                    <div class="col-1 text-center">
+                        <img th:src="|#{site.images.path}/edit.png|" style="width: 25px" alt="edit">
+                    </div>
+                    <div class="col-1 text-center">
+                        <img th:src="|#{site.images.path}/delete.png|" style="width: 25px" alt="delete">
+                    </div>
+                    <div class="col-1 text-center fw-bold" th:text="#{page.categories.choose}"></div>
+                </th:block>
+            </div>
+
+            <div class="row align-items-end" th:each="topic: ${topics.content}" th:id="|topic-${topic.id}|">
+                <div class="border border-secondary-subtle"
+                     th:classappend="${#authorization.expression('hasAnyAuthority(''ADMIN'', ''MODERATOR'')') } ? 'col-4' : 'col-7'">
+
+                    <a th:href="@{/topic/{id}(id=${topic.id})}" th:text="${topic.title}"
+                       th:id="|topic-title-${topic.id}|"></a>
+                </div>
+                <div class="col-2 text-center border border-secondary-subtle">[[${topic.createdAt}]]</div>
+                <div class="col-1 text-center border border-secondary-subtle">[[${topic.messageCount}]]</div>
+                <div class="col-2 text-center border border-secondary-subtle">[[${topic.author.username}]]</div>
+
+                <th:block sec:authorize="hasAnyAuthority('ADMIN','MODERATOR')">
+                    <div class="col-1 text-center border border-secondary-subtle">
+                        <img th:id="|topic-edit-${topic.id}|" th:src="|#{site.images.path}/edit.png|"
+                             style="width: 25px" alt="edit">
+                    </div>
+                    <div class="col-1 text-center border border-secondary-subtle">
+                        <img th:id="|topic-delete-${topic.id}|" th:src="|#{site.images.path}/delete.png|"
+                             style="width: 25px" alt="delete">
+                    </div>
+                    <div class="col-1 text-center border border-secondary-subtle">
+                        <input class="checkbox" type="checkbox" name="topic[]" th:value="${topic.id}">
+                    </div>
+                </th:block>
+            </div>
+
+        </div>
+    </th:block>
+
+    <th:block th:if="${topics.content.size()>0}">
+        <th:block th:replace="~{fragments/pagination :: pagination(${topics.metadata},
+    '/cat/'+${category.id} + ${subCategory != null ? '/subcat/'+subCategory.id :''})}"></th:block>
+    </th:block>
+
+</div>
+
+<th:block th:insert="~{fragments/footer ::footer}"></th:block>
