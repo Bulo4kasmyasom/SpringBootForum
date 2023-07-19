@@ -23,7 +23,7 @@ import org.testcontainers.utility.DockerImageName;
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 //@ActiveProfiles("test")
 @ContextConfiguration
-public class IntegrationBaseTest {
+public abstract class IntegrationBaseTest {
 
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(DockerImageName.parse("postgres:15.1"));
     static GenericContainer<?> redis = new GenericContainer<>(DockerImageName.parse("redis:latest"))
