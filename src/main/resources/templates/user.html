@@ -26,9 +26,9 @@
                 </div>
 
                 <div class="mb-2">
-                    <label for="roles" th:text="#{page.user.form.roles}">Роль
+                    <label for="roles">[[#{page.user.form.roles}]]
                         <select class="form-select" id="roles" name="role">
-                            <option th:each="role : ${roles}"
+                            <option th:each="role:${roles}"
                                     th:text="${role.name}"
                                     th:value="${role.name}"
                                     th:selected="${role.name == user.role}">
@@ -58,7 +58,7 @@
         <img src="/img/avatars/0.png" class="card-img-top mx-auto d-block" style="width: 220px" alt="Profile image">
         <div class="card-body">
             <h5 class="card-title" th:text="${user.username}"></h5>
-            <p class="card-text">Возможно здесь будет подпись пользователя когда-нибудь или ещё чего-то...</p>
+            <p class="card-text">Возможно здесь будет подпись пользователя когда-нибудь...</p>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item" th:text="|#{page.user.lastActivity}: ${user.lastActivity}|"></li>
                 <li class="list-group-item" th:text="|#{page.user.createdAt}: ${user.createdAt}|"></li>
