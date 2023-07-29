@@ -17,15 +17,18 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+import static com.javarush.springbootforum.controller.constant.MappingPathKey.*;
+
 @Controller
-@RequestMapping("/cat")
+@RequestMapping(CATEGORY_PATH)
 @RequiredArgsConstructor
 public class CategoryController {
+
     private final CategoryService categoryService;
     private final SubCategoryService subCategoryService;
     private final TopicService topicService;
 
-    @GetMapping("/{id}")
+    @GetMapping(CATEGORIES_WITH_TOPICS)
     public String categoriesWithTopics(@PathVariable("id") Long id, Model model, Pageable pageable) {
         CategoryReadDto categoryDto = categoryService.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -41,7 +44,7 @@ public class CategoryController {
         return "categories";
     }
 
-    @GetMapping("/{catId}/subcat/{subCatId}")
+    @GetMapping(CATEGORIES_WITH_TOPICS_AND_SUB_CATS)
     public String categoriesWithTopicsAndSubCats(
             @PathVariable("catId") Long catId,
             @PathVariable("subCatId") Long subCatId,
@@ -64,7 +67,7 @@ public class CategoryController {
     }
 
 
-    @PostMapping("/new")
+    @PostMapping(CATEGORY_CREATE)
     public String create(@ModelAttribute @Validated CategoryCreateDto categoryCreateDto) {
         categoryService.create(categoryCreateDto);
         return "redirect:/home";

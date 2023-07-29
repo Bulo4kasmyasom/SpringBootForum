@@ -15,14 +15,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import static com.javarush.springbootforum.controller.constant.MappingPathKey.TOPIC_MESSAGE_CREATE;
+import static com.javarush.springbootforum.controller.constant.MappingPathKey.TOPIC_MESSAGE_PATH;
+
 @Controller
-@RequestMapping("/topic-message")
+@RequestMapping(TOPIC_MESSAGE_PATH)
 @RequiredArgsConstructor
 public class TopicMessageController {
+
     private final TopicMessageService topicMessageService;
     private final UserService userService;
 
-    @PostMapping("/new")
+    @PostMapping(TOPIC_MESSAGE_CREATE)
     public String create(@ModelAttribute @Validated TopicMessageCreateEditDto message,
                          @AuthenticationPrincipal UserDetails userDetails,
                          @RequestHeader(value = "referer") String referer

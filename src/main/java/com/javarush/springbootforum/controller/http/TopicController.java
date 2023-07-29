@@ -15,15 +15,18 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import static com.javarush.springbootforum.controller.constant.MappingPathKey.*;
+
 @Controller
-@RequestMapping("/topic")
+@RequestMapping(TOPIC_PATH)
 @RequiredArgsConstructor
 public class TopicController {
+
     private final UserService userService;
     private final TopicService topicService;
     private final TopicMessageService topicMessageService;
 
-    @GetMapping("/{id}")
+    @GetMapping(TOPIC_WITH_MESSAGES)
     public String topicWithMessages(@PathVariable("id") Long id, Model model, Pageable pageable) {
         TopicReadDto topicReadDto = topicService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Topic not found"));
@@ -37,7 +40,7 @@ public class TopicController {
     }
 
 
-    @PostMapping("/new")
+    @PostMapping(TOPIC_CREATE)
     public String create(@ModelAttribute @Validated TopicCreateDto topicCreateDto,
                          @AuthenticationPrincipal UserDetails userDetails) {
         UserReadDto userReadDto = userService.findByUsername(userDetails.getUsername())

@@ -19,12 +19,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.javarush.springbootforum.controller.constant.MappingPathKey.*;
+
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/users")
+@RequestMapping(USERS_PATH)
 public class UserController {
-    private final UserService userService;
 
+    private final UserService userService;
     private final List<String> getDefaultAvatarImagesList;
 
     @GetMapping
@@ -35,7 +37,7 @@ public class UserController {
         return "users";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(USERS_FIND_BY_ID)
     public String findById(@PathVariable("id") Long id, Model model) {
         return userService.findById(id)
                 .map(user -> {
@@ -48,13 +50,13 @@ public class UserController {
                 .orElse("redirect:/users");
     }
 
-    @PostMapping("/registration")
+    @PostMapping(USERS_REGISTRATION)
     public String create(@ModelAttribute @Validated(OnCreatable.class) UserCreateEditDto user) {
         userService.create(user);
         return "redirect:/home";
     }
 
-    @PostMapping("/{id}/update")
+    @PostMapping(USERS_UPDATE)
     public String update(@PathVariable("id") Long id,
                          @ModelAttribute @Validated(OnUpdatable.class) UserCreateEditDto user) {
         return userService.update(id, user)
@@ -62,7 +64,7 @@ public class UserController {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
-    @PostMapping("/{id}/delete")
+    @PostMapping(USERS_DELETE)
     public String delete(@PathVariable("id") Long id) {
         if (!userService.delete(id)) {
             throw new ResourceNotFoundException("User not found, not deleted");

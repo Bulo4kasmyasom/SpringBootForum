@@ -12,19 +12,21 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import static com.javarush.springbootforum.controller.constant.MappingPathKey.SECTIONS_PATH;
+import static com.javarush.springbootforum.controller.constant.MappingPathKey.SECTION_CREATE;
+
 @Controller
-@RequestMapping("/sections")
+@RequestMapping(SECTIONS_PATH)
 @RequiredArgsConstructor
 public class SectionController {
 
     private final SectionService sectionService;
 
-    @PostMapping("/new")
+    @PostMapping(SECTION_CREATE)
     public String create(@ModelAttribute @Validated SectionCreateEditDto sectionCreateEditDto) {
         sectionService.create(sectionCreateEditDto);
         return "redirect:/home";
     }
-
 
     @GetMapping
     public String findAll(Model model, @Value("${page.title.home}") String pageTitle) {
@@ -32,5 +34,4 @@ public class SectionController {
         model.addAttribute("pageTitle", pageTitle);
         return "home";
     }
-
 }
