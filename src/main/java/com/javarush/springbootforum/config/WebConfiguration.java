@@ -15,12 +15,9 @@ public class WebConfiguration implements WebMvcConfigurer {
     @Value("${page.title.afterTitle}")
     private String afterTitle;
 
-    @Value("${page.title.defaultTitle}")
-    private String defaultTitle;
-
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new PageTitleInterceptorHandler(beforeTitle, afterTitle, defaultTitle)).addPathPatterns("/**");
+        registry.addInterceptor(new PageTitleInterceptorHandler(beforeTitle, afterTitle)).addPathPatterns("/**");
     }
 
 }

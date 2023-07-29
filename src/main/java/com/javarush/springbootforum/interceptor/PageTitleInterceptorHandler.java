@@ -11,7 +11,6 @@ public class PageTitleInterceptorHandler implements HandlerInterceptor {
 
     private String beforeTitle;
     private String afterTitle;
-    private String defaultTitle;
 
     @SuppressWarnings("NullableProblems") // response and handler require @NonNullApi
     @Override
@@ -22,10 +21,6 @@ public class PageTitleInterceptorHandler implements HandlerInterceptor {
                 String fullPageTitle = beforeTitle + pageTitle + afterTitle;
                 modelAndView.getModel().put("pageTitle", fullPageTitle);
             }
-            // todo нужно ли это вообще. Код ниже.
-//            else {
-//                modelAndView.getModel().put("pageTitle", defaultTitle);
-//            }
         }
     }
 
