@@ -3,7 +3,6 @@ package com.javarush.springbootforum.security.expression;
 import com.javarush.springbootforum.controller.handler.exception.ResourceNotFoundException;
 import com.javarush.springbootforum.dto.UserReadDto;
 import com.javarush.springbootforum.entity.Role;
-import com.javarush.springbootforum.entity.User;
 import com.javarush.springbootforum.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

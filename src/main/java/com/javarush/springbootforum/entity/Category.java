@@ -1,6 +1,5 @@
 package com.javarush.springbootforum.entity;
 
-import com.javarush.springbootforum.listener.CategoryListener;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
@@ -16,7 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 @ToString(exclude = "section")
 @EqualsAndHashCode(exclude = "section", callSuper = false)
-@EntityListeners(CategoryListener.class)
 public class Category extends BaseEntity {
 
     @Id

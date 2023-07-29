@@ -1,6 +1,5 @@
 package com.javarush.springbootforum.entity;
 
-import com.javarush.springbootforum.listener.SubCategoryListener;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +11,6 @@ import lombok.*;
 @AllArgsConstructor
 @ToString(exclude = "category")
 @EqualsAndHashCode(exclude = "category", callSuper = false)
-@EntityListeners(SubCategoryListener.class)
 public class SubCategory extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
