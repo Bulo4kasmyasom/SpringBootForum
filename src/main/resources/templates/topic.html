@@ -55,7 +55,7 @@
             </div>
         </div>
 
-        <th:block sec:authorize="isAuthenticated()"
+        <th:block sec:authorize="isAuthenticated() && !hasAuthority('GUEST')"
                   th:replace="~{fragments/modal :: topic-message-new(${topic.id},
                   ${topicMessage!=null}?${topicMessage}:null)}">
         </th:block>
