@@ -12,21 +12,24 @@ import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import static com.javarush.springbootforum.controller.constant.MappingPathKey.*;
+
 @RestController
-@RequestMapping("/api/topic-message")
+@RequestMapping(API_PATH + REST_TOPIC_MESSAGE_PATH)
 @RequiredArgsConstructor
 @Tag(name = "TopicMessage Rest Controller", description = "TopicMessage API")
 public class TopicMessageRestController {
+
     private final TopicMessageService topicMessageService;
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = REST_TOPIC_MESSAGE_FIND_BY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Topic message find by id and return TopicMessageReadDto")
     public TopicMessageReadDto findById(@PathVariable("id") Long id) {
         return topicMessageService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Topic message not found"));
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = REST_TOPIC_MESSAGE_UPDATE)
     @Operation(summary = "Update topic message and return TopicMessageReadDto")
     public TopicMessageReadDto update(@PathVariable("id") Long topicMessageId,
                                       @RequestBody @Validated TopicMessageCreateEditDto topicMessageCreateEditDto
@@ -35,7 +38,7 @@ public class TopicMessageRestController {
                 .orElseThrow(() -> new ResourceNotFoundException("Topic message not found"));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(REST_TOPIC_MESSAGE_DELETE)
     @Operation(summary = "Delete topic message by id")
     public HttpStatus delete(@PathVariable("id") Long id) {
         return topicMessageService.delete(id)

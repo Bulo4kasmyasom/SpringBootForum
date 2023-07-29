@@ -11,14 +11,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import static com.javarush.springbootforum.controller.constant.MappingPathKey.*;
+
 @RestController
-@RequestMapping("/api/topic")
+@RequestMapping(API_PATH + REST_TOPIC_PATH)
 @RequiredArgsConstructor
 @Tag(name = "Topic Rest Controller", description = "Topic API")
 public class TopicRestController {
+
     private final TopicService topicService;
 
-    @PutMapping("/{id}")
+    @PutMapping(REST_TOPIC_UPDATE)
     @Operation(summary = "Update topic by topicId, and return TopicFieldReadDto")
     public TopicFieldReadDto update(@PathVariable("id") Long topicId,
                                     @RequestBody @Validated TopicEditDto topicEditDto) {
@@ -26,7 +29,7 @@ public class TopicRestController {
                 .orElseThrow(() -> new ResourceNotFoundException("Topic not found"));
     }
 
-    @PatchMapping("/cat/{catId}")
+    @PatchMapping(REST_TOPIC_MOVE_TOPICS_IN_CATEGORY)
     @Operation(summary = "Move topics in category")
     public HttpStatus moveTopicsInCategory(@PathVariable("catId") Long catId,
                                            @RequestBody Long[] topicsIds) {
@@ -35,7 +38,7 @@ public class TopicRestController {
                 : HttpStatus.BAD_REQUEST;
     }
 
-    @PatchMapping("/cat/{catId}/subCat/{subCatId}")
+    @PatchMapping(REST_TOPIC_MOVE_TOPICS_IN_SUB_CATEGORY)
     @Operation(summary = "Move topics in subcategory")
     public HttpStatus moveTopicsInSubCategory(@PathVariable("catId") Long catId,
                                               @PathVariable(value = "subCatId") Long subCatId,
@@ -45,8 +48,7 @@ public class TopicRestController {
                 : HttpStatus.BAD_REQUEST;
     }
 
-
-    @DeleteMapping("/{id}")
+    @DeleteMapping(REST_TOPIC_DELETE)
     @Operation(summary = "Delete topic by id")
     public HttpStatus delete(@PathVariable("id") Long id) {
         return topicService.delete(id)

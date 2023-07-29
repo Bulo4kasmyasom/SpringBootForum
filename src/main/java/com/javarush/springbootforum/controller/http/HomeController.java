@@ -10,7 +10,7 @@ import static com.javarush.springbootforum.controller.constant.MappingPathKey.*;
 @RequiredArgsConstructor
 public class HomeController {
 
-    @GetMapping(value = {HOME_PATH, HOME_PATH_SLASH, HOME_PATH_EMPTY})
+    @GetMapping(value = {HTTP_HOME_PATH, HTTP_HOME_PATH_SLASH, HTTP_HOME_PATH_EMPTY})
     public String showHomePage() {
         return "forward:/sections";
     }

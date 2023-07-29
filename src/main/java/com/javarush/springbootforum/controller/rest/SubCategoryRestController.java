@@ -11,15 +11,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import static com.javarush.springbootforum.controller.constant.MappingPathKey.*;
+
 @RestController
-@RequestMapping("/api/subcat")
+@RequestMapping(API_PATH + REST_SUBCATEGORY_PATH)
 @RequiredArgsConstructor
 @Tag(name = "SubCategory Rest Controller", description = "SubCategory API")
 public class SubCategoryRestController {
 
     private final SubCategoryService subCategoryService;
 
-    @PutMapping("/{id}")
+    @PutMapping(REST_SUBCATEGORY_UPDATE)
     @Operation(summary = "Update subcategory and return SubCategoryFieldReadDto")
     public SubCategoryFieldReadDto update(@PathVariable("id") Long id,
                                           @RequestBody @Validated SubCategoryEditDto subCategoryEditDto) {
@@ -27,8 +29,7 @@ public class SubCategoryRestController {
                 .orElseThrow(() -> new ResourceNotFoundException("Subcategory not found"));
     }
 
-
-    @DeleteMapping("/{id}")
+    @DeleteMapping(REST_SUBCATEGORY_DELETE)
     @Operation(summary = "Delete subcategory by id")
     public HttpStatus delete(@PathVariable("id") Long id) {
         return subCategoryService.delete(id)

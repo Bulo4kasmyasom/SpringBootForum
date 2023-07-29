@@ -11,15 +11,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import static com.javarush.springbootforum.controller.constant.MappingPathKey.*;
+
 @RestController
-@RequestMapping("/api/sections")
+@RequestMapping(API_PATH + REST_SECTION_PATH)
 @RequiredArgsConstructor
 @Tag(name = "Section Rest Controller", description = "Section API")
 public class SectionRestController {
 
     private final SectionService sectionService;
 
-    @PutMapping("/{id}")
+    @PutMapping(REST_SECTION_UPDATE)
     @Operation(summary = "Update section and return SectionWithoutCategoryListReadDto")
     public SectionWithoutCategoryListReadDto update(@PathVariable("id") Long sectionId,
                                                     @RequestBody @Validated SectionCreateEditDto sectionCreateEditDto) {
@@ -27,8 +29,7 @@ public class SectionRestController {
                 .orElseThrow(() -> new ResourceNotFoundException("Section not found"));
     }
 
-
-    @DeleteMapping("/{id}")
+    @DeleteMapping(REST_SECTION_DELETE)
     @Operation(summary = "Delete section by id")
     public HttpStatus delete(@PathVariable("id") Long id) {
         return sectionService.delete(id)

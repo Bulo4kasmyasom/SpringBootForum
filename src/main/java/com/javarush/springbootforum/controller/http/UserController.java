@@ -23,7 +23,7 @@ import static com.javarush.springbootforum.controller.constant.MappingPathKey.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(USERS_PATH)
+@RequestMapping(HTTP_USERS_PATH)
 public class UserController {
 
     private final UserService userService;
@@ -37,7 +37,7 @@ public class UserController {
         return "users";
     }
 
-    @GetMapping(USERS_FIND_BY_ID)
+    @GetMapping(HTTP_USERS_FIND_BY_ID)
     public String findById(@PathVariable("id") Long id, Model model) {
         return userService.findById(id)
                 .map(user -> {
@@ -50,13 +50,13 @@ public class UserController {
                 .orElse("redirect:/users");
     }
 
-    @PostMapping(USERS_REGISTRATION)
+    @PostMapping(HTTP_USERS_REGISTRATION)
     public String create(@ModelAttribute @Validated(OnCreatable.class) UserCreateEditDto user) {
         userService.create(user);
         return "redirect:/home";
     }
 
-    @PostMapping(USERS_UPDATE)
+    @PostMapping(HTTP_USERS_UPDATE)
     public String update(@PathVariable("id") Long id,
                          @ModelAttribute @Validated(OnUpdatable.class) UserCreateEditDto user) {
         return userService.update(id, user)
@@ -64,7 +64,7 @@ public class UserController {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
-    @PostMapping(USERS_DELETE)
+    @PostMapping(HTTP_USERS_DELETE)
     public String delete(@PathVariable("id") Long id) {
         if (!userService.delete(id)) {
             throw new ResourceNotFoundException("User not found, not deleted");

@@ -20,7 +20,7 @@ import java.util.List;
 import static com.javarush.springbootforum.controller.constant.MappingPathKey.*;
 
 @Controller
-@RequestMapping(CATEGORY_PATH)
+@RequestMapping(HTTP_CATEGORY_PATH)
 @RequiredArgsConstructor
 public class CategoryController {
 
@@ -28,7 +28,7 @@ public class CategoryController {
     private final SubCategoryService subCategoryService;
     private final TopicService topicService;
 
-    @GetMapping(CATEGORIES_WITH_TOPICS)
+    @GetMapping(HTTP_CATEGORIES_WITH_TOPICS)
     public String categoriesWithTopics(@PathVariable("id") Long id, Model model, Pageable pageable) {
         CategoryReadDto categoryDto = categoryService.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -44,7 +44,7 @@ public class CategoryController {
         return "categories";
     }
 
-    @GetMapping(CATEGORIES_WITH_TOPICS_AND_SUB_CATS)
+    @GetMapping(HTTP_CATEGORIES_WITH_TOPICS_AND_SUB_CATS)
     public String categoriesWithTopicsAndSubCats(
             @PathVariable("catId") Long catId,
             @PathVariable("subCatId") Long subCatId,
@@ -67,7 +67,7 @@ public class CategoryController {
     }
 
 
-    @PostMapping(CATEGORY_CREATE)
+    @PostMapping(HTTP_CATEGORY_CREATE)
     public String create(@ModelAttribute @Validated CategoryCreateDto categoryCreateDto) {
         categoryService.create(categoryCreateDto);
         return "redirect:/home";

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import static com.javarush.springbootforum.controller.constant.MappingPathKey.*;
 
 @Controller
-@RequestMapping(TOPIC_PATH)
+@RequestMapping(HTTP_TOPIC_PATH)
 @RequiredArgsConstructor
 public class TopicController {
 
@@ -26,7 +26,7 @@ public class TopicController {
     private final TopicService topicService;
     private final TopicMessageService topicMessageService;
 
-    @GetMapping(TOPIC_WITH_MESSAGES)
+    @GetMapping(HTTP_TOPIC_WITH_MESSAGES)
     public String topicWithMessages(@PathVariable("id") Long id, Model model, Pageable pageable) {
         TopicReadDto topicReadDto = topicService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Topic not found"));
@@ -40,7 +40,7 @@ public class TopicController {
     }
 
 
-    @PostMapping(TOPIC_CREATE)
+    @PostMapping(HTTP_TOPIC_CREATE)
     public String create(@ModelAttribute @Validated TopicCreateDto topicCreateDto,
                          @AuthenticationPrincipal UserDetails userDetails) {
         UserReadDto userReadDto = userService.findByUsername(userDetails.getUsername())

@@ -12,17 +12,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import static com.javarush.springbootforum.controller.constant.MappingPathKey.SECTIONS_PATH;
-import static com.javarush.springbootforum.controller.constant.MappingPathKey.SECTION_CREATE;
+import static com.javarush.springbootforum.controller.constant.MappingPathKey.HTTP_SECTIONS_PATH;
+import static com.javarush.springbootforum.controller.constant.MappingPathKey.HTTP_SECTION_CREATE;
 
 @Controller
-@RequestMapping(SECTIONS_PATH)
+@RequestMapping(HTTP_SECTIONS_PATH)
 @RequiredArgsConstructor
 public class SectionController {
 
     private final SectionService sectionService;
 
-    @PostMapping(SECTION_CREATE)
+    @PostMapping(HTTP_SECTION_CREATE)
     public String create(@ModelAttribute @Validated SectionCreateEditDto sectionCreateEditDto) {
         sectionService.create(sectionCreateEditDto);
         return "redirect:/home";

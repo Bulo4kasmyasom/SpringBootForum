@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.javarush.springbootforum.controller.constant.MappingPathKey.*;
+
 @RestController
-@RequestMapping("/api/cat")
+@RequestMapping(API_PATH + REST_CATEGORY_PATH)
 @RequiredArgsConstructor
 @Validated
 @Tag(name = "Category Rest Controller", description = "Category API")
@@ -29,7 +31,7 @@ public class CategoryRestController {
         return categoryService.findAll();
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(REST_CATEGORY_UPDATE)
     @Operation(summary = "Update category and return CategoryFieldReadDto")
     public CategoryFieldReadDto update(@PathVariable("id") Long id,
                                        @RequestBody @Validated CategoryEditDto categoryEditDto) {
@@ -37,7 +39,7 @@ public class CategoryRestController {
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(REST_CATEGORY_DELETE)
     @Operation(summary = "Delete category by id")
     public HttpStatus delete(@PathVariable("id") Long id) {
         return categoryService.delete(id)
