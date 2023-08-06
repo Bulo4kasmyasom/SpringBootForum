@@ -7,13 +7,13 @@ create schema if not exists public;
 set schema 'public';
 
 --changeset bulo4kasmyasom:create_table_roles
-create table public.roles
+create table if not exists public.roles
 (
     value varchar(20) unique not null
 );
 
 --changeset bulo4kasmyasom:create_table_users
-create table public.users
+create table if not exists public.users
 (
     id            bigserial primary key,
     username      varchar(20) unique not null,
@@ -27,7 +27,7 @@ create table public.users
 );
 
 --changeset bulo4kasmyasom:create_table_sections
-create table public.sections
+create table if not exists public.sections
 (
     id          bigserial primary key,
     title       varchar(128) not null,
@@ -37,7 +37,7 @@ create table public.sections
 );
 
 --changeset bulo4kasmyasom:create_table_categories
-create table public.categories
+create table if not exists public.categories
 (
     id          bigserial primary key,
     section_id  bigint references sections (id) on update cascade on delete cascade,
@@ -49,7 +49,7 @@ create table public.categories
 );
 
 --changeset bulo4kasmyasom:create_table_sub_categories
-create table public.sub_categories
+create table if not exists public.sub_categories
 (
     id          bigserial primary key,
     category_id bigint       not null references categories (id) on update cascade on delete cascade,
@@ -61,7 +61,7 @@ create table public.sub_categories
 );
 
 --changeset bulo4kasmyasom:create_table_topics
-create table public.topics
+create table if not exists public.topics
 (
     id              bigserial primary key,
     category_id     bigint       not null references categories (id) on update cascade on delete cascade,
@@ -74,7 +74,7 @@ create table public.topics
 );
 
 --changeset bulo4kasmyasom:create_table_topic_messages
-create table public.topic_messages
+create table if not exists public.topic_messages
 (
     id         bigserial primary key,
     topic_id   bigint        not null references topics (id) on delete cascade on update cascade,
@@ -85,7 +85,7 @@ create table public.topic_messages
 );
 
 --changeset bulo4kasmyasom:added_roles_in_table_roles
-INSERT INTO public.roles (value)
+INSERT  INTO public.roles (value)
 VALUES ('ADMIN'),
        ('MODERATOR'),
        ('USER'),

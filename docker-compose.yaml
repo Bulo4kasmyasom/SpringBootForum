@@ -1,12 +1,4 @@
-# todo https://www.youtube.com/watch?v=qS9KYTcWMlY
-
 version: '3'
-
-volumes:
-  redis_cache:
-    driver: local
-  postgres_db:
-    driver: local
 
 services:
   app:
@@ -15,14 +7,17 @@ services:
     container_name: SpringBootForum
     depends_on:
       - db
+      - redis
     env_file:
       - .env
     ports:
-      - '8080:8080'
+      - ${APP_PORT}:${APP_PORT}
 
   db:
     image: postgres:15.1
     container_name: postgres
+    env_file:
+      - .env
     environment:
       - POSTGRES_USER=${POSTGRES_USERNAME}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -34,8 +29,16 @@ services:
     image: redis
     restart: always
     container_name: redis
+    env_file:
+      - .env
     ports:
-      - '6379:6379'
+      - ${REDIS_PORT}:${REDIS_PORT}
     command: redis-server --save 20 1 --loglevel warning
     volumes:
       - redis_cache:/var/lib/redis/data
+
+volumes:
+  redis_cache:
+    driver: local
+  postgres_db:
+    driver: local

@@ -13,12 +13,17 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>SpringBootForum</name>
     <description>SpringBootForum</description>
+
     <properties>
         <java.version>17</java.version>
+        <mvn.skip.tests>false</mvn.skip.tests>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <springdoc.version>2.1.0</springdoc.version>
         <commons-io.version>2.11.0</commons-io.version>
+        <testcontainers.version>1.18.3</testcontainers.version>
+        <mvn.compiler.plugin.verison>3.11.0</mvn.compiler.plugin.verison>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -108,39 +113,25 @@
         <version>${commons-io.version}</version>
         </dependency>
 
-
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>postgresql</artifactId>
-            <version>1.18.3</version>
+            <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.junit.jupiter</groupId>-->
-<!--            <artifactId>junit-jupiter</artifactId>-->
-<!--            <version>5.8.1</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
+
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers</artifactId>
-            <version>1.18.3</version>
+            <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.testcontainers</groupId>-->
-<!--            <artifactId>junit-jupiter</artifactId>-->
-<!--            <version>1.18.3</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
 
     </dependencies>
 
     <build>
-        <finalName>springBootForumApp</finalName>
-
+        <finalName>SpringBootForumApp</finalName>
         <plugins>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -156,8 +147,16 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skipTests>${mvn.skip.tests}</skipTests>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <version>${mvn.compiler.plugin.verison}</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
