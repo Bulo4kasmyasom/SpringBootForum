@@ -21,11 +21,11 @@ public class WebConfiguration implements WebMvcConfigurer {
     @Value("${page.title.afterTitle}")
     private String afterTitle;
 
-
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
-        sessionLocaleResolver.setDefaultLocale(Locale.ENGLISH);
+        Locale locale = new Locale("ru");
+        sessionLocaleResolver.setDefaultLocale(locale);
         return sessionLocaleResolver;
     }
 

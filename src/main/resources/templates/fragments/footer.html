@@ -3,6 +3,15 @@
         <div class="container p-3 text-secondary-emphasis bg-secondary-subtle border border-dark-subtle rounded-3"
              th:text="#{footer.text}"></div>
     </footer>
+    <div>
+        <form id="select-lang" name="lang">
+            <select onchange="location.href = '?lang='+this.value" class="form-select-sm bg-white rounded mx-auto mt-1">
+                <option hidden>Выбрать язык</option>
+                <option value="ru">RU</option>
+                <option value="en">EN</option>
+            </select>
+        </form>
+    </div>
 
     </div>
     </body>
