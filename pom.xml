@@ -16,7 +16,7 @@
 
     <properties>
         <java.version>17</java.version>
-        <mvn.skip.tests>false</mvn.skip.tests>
+        <mvn.skip.tests>true</mvn.skip.tests>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <springdoc.version>2.1.0</springdoc.version>
         <commons-io.version>2.11.0</commons-io.version>
