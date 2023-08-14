@@ -17,7 +17,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    @Profile("dev")
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
@@ -41,6 +40,8 @@ public class SecurityConfiguration {
                 .and()
                 .formLogin().defaultSuccessUrl("/home", true)
                 // todo что делать если авторизация не прошла. Написать.
+                .and()
+                .formLogin().failureForwardUrl("/home")
                 .and()
                 .logout().logoutUrl("/logout").logoutSuccessUrl("/home").invalidateHttpSession(true)
                 .and()
