@@ -86,10 +86,11 @@ public class UserServiceImpl implements UserService {
         if (countUsersByEmailOrUsername > 1)
             throw new IllegalStateException("User with this login or email already exists");
 
-        return userRepository.findById(id)
+        return Optional.ofNullable(userRepository.findById(id)
                 .map(user -> userMapper.toEntity(user, userCreateEditDto))
                 .map(userRepository::saveAndFlush)
-                .map(userMapper::toDto);
+                .map(userMapper::toDto)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found")));
     }
 
     @Override
