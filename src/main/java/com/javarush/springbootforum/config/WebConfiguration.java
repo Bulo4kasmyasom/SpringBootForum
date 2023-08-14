@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
@@ -20,6 +21,9 @@ public class WebConfiguration implements WebMvcConfigurer {
 
     @Value("${page.title.afterTitle}")
     private String afterTitle;
+
+    @Value("${static.resources.path}")
+    private String staticResourcesPath;
 
     @Bean
     public LocaleResolver localeResolver() {
@@ -40,6 +44,13 @@ public class WebConfiguration implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
         registry.addInterceptor(new PageTitleInterceptorHandler(beforeTitle, afterTitle)).addPathPatterns("/**");
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/img/**").addResourceLocations(staticResourcesPath + "/img/");
+        registry.addResourceHandler("/js/**").addResourceLocations(staticResourcesPath + "/js/");
+        registry.setOrder(Integer.MAX_VALUE); // наивысший приоритет
     }
 
 }
