@@ -102,7 +102,6 @@ public class TopicServiceImpl implements TopicService {
 
         List<Topic> topics = getTopicsForMove(topicsIds, newCategory, null);
 
-        // todo  N + 1 при обновлении, batch не работает из application.yaml
         return topicRepository.saveAllAndFlush(topics).size() > 0;
     }
 
@@ -118,7 +117,6 @@ public class TopicServiceImpl implements TopicService {
 
         List<Topic> topics = getTopicsForMove(topicsIds, newCategory, newSubCategory);
 
-        // todo  N + 1 при обновлении, batch не работает из application.yaml
         return topicRepository.saveAllAndFlush(topics).size() > 0;
     }
 
@@ -136,9 +134,6 @@ public class TopicServiceImpl implements TopicService {
 
 
     private List<Topic> getTopicsForMove(Long[] topicsIds, Category newCategory, SubCategory newSubCategory) {
-        // todo много запросов, нужно уменьшать их кол-во и подумать над адекватностью кода ниже. Если выделить
-        //  в отдельные переменные категории и подкатегории, то некорректно работает код,
-        //  поэтому геттеры и сеттеры
         return topicRepository.findTopicsByIdIn(List.of(topicsIds))
                 .stream()
                 .peek(topic -> {

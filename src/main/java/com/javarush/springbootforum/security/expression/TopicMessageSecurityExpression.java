@@ -20,7 +20,7 @@ public class TopicMessageSecurityExpression { // used in service layer
     // only user message owner or moderator/admin can edit message
     public boolean canUserEditDeleteMessage(Long id, Role... roles) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        // todo костыль. Если не авторизован, но при этом isAuthenticated = true почему-то
+        // todo Не авторизован, но при этом isAuthenticated = true почему-то
         if (authentication.getName().equals("anonymousUser")) return false;
 
         TopicMessageReadDto topicMessage = topicMessageService.findById(id)

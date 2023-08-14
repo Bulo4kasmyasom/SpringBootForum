@@ -80,7 +80,6 @@ public class TopicMessageServiceImpl implements TopicMessageService {
     @Override
     @Transactional
     @PreAuthorize("@topicMessageSecurityExpression.canUserEditDeleteMessage(#topicMessageId, 'MODERATOR','ADMIN')")
-    // todo проверить а своё ли он сообщение обновляет - USER
     public Optional<TopicMessageReadDto> update(Long topicMessageId, TopicMessageCreateEditDto topicMessageCreateEditDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();

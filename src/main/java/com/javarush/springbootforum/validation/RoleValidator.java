@@ -12,7 +12,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = RoleValidatorImpl.class)
-//@NotNull // Если раскомментировать, то null не пройдёт, поле должно существовать и не может быть null
 public @interface RoleValidator {
     Class<? extends Enum<?>> enumClass();
 

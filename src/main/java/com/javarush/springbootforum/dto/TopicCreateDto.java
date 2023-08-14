@@ -27,13 +27,12 @@ public class TopicCreateDto {
     @Schema(description = "Category id", example = "1")
     private final Long categoryId;
 
-    //    @NumberValidator
     @Schema(description = "Subcategory id", example = "1")
     private final Long subCategoryId;
 
     @Nullable
     @Schema(description = "Topic author id", example = "2")
-    private Long authorId; // устанавливается сеттером после получения из UserDetails (чтобы не было подмены)
+    private Long authorId;
 
     public void setAuthorId(Long authorId) {
         this.authorId = authorId;

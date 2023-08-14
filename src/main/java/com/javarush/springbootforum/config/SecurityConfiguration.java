@@ -39,7 +39,6 @@ public class SecurityConfiguration {
                 .anyRequest().permitAll()
                 .and()
                 .formLogin().defaultSuccessUrl("/home", true)
-                // todo что делать если авторизация не прошла. Написать.
                 .and()
                 .formLogin().failureForwardUrl("/home")
                 .and()

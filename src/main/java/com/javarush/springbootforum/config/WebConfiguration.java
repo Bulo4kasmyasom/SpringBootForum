@@ -50,7 +50,7 @@ public class WebConfiguration implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/img/**").addResourceLocations(staticResourcesPath + "/img/");
         registry.addResourceHandler("/js/**").addResourceLocations(staticResourcesPath + "/js/");
-        registry.setOrder(Integer.MAX_VALUE); // наивысший приоритет
+        registry.setOrder(Integer.MAX_VALUE);
     }
 
 }

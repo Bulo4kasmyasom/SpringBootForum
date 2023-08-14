@@ -22,7 +22,6 @@ public class RoleValidatorImpl implements ConstraintValidator<RoleValidator, Str
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        // роль по умолчанию будет установлена в маппере. Если всегда нужна роль, то вернуть false в строке ниже.
         if (value == null) value = Role.USER.name();
         return this.rolesList.contains(value);
     }

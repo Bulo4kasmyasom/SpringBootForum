@@ -21,10 +21,4 @@ public class BaseEntity {
     @Column(name = "updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
-//    @CreatedBy
-//    private String createdBy;
-//
-//    @LastModifiedBy
-//    private String updatedBy;
 }
