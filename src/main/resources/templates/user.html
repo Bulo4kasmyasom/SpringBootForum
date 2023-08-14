@@ -2,7 +2,8 @@
 
 <div class="container col-8">
 
-    <th:block sec:authorize="hasAuthority('ADMIN')">
+    <th:block th:if="${#authentication.name == user.username} or
+            ${#authorization.expression('hasAnyAuthority(''ADMIN'')')}">
 
         <th:block th:replace="~{fragments/fragments :: errors(${errors})}">errors</th:block>
         <form th:action="@{/users/{userId}/update(userId=${user.id})}" method="post" th:object="${user}">
@@ -38,7 +39,6 @@
             </div>
             <div class="mb-3">
                 <input type="submit" class="btn btn-primary btn-sm btn-light"
-                       sec:authorize="hasAuthority('ADMIN')"
                        th:value="#{page.user.form.submit}">
             </div>
             <input type="hidden" name="image" id="avatar-image-id" th:value="*{image}">
@@ -54,8 +54,9 @@
     </th:block>
 
 
-    <div class="card w-30 mt-4 mb-4" sec:authorize="!hasAuthority('ADMIN')">
-        <img src="/img/avatars/0.png" class="card-img-top mx-auto d-block" style="width: 220px" alt="Profile image">
+    <div class="card w-30 mt-4 mb-4" th:if="${#authentication.name != user.username} and
+    ${#authorization.expression('!hasAnyAuthority(''ADMIN'')')}">
+        <img th:src="|#{user.images.path}/${user.image}|" class="card-img-top mx-auto d-block" style="width: 220px" alt="Profile image">
         <div class="card-body">
             <h5 class="card-title" th:text="${user.username}"></h5>
             <p class="card-text">Возможно здесь будет подпись пользователя когда-нибудь...</p>
