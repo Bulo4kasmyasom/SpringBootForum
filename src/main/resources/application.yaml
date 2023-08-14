@@ -1,4 +1,6 @@
 spring:
+  server:
+    port: ${APP_PORT}
   config:
     import: optional:file:.env[.properties]
   cache:
