@@ -12,7 +12,9 @@
 2. В `src/main/resources/site.properties` указать путь к папке с ресурсами (html, js, css).
 
     Пример: `static.resources.path=file:/home/USERNAME/resources/static`
-3. Этот путь так же указать в Dockerfile.
+3. Этот путь так же указать в Dockerfile без папки static
+   Пример:
+   `COPY resources /home/bulo4ka/resources`
 4. Выполнить команду: `docker compose up`
 
 ### Скриншоты
